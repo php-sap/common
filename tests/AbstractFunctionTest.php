@@ -49,7 +49,7 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         static::assertInstanceOf(RemoteFunction::class, $function);
         static::assertSame($resource, $function->debugGet('connection'));
         static::assertSame('7Q81mA0M', $function->getName());
-        static::assertSame([], $function->debugGet('params'));
+        static::assertSame([], $function->getParams());
     }
 
     public function testSetParam()
@@ -57,7 +57,7 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         $resource = 'grFGmOH4';
         $function = new RemoteFunction($resource, 'FcWOSDAa');
         $function->setParam('QG5ie8PS', 'JNmHX42z');
-        static::assertSame(['QG5ie8PS' => 'JNmHX42z'], $function->debugGet('params'));
+        static::assertSame(['QG5ie8PS' => 'JNmHX42z'], $function->getParams());
     }
 
     /**
@@ -105,7 +105,7 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         static::assertSame(542, $function->getParam('NpvS2eyw'));
         static::assertSame(7.8, $function->getParam('Hzc4KxPn', 7.8));
         $function->reset();
-        static::assertSame([], $function->debugGet('params'));
+        static::assertSame([], $function->getParams());
     }
 
     /**
@@ -118,53 +118,6 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         $function->results = ['tnvqmfNU' => 91];
         $result = $function->invoke();
         static::assertSame(['tnvqmfNU' => 91], $result);
-    }
-
-    /**
-     * Test invoke with parameters
-     */
-    public function testInvokeWithParameters()
-    {
-        $resource = 'ugtkSL6G';
-        $function = new RemoteFunction($resource, '8QjM3dxJ');
-        $function->results = ['yZNNS2iL' => 266];
-
-        $result = $function
-            ->setParam('lxxa1afs', 465)
-            ->invoke(['lxxa1afs' => '155']);
-        static::assertSame(['yZNNS2iL' => 266], $result);
-        static::assertSame(['lxxa1afs' => '155'], $function->debugGet('params'));
-    }
-
-    /**
-     * Data provider of invalid parameters for invoke.
-     * @return array
-     */
-    public static function invalidParametersForInvoke()
-    {
-        return [
-            [''],
-            ['5eTcDlFD'],
-            [296],
-            [19.4],
-            [true],
-            [false],
-            [new \stdClass()]
-        ];
-    }
-
-    /**
-     * Test invoke with invalid parameters.
-     * @param mixed $params
-     * @dataProvider invalidParametersForInvoke
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp "^Expected function BD89dB7a invoke parameters to be array, but got (string|double|integer|boolean|object)\.$"
-     */
-    public function testInvalidParametersForInvoke($params)
-    {
-        $resource = 'zqhLTg9T';
-        $function = new RemoteFunction($resource, 'BD89dB7a');
-        $function->invoke($params);
     }
 
     /**

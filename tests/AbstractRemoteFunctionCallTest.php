@@ -63,8 +63,7 @@ class AbstractRemoteFunctionCallTest extends \PHPUnit_Framework_TestCase
     {
         $rfc = new RemoteFunctionCall(new ConfigA());
         $rfc->setParam('mddaudvn', 613);
-        $function = $rfc->getFunction();
-        static::assertSame(['mddaudvn' => 613], $function->debugGet('params'));
+        static::assertSame(['mddaudvn' => 613], $rfc->getParams());
     }
 
     /**
@@ -75,8 +74,7 @@ class AbstractRemoteFunctionCallTest extends \PHPUnit_Framework_TestCase
         $rfc = new RemoteFunctionCall(new ConfigA());
         $rfc->setParam('yovgwyfi', 51.3);
         $rfc->reset();
-        $function = $rfc->getFunction();
-        static::assertSame([], $function->debugGet('params'));
+        static::assertSame([], $rfc->getParams());
     }
 
     /**

@@ -31,11 +31,6 @@ abstract class AbstractRemoteFunctionCall implements IFunction
     protected $connection;
 
     /**
-     * @var string The connection ID of the current SAP remote connection.
-     */
-    protected $connectionId;
-
-    /**
      * @var \phpsap\classes\AbstractFunction
      */
     protected $function;
@@ -77,17 +72,15 @@ abstract class AbstractRemoteFunctionCall implements IFunction
 
     /**
      * Invoke SAP remote function call.
-     * @param null|array $params Optional parameter array.
      * @return array result.
      * @throws \phpsap\interfaces\exceptions\IConnectionFailedException
      * @throws \phpsap\interfaces\exceptions\IUnknownFunctionException
      * @throws \phpsap\exceptions\FunctionCallException
      */
-    public function invoke($params = null)
+    public function invoke()
     {
         //invoke the remove function call
-        return $this->getFunction()
-            ->invoke($params);
+        return $this->getFunction()->invoke();
     }
 
     /**
@@ -116,4 +109,15 @@ abstract class AbstractRemoteFunctionCall implements IFunction
      * @return \phpsap\interfaces\IConnection
      */
     abstract protected function createConnectionInstance(IConfig $config);
+
+    /**
+     * Get all set parameters.
+     * @return array Associative array of all parameters that have been set.
+     * @throws \phpsap\interfaces\exceptions\IConnectionFailedException
+     * @throws \phpsap\interfaces\exceptions\IUnknownFunctionException
+     */
+    public function getParams()
+    {
+        return $this->getFunction()->getParams();
+    }
 }

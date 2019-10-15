@@ -42,7 +42,7 @@ class RemoteFunction extends AbstractFunction
      * @throws \phpsap\exceptions\ConnectionFailedException
      * @throws \phpsap\exceptions\FunctionCallException
      */
-    protected function execute()
+    public function invoke()
     {
         if ($this->results instanceof \Exception) {
             throw new $this->results;

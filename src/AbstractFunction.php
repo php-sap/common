@@ -97,6 +97,15 @@ abstract class AbstractFunction implements IFunction
     }
 
     /**
+     * Get all set parameters.
+     * @return array Associative array of all parameters that have been set.
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
      * Get a parameter previously defined using setParam().
      * In case the requested parameter has not been set, return the defined default value.
      * @param string $name
@@ -113,42 +122,17 @@ abstract class AbstractFunction implements IFunction
 
     /**
      * Invoke the prepared function call.
-     * @param null|array $params Optional parameter array.
      * @return array
      * @throws \InvalidArgumentException
      * @throws \phpsap\exceptions\ConnectionFailedException
      * @throws \phpsap\exceptions\FunctionCallException
      */
-    public function invoke($params = null)
-    {
-        if ($params === null) {
-            $params = [];
-        }
-        if (!is_array($params)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Expected function %s invoke parameters to be array, but got %s.',
-                $this->getName(),
-                gettype($params)
-            ));
-        }
-        foreach ($params as $name => $value) {
-            $this->setParam($name, $value);
-        }
-        return $this->execute();
-    }
+    abstract public function invoke();
 
     /**
      * Clear remote function call.
      */
     abstract public function __destruct();
-
-    /**
-     * Execute the prepared function call.
-     * @return array
-     * @throws \phpsap\exceptions\ConnectionFailedException
-     * @throws \phpsap\exceptions\FunctionCallException
-     */
-    abstract protected function execute();
 
     /**
      * Get the PHP module remote function ressource/object.

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb8ecacb198230c3a45604966642d57d",
+    "content-hash": "7200279122862a78692348c5d5a74d8c",
     "packages": [
         {
             "name": "php-sap/interfaces",
@@ -12,15 +12,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/interfaces.git",
-                "reference": "ccc931051e49df84a074a9efcbb74e3532ce899f"
+                "reference": "65f9fdea94e82453e90e9a9ffd6936e1c2efe6ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/ccc931051e49df84a074a9efcbb74e3532ce899f",
-                "reference": "ccc931051e49df84a074a9efcbb74e3532ce899f",
+                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/65f9fdea94e82453e90e9a9ffd6936e1c2efe6ea",
+                "reference": "65f9fdea94e82453e90e9a9ffd6936e1c2efe6ea",
                 "shasum": ""
             },
             "require": {
+                "ext-json": "*",
                 "php": ">=5.5.0"
             },
             "conflict": {
@@ -50,7 +51,7 @@
                 "interfaces",
                 "php-sap"
             ],
-            "time": "2019-10-14T15:14:11+00:00"
+            "time": "2019-10-16T10:55:21+00:00"
         },
         {
             "name": "psr/container",

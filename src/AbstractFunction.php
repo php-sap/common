@@ -11,6 +11,7 @@
 
 namespace phpsap\classes;
 
+use phpsap\interfaces\IApi;
 use phpsap\interfaces\IFunction;
 
 /**
@@ -45,6 +46,11 @@ abstract class AbstractFunction implements IFunction
     protected $params;
 
     /**
+     * @var \phpsap\interfaces\IApi The remote function API.
+     */
+    protected $api;
+
+    /**
      * Initialize this class with a connection instance and the function name.
      * @param mixed $connection Connection resource/object
      * @param string $name
@@ -65,6 +71,16 @@ abstract class AbstractFunction implements IFunction
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set the remote API.
+     * @param \phpsap\interfaces\IApi $api
+     * @return \phpsap\interfaces\IFunction|void
+     */
+    public function setApi(IApi $api)
+    {
+        $this->api = $api;
     }
 
     /**
@@ -119,6 +135,14 @@ abstract class AbstractFunction implements IFunction
         }
         return $default;
     }
+
+    /**
+     * Get an associative array, that describes the API of the remote function.
+     * The associative array consists of arrays for 'input', 'output',
+     * 'bidirectional' and 'table' parameters.
+     * @return \phpsap\interfaces\IApi
+     */
+    abstract public function getApi();
 
     /**
      * Invoke the prepared function call.

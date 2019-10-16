@@ -37,6 +37,15 @@ class RemoteFunction extends AbstractFunction
     }
 
     /**
+     * Fake getting the remote API.
+     * @return array|null
+     */
+    public function getApi()
+    {
+        return $this->api;
+    }
+
+    /**
      * Execute the prepared function call.
      * @return array
      * @throws \phpsap\exceptions\ConnectionFailedException

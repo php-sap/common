@@ -176,4 +176,79 @@ class ElementTest extends \PHPUnit_Framework_TestCase
         $expectedJson = '{"type":"int","name":"fcotBFjX"}';
         static::assertSame($expectedJson, $actualJson);
     }
+
+    /**
+     * Test JSON decode.
+     */
+    public function testJsonDecode()
+    {
+        $element = Element::jsonDecode('{"type":"string","name":"VaJPAA7d"}');
+        static::assertInstanceOf(Element::class, $element);
+        static::assertSame(IElement::TYPE_STRING, $element->getType());
+        static::assertSame('VaJPAA7d', $element->getName());
+    }
+
+    /**
+     * Data provider for values, that won't JSON decode to the expected configuration
+     * array.
+     * @return array
+     */
+    public static function provideInvalidJson()
+    {
+        return [
+            [''],
+            ['{'],
+            ['['],
+            ['gbGCUhMd'],
+            [735],
+            [5.9],
+            [true],
+            [false],
+            [null]
+        ];
+    }
+
+    /**
+     * Test JSON decoding on invalid parameters.
+     * @param mixed $json
+     * @dataProvider provideInvalidJson
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON!
+     */
+    public function testInvalidJson($json)
+    {
+        Element::jsonDecode($json);
+    }
+
+    /**
+     * Data provider for incomplete JSON objects.
+     * @return array
+     */
+    public static function provideIncompleteJsonObjects()
+    {
+        $obj1 = new \stdClass();
+        $obj1->type = 'int';
+        return [
+            ['{"name":"I2g8g23n"}'],
+            ['{"type":930}'],
+            ['{"3cQYx9fv":"int"}'],
+            ['{}'],
+            [[]],
+            [['name' => 'skyhCVIE', 'ymECDAE6' => 50.4]],
+            [new \stdClass()],
+            [$obj1]
+        ];
+    }
+
+    /**
+     * Test JSON decoding on incomplete JSON objects.
+     * @param string $json
+     * @dataProvider provideIncompleteJsonObjects
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON: API Element is missing
+     */
+    public function testIncompleteJsonObjects($json)
+    {
+        Element::jsonDecode($json);
+    }
 }

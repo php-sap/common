@@ -44,7 +44,7 @@ class Value extends Element implements IValue
      */
     public function getDirection()
     {
-        return $this->data['direction'];
+        return $this->data[self::JSON_DIRECTION];
     }
 
     /**
@@ -53,7 +53,7 @@ class Value extends Element implements IValue
      */
     public function isOptional()
     {
-        return $this->data['isOptional'];
+        return $this->data[self::JSON_OPTIONAL];
     }
 
     /**
@@ -74,7 +74,7 @@ class Value extends Element implements IValue
                 implode(', ', static::$allowedDirections)
             ));
         }
-        $this->data['direction'] = $direction;
+        $this->data[self::JSON_DIRECTION] = $direction;
     }
 
     /**
@@ -89,6 +89,44 @@ class Value extends Element implements IValue
                 'Expected API value isOptional flag to be boolean!'
             );
         }
-        $this->data['isOptional'] = $isOptional;
+        $this->data[self::JSON_OPTIONAL] = $isOptional;
+    }
+
+    /**
+     * Decode a formerly JSON encoded Value object.
+     * @param string|\stdClass|array $json
+     * @return \phpsap\classes\Api\Value
+     */
+    public static function jsonDecode($json)
+    {
+        if (is_object($json)) {
+            $json = json_encode($json);
+        }
+        if (is_string($json)) {
+            $json = json_decode($json, true);
+        }
+        if (!is_array($json)) {
+            throw new \InvalidArgumentException('Invalid JSON!');
+        }
+        $fields = [
+            self::JSON_TYPE,
+            self::JSON_NAME,
+            self::JSON_DIRECTION,
+            self::JSON_OPTIONAL
+        ];
+        foreach ($fields as $field) {
+            if (!array_key_exists($field, $json)) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Invalid JSON: API Value is missing %s!',
+                    $field
+                ));
+            }
+        }
+        return new self(
+            $json[self::JSON_TYPE],
+            $json[self::JSON_NAME],
+            $json[self::JSON_DIRECTION],
+            $json[self::JSON_OPTIONAL]
+        );
     }
 }

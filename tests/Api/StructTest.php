@@ -138,4 +138,125 @@ class StructTest extends \PHPUnit_Framework_TestCase
     {
         new Struct('1M9enD5H', Struct::DIRECTION_OUTPUT, true, [new \stdClass()]);
     }
+
+    /**
+     * Test JSON decode.
+     */
+    public function testJsonDecode()
+    {
+        $json = '{"type":"array","name":"l9M7gn6p","direction":"input",'
+                .'"optional":true,"members":[{"type":"int","name":"lnrxpRjh"}]}';
+        $element = Struct::jsonDecode($json);
+        static::assertInstanceOf(Struct::class, $element);
+        static::assertSame(IArray::TYPE_ARRAY, $element->getType());
+        static::assertSame('l9M7gn6p', $element->getName());
+        static::assertSame(IArray::DIRECTION_INPUT, $element->getDirection());
+        static::assertTrue($element->isOptional());
+        static::assertInternalType('array', $element->getMembers());
+        $members = $element->getMembers();
+        foreach ($members as $member) {
+            /**
+             * @var \phpsap\interfaces\Api\IElement $member
+             */
+            static::assertSame(IArray::TYPE_INTEGER, $member->getType());
+            static::assertSame('lnrxpRjh', $member->getName());
+        }
+    }
+
+    /**
+     * Test JSON decoding on invalid parameters.
+     * @param mixed $json
+     * @dataProvider \tests\phpsap\classes\Api\ElementTest::provideInvalidJson()
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON!
+     */
+    public function testInvalidJson($json)
+    {
+        Struct::jsonDecode($json);
+    }
+
+    /**
+     * Data provider for incomplete JSON objects.
+     * @return array
+     */
+    public static function provideIncompleteJsonObjects()
+    {
+        $return = ValueTest::provideIncompleteJsonObjects();
+        $return[] = ['{"type":"array","name":"Mvewn5c7","direction":"output","optional":false}'];
+        return $return;
+    }
+
+    /**
+     * Test JSON decoding on incomplete JSON objects.
+     * @param string $json
+     * @dataProvider provideIncompleteJsonObjects
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON: API Struct is missing
+     */
+    public function testIncompleteJson($json)
+    {
+        Struct::jsonDecode($json);
+    }
+
+    /**
+     * Data provider for JSON objects with invalid type value.
+     * @return array
+     */
+    public static function provideJsonDecodeInvalidStruct()
+    {
+        return [
+            ['{"type":"bool","name":"WG0ujcyy","direction":"input","optional":true,'
+             .'"members":[{"type":"int","name":"H423vcVw"}]}'],
+            ['{"type":"int","name":"TAmi4UC3","direction":"input","optional":true,'
+             .'"members":[{"type":"int","name":"TVS46Ay9"}]}'],
+            ['{"type":"float","name":"dgDE3yR3","direction":"input","optional":true,'
+             .'"members":[{"type":"int","name":"RnlONMhA"}]}'],
+            ['{"type":"string","name":"akGRYSzR","direction":"input",'
+             .'"optional":true,"members":[{"type":"int","name":"UBrbUzrK"}]}']
+        ];
+    }
+
+    /**
+     * Test JSON decode objects with invalid type value.
+     * @param string $json
+     * @dataProvider provideJsonDecodeInvalidStruct
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON: API Struct type is not an array!
+     */
+    public function testJsonDecodeInvalidStruct($json)
+    {
+        Struct::jsonDecode($json);
+    }
+
+    /**
+     * Data provider for JSON objects with invalid members.
+     * @return array
+     */
+    public static function provideJsonDecodeInvalidMembers()
+    {
+        return [
+            ['{"type":"array","name":"fiNvZSEH","direction":"output",'
+             .'"optional":true,"members":964}'],
+            ['{"type":"array","name":"eLkiWCkL","direction":"output",'
+             .'"optional":true,"members":5.7}'],
+            ['{"type":"array","name":"zF2vTk2P","direction":"output",'
+             .'"optional":true,"members":"mKgpyVXb"}'],
+            ['{"type":"array","name":"RvU15SUm","direction":"output",'
+             .'"optional":true,"members":true}'],
+            ['{"type":"array","name":"txI85Gco","direction":"output",'
+             .'"optional":true,"members":false}'],
+        ];
+    }
+
+    /**
+     * Test JSON decode objects with invalid members.
+     * @param string $json
+     * @dataProvider provideJsonDecodeInvalidMembers
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON: API Struct members are not an array!
+     */
+    public function testJsonDecodeInvalidMembers($json)
+    {
+        Struct::jsonDecode($json);
+    }
 }

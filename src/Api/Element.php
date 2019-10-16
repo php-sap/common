@@ -48,7 +48,7 @@ class Element implements IElement
      */
     public function getType()
     {
-        return $this->data['type'];
+        return $this->data[self::JSON_TYPE];
     }
 
     /**
@@ -57,7 +57,7 @@ class Element implements IElement
      */
     public function getName()
     {
-        return $this->data['name'];
+        return $this->data[self::JSON_NAME];
     }
 
     /**
@@ -77,7 +77,7 @@ class Element implements IElement
                 implode(', ', static::$allowedTypes)
             ));
         }
-        $this->data['type'] = $type;
+        $this->data[self::JSON_TYPE] = $type;
     }
 
     /**
@@ -91,7 +91,7 @@ class Element implements IElement
                 'Expected API element name to be string!'
             );
         }
-        $this->data['name'] = $name;
+        $this->data[self::JSON_NAME] = $name;
     }
 
     /**
@@ -114,5 +114,36 @@ class Element implements IElement
     public function jsonSerialize()
     {
         return $this->data;
+    }
+
+    /**
+     * Decode a formerly JSON encoded Element object.
+     * @param string|\stdClass|array $json
+     * @return \phpsap\classes\Api\Element
+     */
+    public static function jsonDecode($json)
+    {
+        if (is_object($json)) {
+            $json = json_encode($json);
+        }
+        if (is_string($json)) {
+            $json = json_decode($json, true);
+        }
+        if (!is_array($json)) {
+            throw new \InvalidArgumentException('Invalid JSON!');
+        }
+        $fields = [
+            self::JSON_TYPE,
+            self::JSON_NAME
+        ];
+        foreach ($fields as $field) {
+            if (!array_key_exists($field, $json)) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Invalid JSON: API Element is missing %s!',
+                    $field
+                ));
+            }
+        }
+        return new self($json[self::JSON_TYPE], $json[self::JSON_NAME]);
     }
 }

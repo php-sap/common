@@ -106,4 +106,57 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     {
         new Value(Value::TYPE_STRING, 'C1HZDtVZ', Value::DIRECTION_INPUT, $isOptional);
     }
+
+    /**
+     * Test JSON decode.
+     */
+    public function testJsonDecode()
+    {
+        $element = Value::jsonDecode('{"type":"int","name":"JCmy98c0","direction":"input","optional":false}');
+        static::assertInstanceOf(Value::class, $element);
+        static::assertSame(IElement::TYPE_INTEGER, $element->getType());
+        static::assertSame('JCmy98c0', $element->getName());
+        static::assertSame(IValue::DIRECTION_INPUT, $element->getDirection());
+        static::assertFalse($element->isOptional());
+    }
+
+    /**
+     * Test JSON decoding on invalid parameters.
+     * @param mixed $json
+     * @dataProvider \tests\phpsap\classes\Api\ElementTest::provideInvalidJson()
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON!
+     */
+    public function testInvalidJson($json)
+    {
+        Value::jsonDecode($json);
+    }
+
+    /**
+     * Data provider for incomplete JSON objects.
+     * @return array
+     */
+    public static function provideIncompleteJsonObjects()
+    {
+        $return = ElementTest::provideIncompleteJsonObjects();
+        $return[] = ['{"type":"int","name":"TRD2cpKy"}'];
+        $return[] = ['{"type":true,"name":"H5vNFNkl","optional":true}'];
+        $return[] = ['{"type":"int","name":711,"direction":"output"}'];
+        $obj = new \stdClass();
+        $obj->type = Value::TYPE_BOOLEAN;
+        $obj->name = '9vQWkdZF';
+        return $return;
+    }
+
+    /**
+     * Test JSON decoding on incomplete JSON objects.
+     * @param string $json
+     * @dataProvider provideIncompleteJsonObjects
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON: API Value is missing
+     */
+    public function testIncompleteJson($json)
+    {
+        Value::jsonDecode($json);
+    }
 }

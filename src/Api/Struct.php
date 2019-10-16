@@ -67,7 +67,7 @@ class Struct extends Value implements IArray
      */
     public function getMembers()
     {
-        return $this->data['members'];
+        return $this->data[self::JSON_MEMBERS];
     }
 
     /**
@@ -77,7 +77,7 @@ class Struct extends Value implements IArray
      */
     public function addMember(IElement $member)
     {
-        $this->data['members'][] = $member;
+        $this->data[self::JSON_MEMBERS][] = $member;
         return $this;
     }
 
@@ -92,9 +92,53 @@ class Struct extends Value implements IArray
                 'Expected API struct members to be array!'
             );
         }
-        $this->data['members'] = [];
+        $this->data[self::JSON_MEMBERS] = [];
         foreach ($members as $member) {
             $this->addMember($member);
         }
+    }
+
+    /**
+     * Decode a formerly JSON encoded Struct object.
+     * @param string|\stdClass|array $json
+     * @return \phpsap\classes\Api\Struct
+     */
+    public static function jsonDecode($json)
+    {
+        if (is_object($json)) {
+            $json = json_encode($json);
+        }
+        if (is_string($json)) {
+            $json = json_decode($json, true);
+        }
+        if (!is_array($json)) {
+            throw new \InvalidArgumentException('Invalid JSON!');
+        }
+        $fields = [
+            self::JSON_TYPE,
+            self::JSON_NAME,
+            self::JSON_DIRECTION,
+            self::JSON_OPTIONAL,
+            self::JSON_MEMBERS
+        ];
+        foreach ($fields as $field) {
+            if (!array_key_exists($field, $json)) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Invalid JSON: API Struct is missing %s!',
+                    $field
+                ));
+            }
+        }
+        if ($json[self::JSON_TYPE] !== self::TYPE_ARRAY) {
+            throw new \InvalidArgumentException('Invalid JSON: API Struct type is not an array!');
+        }
+        if (!is_array($json[self::JSON_MEMBERS])) {
+            throw new \InvalidArgumentException('Invalid JSON: API Struct members are not an array!');
+        }
+        $members = [];
+        foreach ($json[self::JSON_MEMBERS] as $member) {
+            $members[] = Element::jsonDecode($member);
+        }
+        return new self($json[self::JSON_NAME], $json[self::JSON_DIRECTION], $json[self::JSON_OPTIONAL], $members);
     }
 }

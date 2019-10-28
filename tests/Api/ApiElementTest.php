@@ -7,12 +7,12 @@ use phpsap\interfaces\Api\IArray;
 use phpsap\interfaces\Api\IElement;
 
 /**
- * Class tests\phpsap\classes\Api\ElementTest
+ * Class tests\phpsap\classes\Api\ApiElementTest
  * @package tests\phpsap\classes\Api
  * @author  Gregor J.
  * @license MIT
  */
-class ElementTest extends \PHPUnit_Framework_TestCase
+class ApiElementTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.

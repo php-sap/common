@@ -9,12 +9,12 @@ use phpsap\interfaces\Api\IElement;
 use phpsap\interfaces\Api\IValue;
 
 /**
- * Class tests\phpsap\classes\Api\ValueTest
+ * Class tests\phpsap\classes\Api\ApiValueTest
  * @package tests\phpsap\classes\Api
  * @author  Gregor J.
  * @license MIT
  */
-class ValueTest extends \PHPUnit_Framework_TestCase
+class ApiValueTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.
@@ -36,7 +36,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     /**
      * Test non-string directions.
      * @param mixed $direction
-     * @dataProvider \tests\phpsap\classes\Api\ElementTest::provideNonStrings
+     * @dataProvider \tests\phpsap\classes\Api\ApiElementTest::provideNonStrings
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Expected API value direction to be string!
      */
@@ -123,7 +123,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     /**
      * Test JSON decoding on invalid parameters.
      * @param mixed $json
-     * @dataProvider \tests\phpsap\classes\Api\ElementTest::provideInvalidJson()
+     * @dataProvider \tests\phpsap\classes\Api\ApiElementTest::provideInvalidJson()
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid JSON!
      */
@@ -138,7 +138,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
      */
     public static function provideIncompleteJsonObjects()
     {
-        $return = ElementTest::provideIncompleteJsonObjects();
+        $return = ApiElementTest::provideIncompleteJsonObjects();
         $return[] = ['{"type":"int","name":"TRD2cpKy"}'];
         $return[] = ['{"type":true,"name":"H5vNFNkl","optional":true}'];
         $return[] = ['{"type":"int","name":711,"direction":"output"}'];

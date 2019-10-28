@@ -169,7 +169,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
     /**
      * Test JSON decoding on invalid parameters.
      * @param mixed $json
-     * @dataProvider \tests\phpsap\classes\Api\ElementTest::provideInvalidJson()
+     * @dataProvider \tests\phpsap\classes\Api\ApiElementTest::provideInvalidJson()
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid JSON!
      */

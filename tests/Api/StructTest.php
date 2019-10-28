@@ -166,7 +166,7 @@ class StructTest extends \PHPUnit_Framework_TestCase
     /**
      * Test JSON decoding on invalid parameters.
      * @param mixed $json
-     * @dataProvider \tests\phpsap\classes\Api\ElementTest::provideInvalidJson()
+     * @dataProvider \tests\phpsap\classes\Api\ApiElementTest::provideInvalidJson()
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid JSON!
      */
@@ -181,7 +181,7 @@ class StructTest extends \PHPUnit_Framework_TestCase
      */
     public static function provideIncompleteJsonObjects()
     {
-        $return = ValueTest::provideIncompleteJsonObjects();
+        $return = ApiValueTest::provideIncompleteJsonObjects();
         $return[] = ['{"type":"array","name":"Mvewn5c7","direction":"output","optional":false}'];
         return $return;
     }

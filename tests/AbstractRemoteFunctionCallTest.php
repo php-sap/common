@@ -15,6 +15,8 @@ use kbATeam\TypeCast\TypeCastArray;
 use kbATeam\TypeCast\TypeCastValue;
 use phpsap\classes\AbstractFunction;
 use phpsap\classes\AbstractRemoteFunctionCall;
+use phpsap\classes\Api\Value;
+use phpsap\classes\RemoteApi;
 use phpsap\interfaces\IFunction;
 use tests\phpsap\classes\helper\ConfigA;
 use tests\phpsap\classes\helper\RemoteFunction;
@@ -86,5 +88,31 @@ class AbstractRemoteFunctionCallTest extends \PHPUnit_Framework_TestCase
         $rfc->getFunction()->results = ['gpgtowzq' => 'C5AWVD1h'];
         $results = $rfc->invoke();
         static::assertSame(['gpgtowzq' => 'C5AWVD1h'], $results);
+    }
+
+    /**
+     * Test setting and getting a remote function API.
+     * @throws \phpsap\interfaces\exceptions\IConnectionFailedException
+     * @throws \phpsap\interfaces\exceptions\IUnknownFunctionException
+     */
+    public function testSettingAndGettingApi()
+    {
+        $rfc = new RemoteFunctionCall(new ConfigA());
+        $extractedApi = [
+            [
+                'type' => Value::TYPE_FLOAT,
+                'name' => 'Hhld4glG',
+                'direction' => Value::DIRECTION_OUTPUT,
+                'optional' => false
+            ]
+        ];
+        RemoteFunction::$extractedApi = $extractedApi;
+        $extractedApiJson = json_encode($extractedApi);
+        $actualApi = $rfc->getApi();
+        $actualApiJson = json_encode($actualApi);
+        static::assertJsonStringEqualsJsonString($extractedApiJson, $actualApiJson);
+        $rfc->setApi(new RemoteApi());
+        $actual = $rfc->getApi();
+        static::assertSame('[]', json_encode($actual));
     }
 }

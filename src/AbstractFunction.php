@@ -74,13 +74,28 @@ abstract class AbstractFunction implements IFunction
     }
 
     /**
-     * Set the remote API.
+     * Manually set the remote function API (e.g. from cache).
      * @param \phpsap\interfaces\IApi $api
-     * @return \phpsap\interfaces\IFunction|void
+     * @return \phpsap\interfaces\IFunction
      */
     public function setApi(IApi $api)
     {
         $this->api = $api;
+        return $this;
+    }
+
+    /**
+     * Retrieve the remote function API.
+     * Either the API has been set using setApi() or the API will be extracted from
+     * SAP.
+     * @return \phpsap\interfaces\IApi
+     */
+    public function getApi()
+    {
+        if ($this->api === null) {
+            $this->api = $this->extractApi();
+        }
+        return $this->api;
     }
 
     /**
@@ -137,12 +152,10 @@ abstract class AbstractFunction implements IFunction
     }
 
     /**
-     * Get an associative array, that describes the API of the remote function.
-     * The associative array consists of arrays for 'input', 'output',
-     * 'bidirectional' and 'table' parameters.
+     * Extract the remote function API and return an API description class.
      * @return \phpsap\interfaces\IApi
      */
-    abstract public function getApi();
+    abstract public function extractApi();
 
     /**
      * Invoke the prepared function call.

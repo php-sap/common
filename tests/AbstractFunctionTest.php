@@ -12,7 +12,10 @@
 namespace tests\phpsap\classes;
 
 use phpsap\classes\AbstractFunction;
+use phpsap\classes\Api\Value;
+use phpsap\classes\RemoteApi;
 use phpsap\exceptions\FunctionCallException;
+use phpsap\interfaces\IApi;
 use phpsap\interfaces\IFunction;
 use tests\phpsap\classes\helper\RemoteFunction;
 
@@ -130,5 +133,62 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         $function = new RemoteFunction($resource, 'MfGlebYV');
         $function->results = new FunctionCallException('8hQuRt80');
         $function->invoke();
+    }
+
+    /**
+     * Test getting an API of a remote function.
+     */
+    public function testGettingRemoteApi()
+    {
+        $resource = 'RlZKdvSR';
+        $function = new RemoteFunction($resource, 'MfGlebYV');
+        $function::$extractedApi = [
+            [
+                'type' => Value::TYPE_INTEGER,
+                'name' => 'sIg8uhd7',
+                'direction' => Value::DIRECTION_OUTPUT,
+                'optional' => false
+            ]
+        ];
+        $api = $function->getApi();
+        static::assertInstanceOf(IApi::class, $api);
+        $actualOutApi = $api->getOutputValues();
+        static::assertInternalType('array', $actualOutApi);
+        static::assertCount(1, $actualOutApi);
+        static::assertSame('sIg8uhd7', $actualOutApi[0]->getName());
+        static::assertSame(Value::DIRECTION_OUTPUT, $actualOutApi[0]->getDirection());
+    }
+
+    /**
+     * Test setting and getting an API of a remote function.
+     */
+    public function testSettingRemoteApi()
+    {
+        $resource = 'bSJDU5Q8';
+        $function = new RemoteFunction($resource, '2adpI0CP');
+        $extractedApi = [
+            [
+                'type' => Value::TYPE_INTEGER,
+                'name' => 'eb05nS2Q',
+                'direction' => Value::DIRECTION_OUTPUT,
+                'optional' => false
+            ]
+        ];
+        $function::$extractedApi = $extractedApi;
+        $extractedApiJson = json_encode($function::$extractedApi);
+        $actualApiJson = json_encode($function->getApi());
+        static::assertJsonStringEqualsJsonString($extractedApiJson, $actualApiJson);
+        $cachedApi = new RemoteApi([
+            [
+                'type' => Value::TYPE_STRING,
+                'name' => 'tonw9Pou',
+                'direction' => Value::DIRECTION_OUTPUT,
+                'optional' => false
+            ]
+        ]);
+        $function->setApi($cachedApi);
+        $actualCachedApiJson = json_encode($function->getApi());
+        $cachedApiJson = json_encode($cachedApi);
+        static::assertJsonStringEqualsJsonString($cachedApiJson, $actualCachedApiJson);
     }
 }

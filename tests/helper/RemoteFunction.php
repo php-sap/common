@@ -12,6 +12,7 @@
 namespace tests\phpsap\classes\helper;
 
 use phpsap\classes\AbstractFunction;
+use phpsap\classes\RemoteApi;
 
 /**
  * Class tests\phpsap\classes\helper\RemoteFunction
@@ -30,19 +31,15 @@ class RemoteFunction extends AbstractFunction
     public $results;
 
     /**
+     * @var array
+     */
+    public static $extractedApi;
+
+    /**
      * Clear remote function call.
      */
     public function __destruct()
     {
-    }
-
-    /**
-     * Fake getting the remote API.
-     * @return array|null
-     */
-    public function getApi()
-    {
-        return $this->api;
     }
 
     /**
@@ -93,5 +90,14 @@ class RemoteFunction extends AbstractFunction
     protected function getFunction()
     {
         return 'TRBp3hoJ';
+    }
+
+    /**
+     * Extract the remote function API and return an API description class.
+     * @return \phpsap\interfaces\IApi
+     */
+    public function extractApi()
+    {
+        return new RemoteApi(static::$extractedApi);
     }
 }

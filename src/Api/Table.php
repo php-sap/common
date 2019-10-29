@@ -95,11 +95,16 @@ class Table extends Value implements IArray
     {
         if (!is_array($members)) {
             throw new \InvalidArgumentException(
-                'Expected API table members to be array!'
+                'Expected API table members to be in an array!'
             );
         }
         $this->data[self::JSON_MEMBERS] = [];
         foreach ($members as $member) {
+            if (!$member instanceof IElement) {
+                throw new \InvalidArgumentException(
+                    'Expected API table members to be instances of IElement!'
+                );
+            }
             $this->addMember($member);
         }
     }

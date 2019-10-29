@@ -57,7 +57,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
      * @param mixed $members
      * @dataProvider \tests\phpsap\classes\Api\StructTest::provideNonArrays()
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected API table members to be array!
+     * @expectedExceptionMessage Expected API table members to be in an array!
      */
     public function testNonArrayMembers($members)
     {
@@ -65,7 +65,8 @@ class TableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Expected API table members to be instances of IElement!
      */
     public function testNonIElementMembers()
     {

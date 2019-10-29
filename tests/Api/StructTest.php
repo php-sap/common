@@ -76,7 +76,7 @@ class StructTest extends \PHPUnit_Framework_TestCase
      * @param mixed $members
      * @dataProvider provideNonArrays
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected API struct members to be array!
+     * @expectedExceptionMessage Expected API struct members to be in an array!
      */
     public function testNonArrayMembers($members)
     {
@@ -132,7 +132,8 @@ class StructTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test adding non-IElement members.
-     * @expectedException \PHPUnit_Framework_Error
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Expected API struct members to be instances of IElement!
      */
     public function testNonIElementMembers()
     {

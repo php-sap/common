@@ -17,6 +17,7 @@ use phpsap\classes\AbstractFunction;
 use phpsap\classes\AbstractRemoteFunctionCall;
 use phpsap\classes\Api\Value;
 use phpsap\classes\RemoteApi;
+use phpsap\interfaces\Api\IValue;
 use phpsap\interfaces\IFunction;
 use tests\phpsap\classes\helper\ConfigA;
 use tests\phpsap\classes\helper\RemoteFunction;
@@ -63,6 +64,14 @@ class AbstractRemoteFunctionCallTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetParam()
     {
+        RemoteFunction::$extractedApi = [
+            [
+                IValue::JSON_TYPE => IValue::TYPE_INTEGER,
+                IValue::JSON_NAME => 'mddaudvn',
+                IValue::JSON_DIRECTION => IValue::DIRECTION_INPUT,
+                IValue::JSON_OPTIONAL => false
+            ]
+        ];
         $rfc = new RemoteFunctionCall(new ConfigA());
         $rfc->setParam('mddaudvn', 613);
         static::assertSame(['mddaudvn' => 613], $rfc->getParams());
@@ -73,6 +82,14 @@ class AbstractRemoteFunctionCallTest extends \PHPUnit_Framework_TestCase
      */
     public function testReset()
     {
+        RemoteFunction::$extractedApi = [
+            [
+                IValue::JSON_TYPE => IValue::TYPE_FLOAT,
+                IValue::JSON_NAME => 'yovgwyfi',
+                IValue::JSON_DIRECTION => IValue::DIRECTION_INPUT,
+                IValue::JSON_OPTIONAL => false
+            ]
+        ];
         $rfc = new RemoteFunctionCall(new ConfigA());
         $rfc->setParam('yovgwyfi', 51.3);
         $rfc->reset();

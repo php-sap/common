@@ -15,6 +15,7 @@ use phpsap\classes\AbstractFunction;
 use phpsap\classes\Api\Value;
 use phpsap\classes\RemoteApi;
 use phpsap\exceptions\FunctionCallException;
+use phpsap\interfaces\Api\IValue;
 use phpsap\interfaces\IApi;
 use phpsap\interfaces\IFunction;
 use tests\phpsap\classes\helper\RemoteFunction;
@@ -59,6 +60,14 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
     {
         $resource = 'grFGmOH4';
         $function = new RemoteFunction($resource, 'FcWOSDAa');
+        $function::$extractedApi = [
+            [
+                IValue::JSON_TYPE => IValue::TYPE_STRING,
+                IValue::JSON_NAME => 'QG5ie8PS',
+                IValue::JSON_DIRECTION => IValue::DIRECTION_INPUT,
+                IValue::JSON_OPTIONAL => false
+            ]
+        ];
         $function->setParam('QG5ie8PS', 'JNmHX42z');
         static::assertSame(['QG5ie8PS' => 'JNmHX42z'], $function->getParams());
     }
@@ -96,13 +105,40 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test setting an invalid parameter name.
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unknown invoke parameter 'k1S33S08' for function 8d7VRRzj!
+     */
+    public function testSettingInvalidParamName()
+    {
+        $resource = 'tbTje1zd';
+        $function = new RemoteFunction($resource, '8d7VRRzj');
+        $function->setParam('k1S33S08', 28);
+    }
+
+    /**
      * Test retrieving params.
      */
     public function testGetParam()
     {
+        RemoteFunction::$extractedApi = [
+            [
+                IValue::JSON_TYPE => IValue::TYPE_STRING,
+                IValue::JSON_NAME => 'aJMLztf1',
+                IValue::JSON_DIRECTION => IValue::DIRECTION_INPUT,
+                IValue::JSON_OPTIONAL => false
+            ],
+            [
+                IValue::JSON_TYPE => IValue::TYPE_INTEGER,
+                IValue::JSON_NAME => 'NpvS2eyw',
+                IValue::JSON_DIRECTION => IValue::DIRECTION_INPUT,
+                IValue::JSON_OPTIONAL => false
+            ]
+        ];
         $resource = 'NyFvGBzW';
         $function = new RemoteFunction($resource, 'Y3DuHqJk');
-        $function->setParam('aJMLztf1', 'C4bFA5fA')
+        $function
+            ->setParam('aJMLztf1', 'C4bFA5fA')
             ->setParam('NpvS2eyw', 542);
         static::assertSame('C4bFA5fA', $function->getParam('aJMLztf1'));
         static::assertSame(542, $function->getParam('NpvS2eyw'));
@@ -144,10 +180,10 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         $function = new RemoteFunction($resource, 'MfGlebYV');
         $function::$extractedApi = [
             [
-                'type' => Value::TYPE_INTEGER,
-                'name' => 'sIg8uhd7',
-                'direction' => Value::DIRECTION_OUTPUT,
-                'optional' => false
+                IValue::JSON_TYPE => Value::TYPE_INTEGER,
+                IValue::JSON_NAME => 'sIg8uhd7',
+                IValue::JSON_DIRECTION => Value::DIRECTION_OUTPUT,
+                IValue::JSON_OPTIONAL => false
             ]
         ];
         $api = $function->getApi();
@@ -168,10 +204,10 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         $function = new RemoteFunction($resource, '2adpI0CP');
         $extractedApi = [
             [
-                'type' => Value::TYPE_INTEGER,
-                'name' => 'eb05nS2Q',
-                'direction' => Value::DIRECTION_OUTPUT,
-                'optional' => false
+                IValue::JSON_TYPE => Value::TYPE_INTEGER,
+                IValue::JSON_NAME => 'eb05nS2Q',
+                IValue::JSON_DIRECTION => Value::DIRECTION_OUTPUT,
+                IValue::JSON_OPTIONAL => false
             ]
         ];
         $function::$extractedApi = $extractedApi;
@@ -180,10 +216,10 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         static::assertJsonStringEqualsJsonString($extractedApiJson, $actualApiJson);
         $cachedApi = new RemoteApi([
             [
-                'type' => Value::TYPE_STRING,
-                'name' => 'tonw9Pou',
-                'direction' => Value::DIRECTION_OUTPUT,
-                'optional' => false
+                IValue::JSON_TYPE => Value::TYPE_STRING,
+                IValue::JSON_NAME => 'tonw9Pou',
+                IValue::JSON_DIRECTION => Value::DIRECTION_OUTPUT,
+                IValue::JSON_OPTIONAL => false
             ]
         ]);
         $function->setApi($cachedApi);

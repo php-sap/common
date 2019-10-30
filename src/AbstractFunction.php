@@ -51,6 +51,11 @@ abstract class AbstractFunction implements IFunction
     protected $api;
 
     /**
+     * @var array Expected remote function call parameters.
+     */
+    protected $expectedParams;
+
+    /**
      * Initialize this class with a connection instance and the function name.
      * @param mixed $connection Connection resource/object
      * @param string $name
@@ -123,8 +128,32 @@ abstract class AbstractFunction implements IFunction
                 $this->getName()
             ));
         }
+        if (!array_key_exists($name, $this->getExpectedParams())) {
+            throw new \InvalidArgumentException(sprintf(
+                'Unknown invoke parameter \'%s\' for function %s!',
+                $name,
+                $this->getName()
+            ));
+        }
         $this->params[$name] = $value;
         return $this;
+    }
+
+    /**
+     * Get an array of expected input parameters to invoke the remote function call
+     * and whether they are optional.
+     * The parameter names are all upper-case.
+     * @return array
+     */
+    protected function getExpectedParams()
+    {
+        if ($this->expectedParams === null) {
+            $this->expectedParams = [];
+            foreach ($this->getApi()->getInputValues() as $input) {
+                $this->expectedParams[$input->getName()] = $input->isOptional();
+            }
+        }
+        return $this->expectedParams;
     }
 
     /**

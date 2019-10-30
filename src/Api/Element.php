@@ -31,7 +31,7 @@ class Element implements IElement
         self::TYPE_INTEGER,
         self::TYPE_FLOAT,
         self::TYPE_STRING,
-        self::TYPE_HEX2BIN,
+        self::TYPE_HEXBIN,
         self::TYPE_DATE,
         self::TYPE_TIME,
         self::TYPE_TIMESTAMP,
@@ -123,7 +123,7 @@ class Element implements IElement
             case self::TYPE_WEEK:
                 $result = SapDateTime::createFromFormat(SapDateTime::SAP_WEEK, $value);
                 break;
-            case self::TYPE_HEX2BIN:
+            case self::TYPE_HEXBIN:
                 $result = hex2bin($value);
                 break;
             default:

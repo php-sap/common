@@ -150,7 +150,7 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
             [Element::TYPE_INTEGER, '98', 98],
             [Element::TYPE_FLOAT, '5.7', 5.7],
             [Element::TYPE_STRING, 21, '21'],
-            [Element::TYPE_HEX2BIN, '534150', 'SAP']
+            [Element::TYPE_HEXBIN, '534150', 'SAP']
         ];
     }
 

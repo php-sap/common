@@ -2,6 +2,7 @@
 
 namespace phpsap\classes\Api;
 
+use InvalidArgumentException;
 use phpsap\exceptions\ArrayElementMissingException;
 use phpsap\interfaces\Api\IArray;
 use phpsap\interfaces\Api\IElement;
@@ -88,14 +89,14 @@ class Struct extends Value implements IArray
     protected function setMembers($members)
     {
         if (!is_array($members)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected API struct members to be in an array!'
             );
         }
         $this->data[self::JSON_MEMBERS] = [];
         foreach ($members as $member) {
             if (!$member instanceof IElement) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'Expected API struct members to be instances of IElement!'
                 );
             }
@@ -117,7 +118,7 @@ class Struct extends Value implements IArray
             $json = json_decode($json, true);
         }
         if (!is_array($json)) {
-            throw new \InvalidArgumentException('Invalid JSON!');
+            throw new InvalidArgumentException('Invalid JSON!');
         }
         $fields = [
             self::JSON_TYPE,
@@ -128,17 +129,17 @@ class Struct extends Value implements IArray
         ];
         foreach ($fields as $field) {
             if (!array_key_exists($field, $json)) {
-                throw new \InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'Invalid JSON: API Struct is missing %s!',
                     $field
                 ));
             }
         }
         if ($json[self::JSON_TYPE] !== self::TYPE_ARRAY) {
-            throw new \InvalidArgumentException('Invalid JSON: API Struct type is not an array!');
+            throw new InvalidArgumentException('Invalid JSON: API Struct type is not an array!');
         }
         if (!is_array($json[self::JSON_MEMBERS])) {
-            throw new \InvalidArgumentException('Invalid JSON: API Struct members are not an array!');
+            throw new InvalidArgumentException('Invalid JSON: API Struct members are not an array!');
         }
         $members = [];
         foreach ($json[self::JSON_MEMBERS] as $member) {

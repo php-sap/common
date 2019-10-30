@@ -11,6 +11,7 @@
 
 namespace phpsap\classes;
 
+use InvalidArgumentException;
 use phpsap\interfaces\IApi;
 use phpsap\interfaces\IFunction;
 
@@ -123,13 +124,13 @@ abstract class AbstractFunction implements IFunction
     public function setParam($name, $value)
     {
         if (!is_string($name) || empty($name)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Expected function %s invoke parameter name to be string',
                 $this->getName()
             ));
         }
         if (!array_key_exists($name, $this->getExpectedParams())) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Unknown invoke parameter \'%s\' for function %s!',
                 $name,
                 $this->getName()

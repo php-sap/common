@@ -2,6 +2,7 @@
 
 namespace phpsap\classes\Api;
 
+use InvalidArgumentException;
 use phpsap\DateTime\SapDateTime;
 use phpsap\interfaces\Api\IElement;
 
@@ -73,12 +74,12 @@ class Element implements IElement
     protected function setType($type)
     {
         if (!is_string($type)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected API element type to be string!'
             );
         }
         if (!in_array($type, static::$allowedTypes, true)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Expected API element type to be in: %s!',
                 implode(', ', static::$allowedTypes)
             ));
@@ -93,7 +94,7 @@ class Element implements IElement
     protected function setName($name)
     {
         if (!is_string($name) || $name === '') {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected API element name to be string!'
             );
         }
@@ -158,7 +159,7 @@ class Element implements IElement
             $json = json_decode($json, true);
         }
         if (!is_array($json)) {
-            throw new \InvalidArgumentException('Invalid JSON!');
+            throw new InvalidArgumentException('Invalid JSON!');
         }
         $fields = [
             self::JSON_TYPE,
@@ -166,7 +167,7 @@ class Element implements IElement
         ];
         foreach ($fields as $field) {
             if (!array_key_exists($field, $json)) {
-                throw new \InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'Invalid JSON: API Element is missing %s!',
                     $field
                 ));

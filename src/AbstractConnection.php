@@ -11,6 +11,7 @@
 
 namespace phpsap\classes;
 
+use InvalidArgumentException;
 use phpsap\exceptions\ConnectionFailedException;
 use phpsap\interfaces\IConfig;
 use phpsap\interfaces\IConnection;
@@ -104,7 +105,7 @@ abstract class AbstractConnection implements IConnection
     public function prepareFunction($name)
     {
         if (!is_string($name) || empty(trim($name))) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing or malformed SAP remote function name'
             );
         }

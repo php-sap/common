@@ -11,6 +11,7 @@
 
 namespace phpsap\classes;
 
+use InvalidArgumentException;
 use phpsap\interfaces\IConfig;
 
 /**
@@ -98,7 +99,7 @@ abstract class AbstractConfig extends AbstractConfigContainer implements IConfig
         if (!is_string($value)
             || !preg_match('~^[A-Z]{2}$~', $value, $match)
         ) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected two letter country code as language.'
             );
         }
@@ -144,7 +145,7 @@ abstract class AbstractConfig extends AbstractConfigContainer implements IConfig
         if ((!is_int($value) && !is_string($value))
            || !preg_match('~^[0-3]$~', $value, $match)
         ) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The trace level can only be 0-3.'
             );
         }

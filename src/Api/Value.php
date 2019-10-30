@@ -2,6 +2,7 @@
 
 namespace phpsap\classes\Api;
 
+use InvalidArgumentException;
 use phpsap\interfaces\Api\IValue;
 
 /**
@@ -64,12 +65,12 @@ class Value extends Element implements IValue
     protected function setDirection($direction)
     {
         if (!is_string($direction)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected API value direction to be string!'
             );
         }
         if (!in_array($direction, static::$allowedDirections, true)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Expected API value direction to be in: %s!',
                 implode(', ', static::$allowedDirections)
             ));
@@ -85,7 +86,7 @@ class Value extends Element implements IValue
     protected function setOptional($isOptional)
     {
         if (!is_bool($isOptional)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected API value isOptional flag to be boolean!'
             );
         }
@@ -106,7 +107,7 @@ class Value extends Element implements IValue
             $json = json_decode($json, true);
         }
         if (!is_array($json)) {
-            throw new \InvalidArgumentException('Invalid JSON!');
+            throw new InvalidArgumentException('Invalid JSON!');
         }
         $fields = [
             self::JSON_TYPE,
@@ -116,7 +117,7 @@ class Value extends Element implements IValue
         ];
         foreach ($fields as $field) {
             if (!array_key_exists($field, $json)) {
-                throw new \InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'Invalid JSON: API Value is missing %s!',
                     $field
                 ));

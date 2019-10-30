@@ -11,6 +11,8 @@
 
 namespace phpsap\classes;
 
+use InvalidArgumentException;
+use JsonSerializable;
 use phpsap\exceptions\ConfigKeyNotFoundException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -25,7 +27,7 @@ use Psr\Container\NotFoundExceptionInterface;
  * @author  Gregor J.
  * @license MIT
  */
-abstract class AbstractConfigContainer implements ContainerInterface, \JsonSerializable
+abstract class AbstractConfigContainer implements ContainerInterface, JsonSerializable
 {
     /**
      * @var array configuration data
@@ -46,7 +48,7 @@ abstract class AbstractConfigContainer implements ContainerInterface, \JsonSeria
         } elseif (is_string($config)) {
             $this->loadJsonString($config);
         } elseif ($config !== null) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected configuration to either be an array'
                 . ', or a JSON encoded string!'
             );
@@ -61,7 +63,7 @@ abstract class AbstractConfigContainer implements ContainerInterface, \JsonSeria
     protected function loadArray($config)
     {
         if (!is_array($config)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected config to be an array!'
             );
         }
@@ -82,13 +84,13 @@ abstract class AbstractConfigContainer implements ContainerInterface, \JsonSeria
     protected function loadJsonString($config)
     {
         if (!is_string($config)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected config to be a JSON encoded string!'
             );
         }
         $configArr = json_decode($config, true);
         if ($configArr === null) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected config to be a JSON encoded string!'
             );
         }
@@ -103,12 +105,12 @@ abstract class AbstractConfigContainer implements ContainerInterface, \JsonSeria
     protected function set($key, $value)
     {
         if (!is_string($key) || empty($key)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected configuration key to be a string value.'
             );
         }
         if (!is_string($value) && !is_int($value) && !is_float($value) && !is_bool($value)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected configuration value to be either a'
                 .' string, floating point, integer or boolean value.'
             );
@@ -130,7 +132,7 @@ abstract class AbstractConfigContainer implements ContainerInterface, \JsonSeria
     public function get($key)
     {
         if (!is_string($key) || empty($key)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected configuration key to be a string value.'
             );
         }
@@ -158,7 +160,7 @@ abstract class AbstractConfigContainer implements ContainerInterface, \JsonSeria
     public function has($key)
     {
         if (!is_string($key) || empty($key)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected configuration key to be a string value.'
             );
         }

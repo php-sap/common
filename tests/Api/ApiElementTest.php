@@ -3,6 +3,7 @@
 namespace tests\phpsap\classes\Api;
 
 use phpsap\classes\Api\Element;
+use phpsap\DateTime\SapDateTime;
 use phpsap\interfaces\Api\IArray;
 use phpsap\interfaces\Api\IElement;
 
@@ -148,7 +149,8 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
             [Element::TYPE_BOOLEAN, '0', false],
             [Element::TYPE_INTEGER, '98', 98],
             [Element::TYPE_FLOAT, '5.7', 5.7],
-            [Element::TYPE_STRING, 21, '21']
+            [Element::TYPE_STRING, 21, '21'],
+            [Element::TYPE_HEX2BIN, '534150', 'SAP']
         ];
     }
 
@@ -164,6 +166,29 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
         $element = new Element($type, 'wGSkGY6F');
         $actual = $element->cast($value);
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test DateTime typed elements.
+     * @throws \Exception
+     */
+    public function testDateTimeElements()
+    {
+        $dateElement = new Element(Element::TYPE_DATE, 'GONyW3vz');
+        $actual = $dateElement->cast('20191030');
+        static::assertSame('2019-10-30', $actual->format('Y-m-d'));
+
+        $timeElement = new Element(Element::TYPE_TIME, 'Ma0NRVdj');
+        $actual = $timeElement->cast('102030');
+        static::assertSame('10:20:30', $actual->format('H:i:s'));
+
+        $timestampElement = new Element(Element::TYPE_TIMESTAMP, '2SNTkpDJ');
+        $actual = $timestampElement->cast('20191030102030');
+        static::assertSame('2019-10-30 10:20:30', $actual->format('Y-m-d H:i:s'));
+
+        $weekElement = new Element(Element::TYPE_WEEK, '5aWCnRfD');
+        $actual = $weekElement->cast('201944');
+        static::assertSame('2019W44', $actual->format('o\WW'));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace phpsap\classes\Api;
 
+use phpsap\DateTime\SapDateTime;
 use phpsap\interfaces\Api\IElement;
 
 /**
@@ -28,7 +29,12 @@ class Element implements IElement
         self::TYPE_BOOLEAN,
         self::TYPE_INTEGER,
         self::TYPE_FLOAT,
-        self::TYPE_STRING
+        self::TYPE_STRING,
+        self::TYPE_HEX2BIN,
+        self::TYPE_DATE,
+        self::TYPE_TIME,
+        self::TYPE_TIMESTAMP,
+        self::TYPE_WEEK
     ];
 
     /**
@@ -95,14 +101,36 @@ class Element implements IElement
     }
 
     /**
-     * Cast a given value to the type defined in this class.
+     * Cast a given output value to the type defined in this class.
      * @param mixed $value
-     * @return bool|int|float|string
+     * @return bool|int|float|string|\phpsap\DateTime\SapDateTime
+     * @throws \Exception
      */
     public function cast($value)
     {
-        settype($value, $this->getType());
-        return $value;
+        $type = $this->getType();
+        switch ($type) {
+            case self::TYPE_DATE:
+                $result = SapDateTime::createFromFormat(SapDateTime::SAP_DATE, $value);
+                break;
+            case self::TYPE_TIME:
+                $result = SapDateTime::createFromFormat(SapDateTime::SAP_TIME, $value);
+                break;
+            case self::TYPE_TIMESTAMP:
+                $result = SapDateTime::createFromFormat(SapDateTime::SAP_TIMESTAMP, $value);
+                break;
+            case self::TYPE_WEEK:
+                $result = SapDateTime::createFromFormat(SapDateTime::SAP_WEEK, $value);
+                break;
+            case self::TYPE_HEX2BIN:
+                $result = hex2bin($value);
+                break;
+            default:
+                $result = $value;
+                settype($result, $type);
+                break;
+        }
+        return $result;
     }
 
     /**

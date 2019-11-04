@@ -153,6 +153,9 @@ abstract class AbstractFunction implements IFunction
             foreach ($this->getApi()->getInputValues() as $input) {
                 $this->expectedParams[$input->getName()] = $input->isOptional();
             }
+            foreach ($this->getApi()->getTables() as $table) {
+                $this->expectedParams[$table->getName()] = $table->isOptional();
+            }
         }
         return $this->expectedParams;
     }

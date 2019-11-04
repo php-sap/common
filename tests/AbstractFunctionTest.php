@@ -56,6 +56,9 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         static::assertSame([], $function->getParams());
     }
 
+    /**
+     * Test setting parameters.
+     */
     public function testSetParam()
     {
         $resource = 'grFGmOH4';

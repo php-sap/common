@@ -124,7 +124,7 @@ class Element implements IElement
                 $result = SapDateTime::createFromFormat(SapDateTime::SAP_WEEK, $value);
                 break;
             case self::TYPE_HEXBIN:
-                $result = hex2bin($value);
+                $result = hex2bin(trim($value));
                 break;
             default:
                 $result = $value;

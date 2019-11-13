@@ -62,12 +62,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/interfaces.git",
-                "reference": "c885680649baf9e5769842302235c6e0df8a9ba7"
+                "reference": "16331f9d2f067d69def09a6893eb29af0e60e17b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/c885680649baf9e5769842302235c6e0df8a9ba7",
-                "reference": "c885680649baf9e5769842302235c6e0df8a9ba7",
+                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/16331f9d2f067d69def09a6893eb29af0e60e17b",
+                "reference": "16331f9d2f067d69def09a6893eb29af0e60e17b",
                 "shasum": ""
             },
             "require": {
@@ -101,7 +101,7 @@
                 "interfaces",
                 "php-sap"
             ],
-            "time": "2019-10-30T15:27:23+00:00"
+            "time": "2019-11-13T17:19:53+00:00"
         },
         {
             "name": "psr/container",

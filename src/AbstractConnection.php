@@ -2,10 +2,15 @@
 
 namespace phpsap\classes;
 
+use stdClass;
 use InvalidArgumentException;
-use phpsap\exceptions\ConnectionFailedException;
-use phpsap\interfaces\IConfig;
 use phpsap\interfaces\IConnection;
+use phpsap\interfaces\IFunction;
+use phpsap\interfaces\Config\IConfiguration;
+use phpsap\exceptions\ConnectionFailedException;
+use phpsap\exceptions\IncompleteConfigException;
+use phpsap\exceptions\UnknownFunctionException;
+use phpsap\classes\Config\ConfigCommon;
 
 /**
  * Class phpsap\classes\AbstractConnection
@@ -19,116 +24,78 @@ use phpsap\interfaces\IConnection;
 abstract class AbstractConnection implements IConnection
 {
     /**
-     * @var mixed SAP remote connection.
+     * @var IConfiguration Connection configuration.
      */
-    protected $connection;
-
-    /**
-     * @var array Configuration array.
-     */
-    protected $config;
-
-    /**
-     * @var string SapRfcConnection ID.
-     */
-    protected $connectionId;
+    protected $configuration;
 
     /**
      * Initialize this class with a configuration.
-     * @param \phpsap\interfaces\IConfig $config
-     * @throws \phpsap\interfaces\exceptions\IIncompleteConfigException
+     * @param string|array|stdClass|IConfiguration $config Connection configuration
      */
-    public function __construct(IConfig $config)
+    public function __construct($config)
     {
-        $this->config = $config->generateConfig();
+        if (!$config instanceof IConfiguration) {
+            $config = ConfigCommon::jsonDecode($config);
+        }
+        $this->configuration = $config;
     }
 
     /**
-     * Returns the connection ID.
-     * The connection ID is derived from the configuration. The same configuration
-     * will result in the same connection ID.
-     * @return string
+     * Get the configuration of this connection instance.
+     * @return IConfiguration
      */
-    public function getId()
+    public function getConfiguration()
     {
-        if ($this->connectionId === null) {
-            $this->connectionId = md5(serialize($this->config));
-        }
-        return $this->connectionId;
+        return $this->configuration;
     }
 
     /**
-     * Is connection established?
-     * @return bool
+     * Specify data which should be serialized to JSON
+     * @link  https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
      */
-    public function isConnected()
+    public function jsonSerialize()
     {
-        return $this->connection !== null;
+        return $this->configuration->jsonSerialize();
     }
 
     /**
-     * Returns the actual connection resource.
-     * @return mixed SAPRFC connection instance
-     * @throws \phpsap\exceptions\ConnectionFailedException
+     * Decode a JSON encoded connection configuration.
+     * @param string|array|stdClass $config Connection configuration
+     * @return IConnection
      */
-    protected function getConnection()
+    public static function jsonDecode($config)
     {
-        if (!$this->isConnected()) {
-            $this->connect();
-        }
-        if ($this->connection === null) {
-            throw new ConnectionFailedException(sprintf(
-                'Connection %s failed.',
-                $this->getId()
-            ));
-        }
-        return $this->connection;
+        return new static($config);
     }
 
     /**
      * Prepare a remote function call and return a function instance.
-     * @param string $name
-     * @return \phpsap\classes\AbstractFunction
-     * @throws \InvalidArgumentException
-     * @throws \phpsap\exceptions\ConnectionFailedException
-     * @throws \phpsap\exceptions\UnknownFunctionException
+     * @param string $functionName
+     * @return IFunction
+     * @throws ConnectionFailedException
+     * @throws UnknownFunctionException
+     * @throws IncompleteConfigException
      */
-    public function prepareFunction($name)
+    public function prepareFunction($functionName)
     {
-        if (!is_string($name) || empty(trim($name))) {
+        if (!is_string($functionName) || empty(trim($functionName))) {
             throw new InvalidArgumentException(
                 'Missing or malformed SAP remote function name'
             );
         }
-        return $this->createFunctionInstance(trim($name));
+        return $this->createFunctionInstance($functionName);
     }
-
-    /**
-     * Establish a connection to the configured system.
-     * In case the connection is already open, close it first.
-     * @throws \phpsap\exceptions\ConnectionFailedException
-     */
-    abstract public function connect();
-
-    /**
-     * Send a ping request via an established connection to verify that the
-     * connection works.
-     * @return boolean success?
-     * @throws \phpsap\exceptions\ConnectionFailedException
-     */
-    abstract public function ping();
-
-    /**
-     * Closes the connection instance of the underlying PHP module.
-     */
-    abstract public function close();
 
     /**
      * Prepare a remote function call and return a function instance.
      * @param string $name
      * @return \phpsap\classes\AbstractFunction
-     * @throws \phpsap\exceptions\ConnectionFailedException
-     * @throws \phpsap\exceptions\UnknownFunctionException
+     * @throws ConnectionFailedException
+     * @throws UnknownFunctionException
+     * @throws IncompleteConfigException
      */
     abstract protected function createFunctionInstance($name);
 }

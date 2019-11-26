@@ -2,16 +2,16 @@
 
 namespace tests\phpsap\classes;
 
-use phpsap\classes\AbstractConnection;
 use phpsap\interfaces\IConnection;
+use phpsap\classes\AbstractConnection;
+use phpsap\classes\Config\ConfigTypeA;
 use tests\phpsap\classes\helper\Connection;
-use tests\phpsap\classes\helper\ConfigA;
 use tests\phpsap\classes\helper\RemoteFunction;
 
 /**
  * Class tests\phpsap\classes\AbstractConnectionTest
  *
- * DESCRIPTION
+ * Test the functionality of the AbstractConnection class.
  *
  * @package tests\phpsap\classes
  * @author  Gregor J.
@@ -24,87 +24,73 @@ class AbstractConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInheritance()
     {
-        $connection = new Connection(new ConfigA());
+        $connection = new Connection(new ConfigTypeA());
         static::assertInstanceOf(IConnection::class, $connection);
         static::assertInstanceOf(AbstractConnection::class, $connection);
         static::assertInstanceOf(Connection::class, $connection);
     }
 
     /**
-     * Test getting the connection ID.
+     * Test basic JSON serialization.
      */
-    public function testGetId()
+    public function testBasicJsonSerialization()
     {
-        $config = new ConfigA();
+        $config = new ConfigTypeA();
+        static::assertJsonStringEqualsJsonString('{}', json_encode($config));
         $connection = new Connection($config);
-        static::assertInstanceOf(Connection::class, $connection);
-        $actual = $connection->getId();
-        $expected = md5(serialize($config->generateConfig()));
-        static::assertSame($expected, $actual);
+        static::assertJsonStringEqualsJsonString('{}', json_encode($connection));
     }
 
     /**
-     * Test successfully pinging the connection.
+     * Data provider for valid configuration variants with ASHOST = a1seera3 and
+     * SYSNR = 3374 (config type A).
+     * @return array
      */
-    public function testSuccessfulPing()
+    public static function provideConnectionConfigurationVariant()
     {
-        $connection = new Connection(new ConfigA());
-        static::assertInstanceOf(Connection::class, $connection);
-        $connection->pingResult = false;
-        static::assertFalse($connection->ping());
-        $connection->pingResult = true;
-        static::assertTrue($connection->ping());
+        $config = (new ConfigTypeA())
+            ->setAshost('a1seera3')
+            ->setSysnr('3374')
+        ;
+        return [
+            [$config],
+            [json_encode($config)],
+            [json_decode(json_encode($config))],
+            [json_decode(json_encode($config), true)]
+        ];
     }
 
     /**
-     * @expectedException \phpsap\exceptions\ConnectionFailedException
-     * @expectedExceptionMessage Connection failed.
+     * Test connection configuration variants.
+     * @param string|array|\phpsap\interfaces\Config\IConfiguration $config
+     * @dataProvider provideConnectionConfigurationVariant
      */
-    public function testPingConnectionFailedException()
+    public function testConnectionConfigurationVariant($config)
     {
-        $connection = new Connection(new ConfigA());
-        static::assertInstanceOf(Connection::class, $connection);
-        $connection->pingResult = null;
-        $connection->ping();
+        $connection = new Connection($config);
+        /**
+         * @var ConfigTypeA $configuration
+         */
+        $configuration = $connection->getConfiguration();
+        static::assertInstanceOf(ConfigTypeA::class, $configuration);
+        $actual = json_encode($configuration);
+        $expected = '{"ashost":"a1seera3","sysnr":"3374"}';
+        static::assertJsonStringEqualsJsonString($expected, $actual);
     }
 
-    /**
-     * Test internal function for establishing a connection.
-     */
-    public function testSuccessfulGetConnection()
+    public function testJsonDecode()
     {
-        $connection = new Connection(new ConfigA());
-        static::assertInstanceOf(Connection::class, $connection);
-        $connection->connectionRessource = 'success';
-        $backend_connection = $connection->getConnection();
-        static::assertSame('success', $backend_connection);
-    }
-
-    /**
-     * Test internal function for establishing a connection.
-     * @expectedException \phpsap\exceptions\ConnectionFailedException
-     * @expectedExceptionMessageRegExp "^Connection [0-9a-f]{32} failed.$"
-     */
-    public function testFailedGetConnection()
-    {
-        $connection = new Connection(new ConfigA());
-        static::assertInstanceOf(Connection::class, $connection);
-        $connection->connectionRessource = null;
-        $connection->getConnection();
-    }
-
-    /**
-     * Test internal function isConnected().
-     */
-    public function testIsConnected()
-    {
-        $connection = new Connection(new ConfigA());
-        static::assertInstanceOf(Connection::class, $connection);
-        static::assertFalse($connection->isConnected());
-        $connection->connectionRessource = 'success';
-        $ressource = $connection->getConnection();
-        static::assertTrue($connection->isConnected());
-        static::assertSame('success', $ressource);
+        $json = '{"ashost":"5fu2gbae","sysnr":"7443"}';
+        $connection = Connection::jsonDecode($json);
+        static::assertInstanceOf(IConnection::class, $connection);
+        static::assertInstanceOf(AbstractConnection::class, $connection);
+        /**
+         * @var ConfigTypeA $configuration
+         */
+        $configuration = $connection->getConfiguration();
+        static::assertInstanceOf(ConfigTypeA::class, $configuration);
+        static::assertSame('5fu2gbae', $configuration->getAshost());
+        static::assertSame('7443', $configuration->getSysnr());
     }
 
     /**
@@ -112,7 +98,7 @@ class AbstractConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareFunction()
     {
-        $connection = new Connection(new ConfigA());
+        $connection = new Connection(new ConfigTypeA());
         static::assertInstanceOf(Connection::class, $connection);
         $function = $connection->prepareFunction('mhcbyejv');
         static::assertInstanceOf(RemoteFunction::class, $function);
@@ -147,7 +133,7 @@ class AbstractConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidFunctionNames($name)
     {
-        $connection = new Connection(new ConfigA());
+        $connection = new Connection(new ConfigTypeA());
         static::assertInstanceOf(Connection::class, $connection);
         $connection->prepareFunction($name);
     }

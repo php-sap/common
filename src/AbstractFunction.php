@@ -1,13 +1,4 @@
 <?php
-/**
- * File src/AbstractFunction.php
- *
- * PHP/SAP abstract function class.
- *
- * @package common
- * @author  Gregor J.
- * @license MIT
- */
 
 namespace phpsap\classes;
 

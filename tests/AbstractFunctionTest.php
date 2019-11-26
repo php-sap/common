@@ -1,13 +1,4 @@
 <?php
-/**
- * File tests/AbstractFunctionTest.php
- *
- * Test the abstract function class.
- *
- * @package common
- * @author  Gregor J.
- * @license MIT
- */
 
 namespace tests\phpsap\classes;
 

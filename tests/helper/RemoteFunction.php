@@ -1,13 +1,4 @@
 <?php
-/**
- * File tests/helper/RemoteFunction.php
- *
- * Helper class extending the abstract function class for testing.
- *
- * @package common
- * @author  Gregor J.
- * @license MIT
- */
 
 namespace tests\phpsap\classes\helper;
 

@@ -1,13 +1,4 @@
 <?php
-/**
- * File tests/helper/Connection.php
- *
- * Helper class extending the abstract connection class for testing.
- *
- * @package common
- * @author  Gregor J.
- * @license MIT
- */
 
 namespace tests\phpsap\classes\helper;
 

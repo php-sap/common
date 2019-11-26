@@ -1,13 +1,4 @@
 <?php
-/**
- * File tests/AbstractConnectionTest.php
- *
- * DESCRIPTION
- *
- * @package common
- * @author  Gregor J.
- * @license MIT
- */
 
 namespace tests\phpsap\classes;
 

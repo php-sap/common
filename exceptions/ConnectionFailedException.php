@@ -1,27 +1,18 @@
 <?php
-/**
- * File exceptions/ConnectionFailedException.php
- *
- * PHP/SAP connection failed.
- *
- * @package exceptions
- * @author  Gregor J.
- * @license MIT
- */
 
 namespace phpsap\exceptions;
 
 use phpsap\interfaces\exceptions\IConnectionFailedException;
 
 /**
- * Class phpsap\exceptions\ConnectionFailedException
+ * Class ConnectionFailedException
  *
- * Exception thrown when PHP/SAP connections fail.
+ * The SAP connection failed.
  *
  * @package phpsap\exceptions
  * @author  Gregor J.
  * @license MIT
  */
-class ConnectionFailedException extends SapException implements IConnectionFailedException
+class ConnectionFailedException extends SapRuntimeException implements IConnectionFailedException
 {
 }

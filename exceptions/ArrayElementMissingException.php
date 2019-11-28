@@ -1,27 +1,18 @@
 <?php
-/**
- * File exceptions/ArrayElementMissingException.php
- *
- * PHP/SAP function not found.
- *
- * @package exceptions
- * @author  Gregor J.
- * @license MIT
- */
 
 namespace phpsap\exceptions;
 
 use phpsap\interfaces\exceptions\IArrayElementMissingException;
 
 /**
- * Class phpsap\exceptions\ArrayElementMissingException
+ * Class ArrayElementMissingException
  *
- * Exception thrown when a SAP remote function cannot be found.
+ * A table element required by the API is not in the table.
  *
  * @package phpsap\exceptions
  * @author  Gregor J.
  * @license MIT
  */
-class ArrayElementMissingException extends SapException implements IArrayElementMissingException
+class ArrayElementMissingException extends SapLogicException implements IArrayElementMissingException
 {
 }

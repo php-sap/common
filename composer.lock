@@ -62,12 +62,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/interfaces.git",
-                "reference": "16331f9d2f067d69def09a6893eb29af0e60e17b"
+                "reference": "fbbb5d1e9b906c79dff83709cef93238cc1963f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/16331f9d2f067d69def09a6893eb29af0e60e17b",
-                "reference": "16331f9d2f067d69def09a6893eb29af0e60e17b",
+                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/fbbb5d1e9b906c79dff83709cef93238cc1963f1",
+                "reference": "fbbb5d1e9b906c79dff83709cef93238cc1963f1",
                 "shasum": ""
             },
             "require": {
@@ -101,7 +101,7 @@
                 "interfaces",
                 "php-sap"
             ],
-            "time": "2019-11-13T17:19:53+00:00"
+            "time": "2019-11-28T15:38:40+00:00"
         },
         {
             "name": "psr/container",
@@ -1168,16 +1168,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.12.0",
+            "version": "v1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "550ebaac289296ce228a706d0867afc34687e3f4"
+                "reference": "f8f0b461be3385e56d6de3dbb5a0df24c0c275e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/550ebaac289296ce228a706d0867afc34687e3f4",
-                "reference": "550ebaac289296ce228a706d0867afc34687e3f4",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/f8f0b461be3385e56d6de3dbb5a0df24c0c275e3",
+                "reference": "f8f0b461be3385e56d6de3dbb5a0df24c0c275e3",
                 "shasum": ""
             },
             "require": {
@@ -1189,7 +1189,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.13-dev"
                 }
             },
             "autoload": {
@@ -1222,7 +1222,7 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2019-08-06T08:03:45+00:00"
+            "time": "2019-11-27T13:56:44+00:00"
         },
         {
             "name": "symfony/yaml",

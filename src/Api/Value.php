@@ -2,14 +2,14 @@
 
 namespace phpsap\classes\Api;
 
-use InvalidArgumentException;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IValue;
 
 /**
- * Class phpsap\classes\Api\Value
+ * Class Value
  *
- * API values have a direction (input, output or table) and an optional flag, unlike
- * elements.
+ * API values extend the logic of an element but have a direction (input or output)
+ * and an optional flag, unlike elements.
  *
  * @package phpsap\classes\Api
  * @author  Gregor J.
@@ -17,6 +17,16 @@ use phpsap\interfaces\Api\IValue;
  */
 class Value extends Element implements IValue
 {
+    /**
+     * @var array Allowed JsonSerializable keys to set values for.
+     */
+    protected static $allowedKeys = [
+        self::JSON_TYPE,
+        self::JSON_NAME,
+        self::JSON_DIRECTION,
+        self::JSON_OPTIONAL
+    ];
+
     /**
      * @var array List of allowed API value directions.
      */
@@ -27,10 +37,11 @@ class Value extends Element implements IValue
 
     /**
      * API value constructor.
-     * @param string  $type        Either string, int, float, bool or array
-     * @param string  $name        API value name.
-     * @param string  $direction   Either input, output or table.
-     * @param bool    $isOptional  Is the API value optional?
+     * @param string $type       Either string, int, float, bool or array
+     * @param string $name       API value name.
+     * @param string $direction  Either input, output or table.
+     * @param bool   $isOptional Is the API value optional?
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function __construct($type, $name, $direction, $isOptional)
     {
@@ -45,7 +56,11 @@ class Value extends Element implements IValue
      */
     public function getDirection()
     {
-        return $this->data[self::JSON_DIRECTION];
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
+        return $this->get(self::JSON_DIRECTION);
     }
 
     /**
@@ -54,13 +69,17 @@ class Value extends Element implements IValue
      */
     public function isOptional()
     {
-        return $this->data[self::JSON_OPTIONAL];
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
+        return $this->get(self::JSON_OPTIONAL);
     }
 
     /**
      * Set the API value direction: input, output or table.
      * @param string $direction
-     * @throws \InvalidArgumentException
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     protected function setDirection($direction)
     {
@@ -75,13 +94,13 @@ class Value extends Element implements IValue
                 implode(', ', static::$allowedDirections)
             ));
         }
-        $this->data[self::JSON_DIRECTION] = $direction;
+        $this->set(self::JSON_DIRECTION, $direction);
     }
 
     /**
      * Set the API value optional flag.
      * @param bool $isOptional
-     * @throws \InvalidArgumentException
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     protected function setOptional($isOptional)
     {
@@ -90,44 +109,23 @@ class Value extends Element implements IValue
                 'Expected API value isOptional flag to be boolean!'
             );
         }
-        $this->data[self::JSON_OPTIONAL] = $isOptional;
+        $this->set(self::JSON_OPTIONAL, $isOptional);
     }
 
     /**
-     * Decode a formerly JSON encoded Value object.
-     * @param string|\stdClass|array $json
+     * Create an instance of this class from an array.
+     * @param array $array Array containing the properties of this class.
      * @return \phpsap\classes\Api\Value
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public static function jsonDecode($json)
+    public static function fromArray($array)
     {
-        if (is_object($json)) {
-            $json = json_encode($json);
-        }
-        if (is_string($json)) {
-            $json = json_decode($json, true);
-        }
-        if (!is_array($json)) {
-            throw new InvalidArgumentException('Invalid JSON!');
-        }
-        $fields = [
-            self::JSON_TYPE,
-            self::JSON_NAME,
-            self::JSON_DIRECTION,
-            self::JSON_OPTIONAL
-        ];
-        foreach ($fields as $field) {
-            if (!array_key_exists($field, $json)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Invalid JSON: API Value is missing %s!',
-                    $field
-                ));
-            }
-        }
+        static::fromArrayValidation($array);
         return new self(
-            $json[self::JSON_TYPE],
-            $json[self::JSON_NAME],
-            $json[self::JSON_DIRECTION],
-            $json[self::JSON_OPTIONAL]
+            $array[self::JSON_TYPE],
+            $array[self::JSON_NAME],
+            $array[self::JSON_DIRECTION],
+            $array[self::JSON_OPTIONAL]
         );
     }
 }

@@ -62,12 +62,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/interfaces.git",
-                "reference": "fbbb5d1e9b906c79dff83709cef93238cc1963f1"
+                "reference": "2b75e1a569e79e46617befedbe4da9633bba1be8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/fbbb5d1e9b906c79dff83709cef93238cc1963f1",
-                "reference": "fbbb5d1e9b906c79dff83709cef93238cc1963f1",
+                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/2b75e1a569e79e46617befedbe4da9633bba1be8",
+                "reference": "2b75e1a569e79e46617befedbe4da9633bba1be8",
                 "shasum": ""
             },
             "require": {
@@ -101,7 +101,7 @@
                 "interfaces",
                 "php-sap"
             ],
-            "time": "2019-11-28T15:38:40+00:00"
+            "time": "2019-12-09T09:36:20+00:00"
         },
         {
             "name": "psr/container",
@@ -1168,7 +1168,7 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.13.0",
+            "version": "v1.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -1226,7 +1226,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.35",
+            "version": "v3.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",

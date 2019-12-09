@@ -2,7 +2,7 @@
 
 namespace phpsap\classes\Api;
 
-use InvalidArgumentException;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\exceptions\ArrayElementMissingException;
 use phpsap\interfaces\Api\IArray;
 use phpsap\interfaces\Api\IElement;
@@ -19,6 +19,17 @@ use phpsap\interfaces\Api\IElement;
 class Struct extends Value implements IArray
 {
     /**
+     * @var array Allowed JsonSerializable keys to set values for.
+     */
+    protected static $allowedKeys = [
+        self::JSON_TYPE,
+        self::JSON_NAME,
+        self::JSON_DIRECTION,
+        self::JSON_OPTIONAL,
+        self::JSON_MEMBERS
+    ];
+
+    /**
      * @var array List of allowed API element types.
      */
     protected static $allowedTypes = [
@@ -26,11 +37,22 @@ class Struct extends Value implements IArray
     ];
 
     /**
+     * Get an array of all valid configuration keys and whether they are mandatory.
+     * @return array
+     */
+    protected function getAllowedKeys()
+    {
+        //Merge the keys of Element, Value and Struct class.
+        return array_merge(parent::getAllowedKeys(), self::$allowedKeys);
+    }
+
+    /**
      * Struct constructor.
-     * @param string  $name        API struct name.
-     * @param string  $direction   Either input or output.
-     * @param bool    $isOptional  Is the API struct optional?
-     * @param array   $members     Array of Elements as the members of the struct.
+     * @param string $name       API struct name.
+     * @param string $direction  Either input or output.
+     * @param bool   $isOptional Is the API struct optional?
+     * @param array  $members    Array of Elements as the members of the struct.
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function __construct($name, $direction, $isOptional, $members)
     {
@@ -40,14 +62,15 @@ class Struct extends Value implements IArray
 
     /**
      * Cast a given value to the implemented value.
-     * @param array $struct
+     * @param array $struct The output array to typecast.
      * @return array
+     * @throws \phpsap\exceptions\ArrayElementMissingException
      */
     public function cast($struct)
     {
         foreach ($this->getMembers() as $member) {
             /**
-             * @var IElement $member
+             * @var \phpsap\classes\Api\Element $member
              */
             $name = $member->getName();
             if (!array_key_exists($name, $struct)) {
@@ -68,23 +91,17 @@ class Struct extends Value implements IArray
      */
     public function getMembers()
     {
-        return $this->data[self::JSON_MEMBERS];
-    }
-
-    /**
-     * Add a member to the table.
-     * @param \phpsap\interfaces\Api\IElement $member
-     * @return \phpsap\classes\Api\Struct
-     */
-    public function addMember(IElement $member)
-    {
-        $this->data[self::JSON_MEMBERS][] = $member;
-        return $this;
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
+        return $this->get(self::JSON_MEMBERS);
     }
 
     /**
      * Set the member elements of the table.
      * @param array $members
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     protected function setMembers($members)
     {
@@ -93,58 +110,41 @@ class Struct extends Value implements IArray
                 'Expected API struct members to be in an array!'
             );
         }
-        $this->data[self::JSON_MEMBERS] = [];
         foreach ($members as $member) {
             if (!$member instanceof IElement) {
                 throw new InvalidArgumentException(
                     'Expected API struct members to be instances of IElement!'
                 );
             }
-            $this->addMember($member);
         }
+        $this->remove(self::JSON_MEMBERS);
+        $this->set(self::JSON_MEMBERS, $members);
     }
 
     /**
-     * Decode a formerly JSON encoded Struct object.
-     * @param string|\stdClass|array $json
+     * Create an instance of this class from an array.
+     * @param array $array Array containing the properties of this class.
      * @return \phpsap\classes\Api\Struct
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public static function jsonDecode($json)
+    public static function fromArray($array)
     {
-        if (is_object($json)) {
-            $json = json_encode($json);
-        }
-        if (is_string($json)) {
-            $json = json_decode($json, true);
-        }
-        if (!is_array($json)) {
-            throw new InvalidArgumentException('Invalid JSON!');
-        }
-        $fields = [
-            self::JSON_TYPE,
-            self::JSON_NAME,
-            self::JSON_DIRECTION,
-            self::JSON_OPTIONAL,
-            self::JSON_MEMBERS
-        ];
-        foreach ($fields as $field) {
-            if (!array_key_exists($field, $json)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Invalid JSON: API Struct is missing %s!',
-                    $field
-                ));
-            }
-        }
-        if ($json[self::JSON_TYPE] !== self::TYPE_ARRAY) {
+        static::fromArrayValidation($array);
+        if ($array[self::JSON_TYPE] !== self::TYPE_ARRAY) {
             throw new InvalidArgumentException('Invalid JSON: API Struct type is not an array!');
         }
-        if (!is_array($json[self::JSON_MEMBERS])) {
+        if (!is_array($array[self::JSON_MEMBERS])) {
             throw new InvalidArgumentException('Invalid JSON: API Struct members are not an array!');
         }
         $members = [];
-        foreach ($json[self::JSON_MEMBERS] as $member) {
-            $members[] = Element::jsonDecode($member);
+        foreach ($array[self::JSON_MEMBERS] as $member) {
+            $members[] = Element::fromArray($member);
         }
-        return new self($json[self::JSON_NAME], $json[self::JSON_DIRECTION], $json[self::JSON_OPTIONAL], $members);
+        return new self(
+            $array[self::JSON_NAME],
+            $array[self::JSON_DIRECTION],
+            $array[self::JSON_OPTIONAL],
+            $members
+        );
     }
 }

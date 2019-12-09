@@ -2,10 +2,12 @@
 
 namespace tests\phpsap\classes\Api;
 
-use phpsap\classes\Api\Element;
-use phpsap\DateTime\SapDateTime;
+use PHPUnit_Framework_TestCase;
+use stdClass;
+use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Api\IArray;
 use phpsap\interfaces\Api\IElement;
+use phpsap\classes\Api\Element;
 
 /**
  * Class tests\phpsap\classes\Api\ApiElementTest
@@ -13,15 +15,17 @@ use phpsap\interfaces\Api\IElement;
  * @author  Gregor J.
  * @license MIT
  */
-class ApiElementTest extends \PHPUnit_Framework_TestCase
+class ApiElementTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testConstructorAndInheritedClasses()
     {
         $element = new Element(Element::TYPE_STRING, 'pG545XSy');
-        static::assertInstanceOf(\JsonSerializable::class, $element);
+        static::assertInstanceOf(JsonSerializable::class, $element);
         static::assertInstanceOf(IElement::class, $element);
         static::assertInstanceOf(Element::class, $element);
         static::assertSame(IElement::TYPE_STRING, $element->getType());
@@ -42,7 +46,7 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
             [false],
             [null],
             [[Element::TYPE_STRING]],
-            [new \stdClass()]
+            [new stdClass()]
         ];
     }
 
@@ -50,7 +54,7 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
      * Test non-string parameters for element types.
      * @param mixed $type
      * @dataProvider provideNonStrings
-     * @expectedException \InvalidArgumentException
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage Expected API element type to be string!
      */
     public function testNonStringTypes($type)
@@ -82,7 +86,7 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
      * Test exception thrown on invalid element types.
      * @param string $type
      * @dataProvider provideInvalidElementTypes
-     * @expectedException \InvalidArgumentException
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage Expected API element type to be in:
      */
     public function testInvalidElementTypes($type)
@@ -108,6 +112,7 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
      * Test valid element types.
      * @param string $type
      * @dataProvider provideValidElementTypes
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testValidElementTypes($type)
     {
@@ -130,7 +135,7 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
      * Test invalid element names.
      * @param mixed $name
      * @dataProvider provideInvalidElementNames
-     * @expectedException \InvalidArgumentException
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage Expected API element name to be string!
      */
     public function testInvalidElementNames($name)
@@ -156,10 +161,12 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test typecasting some data.
-     * @param string $type
-     * @param string|int $value
+     * @param string               $type
+     * @param string|int           $value
      * @param bool|int|float|strin $expected
      * @dataProvider provideTypecastData
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws \Exception
      */
     public function testTypecast($type, $value, $expected)
     {
@@ -204,6 +211,8 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test JSON decode.
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testJsonDecode()
     {
@@ -220,16 +229,18 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
      */
     public static function provideInvalidJson()
     {
+        $cfg = new stdClass();
+        $cfg->name = 'MqUyFBxx';
+        $cfg->type = 'string';
         return [
-            [''],
-            ['{'],
-            ['['],
-            ['gbGCUhMd'],
             [735],
             [5.9],
             [true],
             [false],
-            [null]
+            [null],
+            [['name' => 'skyhCVIE', 'type' => 'string']],
+            [new stdClass()],
+            [$cfg]
         ];
     }
 
@@ -237,10 +248,39 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
      * Test JSON decoding on invalid parameters.
      * @param mixed $json
      * @dataProvider provideInvalidJson
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON!
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON! Expected JSON encoded phpsap\classes\Api\Element string!
      */
     public function testInvalidJson($json)
+    {
+        Element::jsonDecode($json);
+    }
+
+    /**
+     * Data provider for values, that won't JSON decode to the expected configuration
+     * array.
+     * @return array
+     */
+    public static function provideInvalidJsonString()
+    {
+        return [
+            [''],
+            ['{'],
+            [']'],
+            ['71.74'],
+            ['806'],
+            ['"type":"int","name":"WjZpErxz"']
+        ];
+    }
+
+    /**
+     * Test JSON decoding on invalid parameters.
+     * @param mixed $json
+     * @dataProvider provideInvalidJsonString
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON! Expected JSON encoded phpsap\classes\Api\Element string!
+     */
+    public function testInvalidJsonString($json)
     {
         Element::jsonDecode($json);
     }
@@ -251,17 +291,13 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
      */
     public static function provideIncompleteJsonObjects()
     {
-        $obj1 = new \stdClass();
-        $obj1->type = 'int';
         return [
             ['{"name":"I2g8g23n"}'],
             ['{"type":930}'],
             ['{"3cQYx9fv":"int"}'],
             ['{}'],
-            [[]],
-            [['name' => 'skyhCVIE', 'ymECDAE6' => 50.4]],
-            [new \stdClass()],
-            [$obj1]
+            ['{"name":"skyhCVIE","ymECDAE6":50.4}'],
+            ['{"type":"string","YpymmcwI":"v4mm2pb6"}']
         ];
     }
 
@@ -269,11 +305,41 @@ class ApiElementTest extends \PHPUnit_Framework_TestCase
      * Test JSON decoding on incomplete JSON objects.
      * @param string $json
      * @dataProvider provideIncompleteJsonObjects
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON: API Element is missing
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON: phpsap\classes\Api\Element is missing
      */
     public function testIncompleteJsonObjects($json)
     {
         Element::jsonDecode($json);
+    }
+
+    /**
+     * Data provider for non-array type values.
+     * @return array
+     */
+    public static function provideNonArray()
+    {
+        return [
+            ['dNtKMbKSJ8'],
+            [''],
+            [89492],
+            [83.5],
+            [true],
+            [false],
+            ['[]'],
+            [new stdClass()]
+        ];
+    }
+
+    /**
+     * Test fromArray() using non-array input.
+     * @param mixed $input
+     * @dataProvider provideNonArray
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Expected array, but got
+     */
+    public function testNonArrayFromArray($input)
+    {
+        Element::fromArray($input);
     }
 }

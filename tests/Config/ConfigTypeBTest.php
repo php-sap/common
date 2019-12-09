@@ -2,11 +2,13 @@
 
 namespace tests\phpsap\classes\Config;
 
+use PHPUnit_Framework_TestCase;
+use phpsap\classes\Util\JsonSerializable;
+use phpsap\interfaces\Config\IConfigTypeB;
+use phpsap\interfaces\Config\IConfiguration;
 use phpsap\classes\Config\AbstractConfiguration;
 use phpsap\classes\Config\ConfigCommon;
 use phpsap\classes\Config\ConfigTypeB;
-use phpsap\interfaces\Config\IConfigTypeB;
-use phpsap\interfaces\Config\IConfiguration;
 
 /**
  * Class tests\phpsap\classes\Config\ConfigTypeBTest
@@ -17,15 +19,17 @@ use phpsap\interfaces\Config\IConfiguration;
  * @author  Gregor J.
  * @license MIT
  */
-class ConfigTypeBTest extends \PHPUnit_Framework_TestCase
+class ConfigTypeBTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test ConfigTypeB inheritance.
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testInheritance()
     {
         $config = new ConfigTypeB();
-        static::assertInstanceOf(\JsonSerializable::class, $config);
+        static::assertInstanceOf(JsonSerializable::class, $config);
         static::assertInstanceOf(IConfiguration::class, $config);
         static::assertInstanceOf(AbstractConfiguration::class, $config);
         static::assertInstanceOf(ConfigCommon::class, $config);

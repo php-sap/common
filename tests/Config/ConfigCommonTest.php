@@ -2,10 +2,13 @@
 
 namespace tests\phpsap\classes\Config;
 
-use phpsap\classes\Config\AbstractConfiguration;
-use phpsap\classes\Config\ConfigCommon;
+use PHPUnit_Framework_TestCase;
+use stdClass;
+use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Config\IConfigCommon;
 use phpsap\interfaces\Config\IConfiguration;
+use phpsap\classes\Config\AbstractConfiguration;
+use phpsap\classes\Config\ConfigCommon;
 use tests\phpsap\classes\helper\ConfigCommonInstance;
 
 /**
@@ -18,15 +21,17 @@ use tests\phpsap\classes\helper\ConfigCommonInstance;
  * @author  Gregor J.
  * @license MIT
  */
-class ConfigCommonTest extends \PHPUnit_Framework_TestCase
+class ConfigCommonTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test ConfigCommon inheritance.
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testInheritance()
     {
         $config = new ConfigCommonInstance();
-        static::assertInstanceOf(\JsonSerializable::class, $config);
+        static::assertInstanceOf(JsonSerializable::class, $config);
         static::assertInstanceOf(IConfiguration::class, $config);
         static::assertInstanceOf(AbstractConfiguration::class, $config);
         static::assertInstanceOf(ConfigCommon::class, $config);
@@ -34,6 +39,7 @@ class ConfigCommonTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test set*() and get*() methods.
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testSetAndGet()
     {
@@ -71,15 +77,15 @@ class ConfigCommonTest extends \PHPUnit_Framework_TestCase
             [85.07],
             [true],
             [false],
-            [new \stdClass()]
+            [new stdClass()]
         ];
     }
 
     /**
      * Test invalid saprouter values.
      * @param mixed $value
-     * @dataProvider provideInvalidSaprouterValues
-     * @expectedException \InvalidArgumentException
+     * @dataProvider             provideInvalidSaprouterValues
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage Expected SAPROUTER to be in following format:
      */
     public function testInvalidSaprouterValues($value)
@@ -101,7 +107,7 @@ class ConfigCommonTest extends \PHPUnit_Framework_TestCase
             [1.126],
             [true],
             [false],
-            [new \stdClass()],
+            [new stdClass()],
             [[ConfigCommon::TRACE_BRIEF]]
         ];
     }
@@ -110,7 +116,7 @@ class ConfigCommonTest extends \PHPUnit_Framework_TestCase
      * Test invalid trace values.
      * @param mixed $value
      * @dataProvider provideInvalidTraceValues
-     * @expectedException \InvalidArgumentException
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage The trace level can only be 0-3!
      */
     public function testInvalidTraceValues($value)
@@ -131,7 +137,7 @@ class ConfigCommonTest extends \PHPUnit_Framework_TestCase
             [99.02],
             [true],
             [false],
-            [new \stdClass()],
+            [new stdClass()],
             [['EN']]
         ];
     }
@@ -140,7 +146,7 @@ class ConfigCommonTest extends \PHPUnit_Framework_TestCase
      * Test invalid lang values.
      * @param mixed $value
      * @dataProvider provideInvalidLangValues
-     * @expectedException \InvalidArgumentException
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage Expected two letter country code as language!
      */
     public function testInvalidLangValues($value)

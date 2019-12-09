@@ -7,21 +7,24 @@ use phpsap\classes\Api\Element;
 use phpsap\classes\Api\Struct;
 use phpsap\classes\Api\Table;
 use phpsap\classes\Api\Value;
-use phpsap\classes\RemoteApi;
-use phpsap\interfaces\IApi;
+use phpsap\classes\Api\RemoteApi;
+use phpsap\interfaces\Api\IApi;
+use PHPUnit_Framework_TestCase;
 use stdClass;
 
 /**
- * Class tests\phpsap\classes\RemoteApiTest
+ * Class RemoteApiTest
  *
- * @package tests\phpsap\classes
+ * @package tests\phpsap\classes\Api
  * @author  Gregor J.
  * @license MIT
  */
-class RemoteApiTest extends \PHPUnit_Framework_TestCase
+class RemoteApiTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test for the inherited classes and interfaces.
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testInheritance()
     {
@@ -36,6 +39,7 @@ class RemoteApiTest extends \PHPUnit_Framework_TestCase
     /**
      * Data provider for API values to add.
      * @return array
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public static function provideApiValue()
     {
@@ -65,9 +69,10 @@ class RemoteApiTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test adding API values and compare the JSON encoded output of the remote API.
-     * @param \phpsap\interfaces\Api\IValue $value The value to add.
-     * @param string $expected The expected JSON output.
+     * @param \phpsap\interfaces\Api\IValue $value    The value to add.
+     * @param string                        $expected The expected JSON output.
      * @dataProvider provideApiValue
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testAddingAndEncodingApiValue($value, $expected)
     {
@@ -75,6 +80,37 @@ class RemoteApiTest extends \PHPUnit_Framework_TestCase
         $api->add($value);
         $actual = json_encode($api);
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for invalid constructor parameters.
+     * @return array
+     */
+    public static function provideInvalidConstructorParams()
+    {
+        return [
+            [''],
+            ['[]'],
+            ['{}'],
+            ['dJwVRbnAsy'],
+            [83111],
+            [1.99],
+            [true],
+            [false],
+            [new stdClass()]
+        ];
+    }
+
+    /**
+     * Test invalid constructor parameters.
+     * @param mixed $input
+     * @dataProvider provideInvalidConstructorParams
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Expected array of API values.
+     */
+    public function testInvalidConstructorParams($input)
+    {
+        new RemoteApi($input);
     }
 
     /**
@@ -174,24 +210,25 @@ class RemoteApiTest extends \PHPUnit_Framework_TestCase
         /**
          * Construct third and fourth variants as strings of the above.
          */
-        $api3 = json_encode($api1);
-        $api4 = json_encode($api2);
         return [
-            [$api1],
-            [$api2],
-            [$api3],
-            [$api4]
+            [json_encode($api1)],
+            [json_encode($api2)]
         ];
     }
 
     /**
-     * Test creating API class from encoded API class.
-     * @param string|array|\stdClass $json
+     * Test creating API class from an array.
+     * @param array|string $config
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \phpsap\exceptions\InvalidArgumentException
      * @dataProvider provideEncodedRemoteApi
      */
-    public function testEncodedRemoteApi($json)
+    public function testEncodedRemoteApi($config)
     {
-        $api = new RemoteApi($json);
+        $api = RemoteApi::jsonDecode($config);
+        static::assertInstanceOf(IApi::class, $api);
+        static::assertInstanceOf(RemoteApi::class, $api);
         /**
          * Assert input value.
          */
@@ -259,21 +296,19 @@ class RemoteApiTest extends \PHPUnit_Framework_TestCase
         $table = new stdClass();
         $table->type = Table::TYPE_ARRAY;
         return [
+            [''],
+            [' '],
+            ['{'],
+            ['}'],
+            ['{"w1sBz6nE":3501'],
             ['DhVsUXYN'],
             [339],
             [2.3],
             [true],
             [false],
             [new stdClass()],
-            [['mn0EwF4z']],
-            [[50]],
-            [[71.2]],
-            [[true]],
-            [[false]],
-            [[null]],
-            [[new stdClass()]],
-            [['type' => Struct::TYPE_ARRAY]],
-            [[$table]]
+            [$table],
+            ['[{"type":"string","name":"70PSpu7dcO","optional":true}]']
         ];
     }
 
@@ -281,8 +316,8 @@ class RemoteApiTest extends \PHPUnit_Framework_TestCase
      * Test invalid JSON exceptions.
      * @param mixed $value The value, that will cause an invalid JSON exception.
      * @dataProvider provideInvalidJson
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON:
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON!
      */
     public function testInvalidJson($value)
     {
@@ -290,7 +325,45 @@ class RemoteApiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test API value with missing type definition.
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage API Value is missing type.
+     */
+    public function testApiArrayMissingType()
+    {
+        $def = [
+            [
+                'name' => 'bvOScFeIOL',
+                'direction' => Value::DIRECTION_INPUT,
+                'optional' => false
+            ]
+        ];
+        new RemoteApi($def);
+    }
+
+    /**
+     * Test API value with missing direction definition.
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage API Value is missing direction.
+     */
+    public function testApiArrayMissingDirection()
+    {
+        $def = [
+            [
+                'type' => Struct::TYPE_ARRAY,
+                'name' => 'qUvgdjIiMY',
+                'optional' => false,
+                'members' => []
+            ]
+        ];
+        new RemoteApi($def);
+    }
+
+    /**
      * Test type casting using the remote API.
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws \phpsap\exceptions\ArrayElementMissingException
+     * @throws \PHPUnit_Framework_Exception
      */
     public function testTypeCast()
     {
@@ -410,9 +483,10 @@ class RemoteApiTest extends \PHPUnit_Framework_TestCase
     /**
      * Test typecasting invalid values.
      * @param mixed $value
-     * @dataProvider provideInvalidTypeCastValue
-     * @expectedException \InvalidArgumentException
+     * @dataProvider             provideInvalidTypeCastValue
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage Expected data for typecasting to be an array!
+     * @throws \phpsap\exceptions\ArrayElementMissingException
      */
     public function testInvalidTypecastValue($value)
     {
@@ -424,6 +498,7 @@ class RemoteApiTest extends \PHPUnit_Framework_TestCase
      * Test missing mandatory value for typecasting.
      * @expectedException \phpsap\exceptions\ArrayElementMissingException
      * @expectedExceptionMessage Mandatory input value PM1cKiSw is missing!
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testMissingMandatoryValueForTypecasting()
     {

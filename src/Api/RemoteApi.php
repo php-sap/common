@@ -1,22 +1,19 @@
 <?php
 
-namespace phpsap\classes;
+namespace phpsap\classes\Api;
 
-use InvalidArgumentException;
-use phpsap\classes\Api\Struct;
-use phpsap\classes\Api\Table;
-use phpsap\classes\Api\Value;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\exceptions\ArrayElementMissingException;
 use phpsap\interfaces\Api\IArray;
 use phpsap\interfaces\Api\IValue;
-use phpsap\interfaces\IApi;
+use phpsap\interfaces\Api\IApi;
 
 /**
- * Class phpsap\classes\RemoteApi
+ * Class RemoteApi
  *
  * This class contains the description of a single SAP remote function API.
  *
- * @package phpsap\classes
+ * @package phpsap\classes\Api
  * @author  Gregor J.
  * @license MIT
  */
@@ -30,7 +27,7 @@ class RemoteApi implements IApi
     /**
      * Add an input value of the remote function.
      * @param \phpsap\interfaces\Api\IValue $value
-     * @return \phpsap\classes\RemoteApi
+     * @return \phpsap\classes\Api\RemoteApi
      */
     public function add(IValue $value)
     {
@@ -89,6 +86,8 @@ class RemoteApi implements IApi
      * values of the remote function.
      * @param array $array The data array to cast.
      * @return array
+     * @throws \phpsap\exceptions\ArrayElementMissingException
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function castInputValues($array)
     {
@@ -100,6 +99,8 @@ class RemoteApi implements IApi
      * values of the remote function.
      * @param array $array The data array to cast.
      * @return array
+     * @throws \phpsap\exceptions\ArrayElementMissingException
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function castOutputValues($array)
     {
@@ -111,6 +112,8 @@ class RemoteApi implements IApi
      * values of the remote function.
      * @param array $array The data array to cast.
      * @return array
+     * @throws \phpsap\exceptions\ArrayElementMissingException
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function castTables($array)
     {
@@ -121,8 +124,10 @@ class RemoteApi implements IApi
      * Type cast the given array according to the input/output/table values of the
      * API.
      * @param string $direction The direction to get the casting values for.
-     * @param array $array The data array to cast.
+     * @param array  $array     The data array to cast.
      * @return array
+     * @throws \phpsap\exceptions\ArrayElementMissingException
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     protected function castValues($direction, $array)
     {
@@ -134,7 +139,7 @@ class RemoteApi implements IApi
         $values = $this->getValues($direction);
         foreach ($values as $value) {
             /**
-             * @var \phpsap\interfaces\Api\IValue $value
+             * @var \phpsap\classes\Api\Value $value
              * Get the name of the current API value, so there isn't a function call
              * every time the name is needed.
              */
@@ -163,32 +168,19 @@ class RemoteApi implements IApi
     }
 
     /**
-     * Decode a formerly JSON encoded IApi object.
-     * @param string|\stdClass|array|null $values Either a JSON encoded remote API
-     *                                            as array, object or string, or
-     *                                            null for an empty API description.
+     * Create a remote API from a given array.
+     * @param array|null $values Array of remote API elements. Default: null
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function __construct($values = null)
     {
         if ($values === null) {
             $values = [];
         }
-        if (is_string($values)) {
-            $values = json_decode($values, true);
-        }
         if (!is_array($values)) {
-            throw new InvalidArgumentException('Invalid JSON: values are not in an array!');
+            throw new InvalidArgumentException('Expected array of API values.');
         }
         foreach ($values as $value) {
-            /**
-             * In case the value is an object, convert it to an array.
-             */
-            if (is_object($value)) {
-                $value = json_decode(json_encode($value), true);
-            }
-            if (!is_array($value)) {
-                throw new InvalidArgumentException('Invalid JSON: value is not an array!');
-            }
             /**
              * Call type-specific constructors from the array.
              */
@@ -200,50 +192,65 @@ class RemoteApi implements IApi
      * Construct an API value (IValue) from a given array.
      * @param array $value
      * @return \phpsap\interfaces\Api\IValue
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     private function constructValue($value)
     {
         if (!array_key_exists(IValue::JSON_TYPE, $value)) {
-            throw new InvalidArgumentException('Invalid JSON: missing type!');
+            throw new InvalidArgumentException('API Value is missing type.');
         }
         if ($value[IValue::JSON_TYPE] === IArray::TYPE_ARRAY) {
             return $this->constructArray($value);
         }
-        return Value::jsonDecode($value);
+        return Value::fromArray($value);
     }
 
     /**
      * Construct an array type element (table or struct) from the given JSON array.
      * @param array $value
      * @return \phpsap\interfaces\Api\IArray
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     private function constructArray($value)
     {
         if (!array_key_exists(IValue::JSON_DIRECTION, $value)) {
-            throw new InvalidArgumentException('Invalid JSON: missing direction!');
+            throw new InvalidArgumentException('API Value is missing direction.');
         }
         if ($value[IValue::JSON_DIRECTION] === IArray::DIRECTION_TABLE) {
-            return Table::jsonDecode($value);
+            return Table::fromArray($value);
         }
-        return Struct::jsonDecode($value);
+        return Struct::fromArray($value);
     }
 
     /**
      * Decode a formerly JSON encoded IApi object.
-     * @param string|\stdClass|array $json
-     * @return \phpsap\classes\RemoteApi
+     * @param string $json JSON encoded remote API object.
+     * @return \phpsap\classes\Api\RemoteApi
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public static function jsonDecode($json)
     {
-        return new self($json);
+        if (is_string($json)) {
+            $array = json_decode($json, true);
+            if (is_array($array)) {
+                try {
+                    return new self($array);
+                } catch (InvalidArgumentException $exception) {
+                    throw new InvalidArgumentException(sprintf(
+                        'Invalid JSON! %s',
+                        $exception->getMessage()
+                    ));
+                }
+            }
+        }
+        throw new InvalidArgumentException(sprintf(
+            'Invalid JSON! Expected JSON encoded %s string!',
+            static::class
+        ));
     }
 
     /**
-     * Specify data which should be serialized to JSON
-     * @link  https://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
+     * @inheritDoc
      */
     public function jsonSerialize()
     {

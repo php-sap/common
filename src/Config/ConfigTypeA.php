@@ -17,23 +17,22 @@ use phpsap\interfaces\Config\IConfigTypeA;
 class ConfigTypeA extends ConfigCommon implements IConfigTypeA
 {
     /**
-     * @var array
+     * @var array Allowed JsonSerializable keys to set values for.
      */
-    protected static $configKeys = [
+    protected static $allowedKeys = [
         self::JSON_ASHOST,
         self::JSON_SYSNR,
         self::JSON_GWHOST,
-        self::JSON_GWSERV
+        self::JSON_GWSERV,
+        self::JSON_USER,
+        self::JSON_PASSWD,
+        self::JSON_CLIENT,
+        self::JSON_SAPROUTER,
+        self::JSON_TRACE,
+        self::JSON_LANG,
+        self::JSON_DEST,
+        self::JSON_CODEPAGE
     ];
-
-    /**
-     * Get an array of all valid configuration keys and whether they are mandatory.
-     * @return array
-     */
-    public static function getValidConfigKeys()
-    {
-        return array_merge(parent::getValidConfigKeys(), self::$configKeys);
-    }
 
     /**
      * Get the host name of a specific SAP application server.
@@ -41,13 +40,18 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      */
     public function getAshost()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_ASHOST);
     }
 
     /**
      * Set the host name of a specific SAP application server.
      * @param string $ashost The host name of a specific SAP application server.
-     * @return ConfigTypeA
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setAshost($ashost)
     {
@@ -61,13 +65,18 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      */
     public function getSysnr()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_SYSNR);
     }
 
     /**
      * Set the SAP system number.
      * @param string $sysnr The SAP system number.
-     * @return ConfigTypeA
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setSysnr($sysnr)
     {
@@ -81,13 +90,18 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      */
     public function getGwhost()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_GWHOST);
     }
 
     /**
      * optional; default: gateway on application server
      * @param string $gwhost The gateway on the application server.
-     * @return ConfigTypeA
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setGwhost($gwhost)
     {
@@ -101,13 +115,18 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      */
     public function getGwserv()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_GWSERV);
     }
 
     /**
      * optional; default: gateway on application server
      * @param string $gwserv The gateway on the application server.
-     * @return ConfigTypeA
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setGwserv($gwserv)
     {

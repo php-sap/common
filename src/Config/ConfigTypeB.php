@@ -17,21 +17,45 @@ use phpsap\interfaces\Config\IConfigTypeB;
 class ConfigTypeB extends ConfigCommon implements IConfigTypeB
 {
     /**
-     * @var array
+     * @var array Allowed JsonSerializable keys to set values for.
      */
-    protected static $configKeys = [
+    protected static $allowedKeys = [
         self::JSON_MSHOST,
         self::JSON_R3NAME,
-        self::JSON_GROUP
+        self::JSON_GROUP,
+        self::JSON_USER,
+        self::JSON_PASSWD,
+        self::JSON_CLIENT,
+        self::JSON_SAPROUTER,
+        self::JSON_TRACE,
+        self::JSON_LANG,
+        self::JSON_DEST,
+        self::JSON_CODEPAGE
     ];
 
     /**
-     * Get an array of all valid configuration keys and whether they are mandatory.
-     * @return array
+     * Get the host name of the message server.
+     * @return string host name of the message server
      */
-    public static function getValidConfigKeys()
+    public function getMshost()
     {
-        return array_merge(parent::getValidConfigKeys(), self::$configKeys);
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
+        return $this->get(self::JSON_MSHOST);
+    }
+
+    /**
+     * Set the host name of the message server.
+     * @param string $mshost The host name of the message server.
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     */
+    public function setMshost($mshost)
+    {
+        $this->set(self::JSON_MSHOST, $mshost);
+        return $this;
     }
 
     /**
@@ -40,37 +64,22 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      */
     public function getR3name()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_R3NAME);
     }
 
     /**
      * Set the name of SAP system, optional; default: destination
      * @param string $r3name The name of the SAP system.
-     * @return ConfigTypeB
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setR3name($r3name)
     {
         $this->set(self::JSON_R3NAME, $r3name);
-        return $this;
-    }
-
-    /**
-     * Get the host name of the message server.
-     * @return string host name of the message server
-     */
-    public function getMshost()
-    {
-        return $this->get(self::JSON_MSHOST);
-    }
-
-    /**
-     * Set the host name of the message server.
-     * @param string $mshost The host name of the message server.
-     * @return ConfigTypeB
-     */
-    public function setMshost($mshost)
-    {
-        $this->set(self::JSON_MSHOST, $mshost);
         return $this;
     }
 
@@ -80,13 +89,18 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      */
     public function getGroup()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_GROUP);
     }
 
     /**
      * Set the group name of the application servers, optional; default: PUBLIC.
      * @param string $group The group name of the application servers.
-     * @return ConfigTypeB
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setGroup($group)
     {

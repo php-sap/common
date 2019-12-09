@@ -2,7 +2,7 @@
 
 namespace phpsap\classes\Config;
 
-use InvalidArgumentException;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigCommon;
 
 /**
@@ -17,9 +17,9 @@ use phpsap\interfaces\Config\IConfigCommon;
 abstract class ConfigCommon extends AbstractConfiguration implements IConfigCommon
 {
     /**
-     * @var array
+     * @var array Allowed JsonSerializable keys to set values for.
      */
-    protected static $configKeys = [
+    protected static $allowedKeys = [
         self::JSON_USER,
         self::JSON_PASSWD,
         self::JSON_CLIENT,
@@ -31,15 +31,6 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     ];
 
     /**
-     * Get an array of all valid configuration keys and whether they are mandatory.
-     * @return array
-     */
-    public static function getValidConfigKeys()
-    {
-        return self::$configKeys;
-    }
-
-    /**
      * In case the connection needs to be made through a firewall using a SAPRouter,
      * the parameters are in the following format:
      * /H/hostname/S/portnumber/H/
@@ -47,6 +38,10 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function getSaprouter()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_SAPROUTER);
     }
 
@@ -55,7 +50,8 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * specify the SAPRouter parameters in the following format:
      * /H/hostname/S/portnumber/H/
      * @param string $saprouter The saprouter configuration parameter.
-     * @return ConfigCommon
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setSaprouter($saprouter)
     {
@@ -78,13 +74,18 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function getTrace()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_TRACE);
     }
 
     /**
      * Set the trace level (0-3). See constants TRACE_*.
      * @param int $trace The trace level.
-     * @return ConfigCommon
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setTrace($trace)
     {
@@ -108,6 +109,10 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function getCodepage()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_CODEPAGE);
     }
 
@@ -117,7 +122,8 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * codepage for the initial handshake, thus preserving the characters in
      * username/password.
      * @param int $codepage The codepage.
-     * @return ConfigCommon
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setCodepage($codepage)
     {
@@ -131,13 +137,18 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function getUser()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_USER);
     }
 
     /**
      * Set the username to use for authentication.
      * @param string $user The username.
-     * @return ConfigCommon
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setUser($user)
     {
@@ -151,13 +162,18 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function getPasswd()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_PASSWD);
     }
 
     /**
      * Get the password to use for authentication.
      * @param string $passwd The password.
-     * @return ConfigCommon
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setPasswd($passwd)
     {
@@ -171,13 +187,18 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function getClient()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_CLIENT);
     }
 
     /**
      * Set the destination in RfcOpen.
      * @param string $client The destination in RfcOpen.
-     * @return ConfigCommon
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setClient($client)
     {
@@ -191,13 +212,18 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function getLang()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_LANG);
     }
 
     /**
      * Set the logon Language.
      * @param string $lang The logon language.
-     * @return ConfigCommon
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setLang($lang)
     {
@@ -218,13 +244,18 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function getDest()
     {
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
         return $this->get(self::JSON_DEST);
     }
 
     /**
      * Set the destination in RfcOpenConnection.
      * @param string $dest The destination in RfcOpenConnection.
-     * @return ConfigCommon
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function setDest($dest)
     {

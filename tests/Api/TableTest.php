@@ -2,12 +2,15 @@
 
 namespace tests\phpsap\classes\Api;
 
-use phpsap\classes\Api\Element;
-use phpsap\classes\Api\Table;
-use phpsap\classes\Api\Value;
+use PHPUnit_Framework_TestCase;
+use stdClass;
+use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Api\IArray;
 use phpsap\interfaces\Api\IElement;
 use phpsap\interfaces\Api\IValue;
+use phpsap\classes\Api\Element;
+use phpsap\classes\Api\Table;
+use phpsap\classes\Api\Value;
 
 /**
  * Class tests\phpsap\classes\Api\TableTest
@@ -15,10 +18,12 @@ use phpsap\interfaces\Api\IValue;
  * @author  Gregor J.
  * @license MIT
  */
-class TableTest extends \PHPUnit_Framework_TestCase
+class TableTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testConstructorAndInheritance()
     {
@@ -26,7 +31,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
             new Element(Element::TYPE_STRING, 'QoTyE1xK')
         ]);
         //heritage
-        static::assertInstanceOf(\JsonSerializable::class, $table);
+        static::assertInstanceOf(JsonSerializable::class, $table);
         static::assertInstanceOf(IArray::class, $table);
         static::assertInstanceOf(Table::class, $table);
         static::assertInstanceOf(IValue::class, $table);
@@ -56,7 +61,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
      * Test non-array members.
      * @param mixed $members
      * @dataProvider \tests\phpsap\classes\Api\StructTest::provideNonArrays()
-     * @expectedException \InvalidArgumentException
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage Expected API table members to be in an array!
      */
     public function testNonArrayMembers($members)
@@ -65,16 +70,18 @@ class TableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage Expected API table members to be instances of IElement!
      */
     public function testNonIElementMembers()
     {
-        new Table('XPn2Pf2n', true, [new \stdClass()]);
+        new Table('XPn2Pf2n', true, [new stdClass()]);
     }
 
     /**
      * Test typecasting of table input.
+     * @throws \phpsap\exceptions\ArrayElementMissingException
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testTableCast()
     {
@@ -145,6 +152,8 @@ class TableTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test JSON decode.
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testJsonDecode()
     {
@@ -171,8 +180,8 @@ class TableTest extends \PHPUnit_Framework_TestCase
      * Test JSON decoding on invalid parameters.
      * @param mixed $json
      * @dataProvider \tests\phpsap\classes\Api\ApiElementTest::provideInvalidJson()
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON!
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON! Expected JSON encoded phpsap\classes\Api\Table string!
      */
     public function testInvalidJson($json)
     {
@@ -183,8 +192,8 @@ class TableTest extends \PHPUnit_Framework_TestCase
      * Test JSON decoding on incomplete JSON objects.
      * @param string $json
      * @dataProvider \tests\phpsap\classes\Api\StructTest::provideIncompleteJsonObjects()
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON: API Table is missing
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON: phpsap\classes\Api\Table is missing
      */
     public function testIncompleteJson($json)
     {
@@ -209,7 +218,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
      * Test JSON decode objects with invalid type value.
      * @param string $json
      * @dataProvider provideJsonDecodeInvalidDirection
-     * @expectedException \InvalidArgumentException
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage Invalid JSON: API Table direction is not table!
      */
     public function testJsonDecodeInvalidDirection($json)
@@ -239,7 +248,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
      * Test JSON decode objects with invalid type value.
      * @param string $json
      * @dataProvider provideJsonDecodeInvalidType
-     * @expectedException \InvalidArgumentException
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage Invalid JSON: API Table type is not an array!
      */
     public function testJsonDecodeInvalidType($json)
@@ -263,7 +272,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ['{"type":"array","name":"RvU15SUm","direction":"table",'
              .'"optional":true,"members":true}'],
             ['{"type":"array","name":"7LQXw6IT","direction":"table",'
-             .'"optional":true,"members":false}'],
+             .'"optional":true,"members":false}']
         ];
     }
 
@@ -271,11 +280,23 @@ class TableTest extends \PHPUnit_Framework_TestCase
      * Test JSON decode objects with invalid members.
      * @param string $json
      * @dataProvider provideJsonDecodeInvalidMembers
-     * @expectedException \InvalidArgumentException
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
      * @expectedExceptionMessage Invalid JSON: API Table members are not an array!
      */
     public function testJsonDecodeInvalidMembers($json)
     {
         Table::jsonDecode($json);
+    }
+
+    /**
+     * Test fromArray() using non-array input.
+     * @param mixed $input
+     * @dataProvider \tests\phpsap\classes\Api\ApiElementTest::provideNonArray
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Expected array, but got
+     */
+    public function testNonArrayFromArray($input)
+    {
+        Table::fromArray($input);
     }
 }

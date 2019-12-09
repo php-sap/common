@@ -2,12 +2,13 @@
 
 namespace phpsap\classes\Api;
 
-use InvalidArgumentException;
+use phpsap\classes\Util\JsonSerializable;
 use phpsap\DateTime\SapDateTime;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IElement;
 
 /**
- * Class phpsap\classes\Api\Element
+ * Class Element
  *
  * API elements are struct or table values and have no direction or optional flag of
  * their own.
@@ -16,12 +17,15 @@ use phpsap\interfaces\Api\IElement;
  * @author  Gregor J.
  * @license MIT
  */
-class Element implements IElement
+class Element extends JsonSerializable implements IElement
 {
     /**
-     * @var array
+     * @var array Allowed JsonSerializable keys to set values for.
      */
-    protected $data = [];
+    protected static $allowedKeys = [
+        self::JSON_TYPE,
+        self::JSON_NAME
+    ];
 
     /**
      * @var array List of allowed API element types.
@@ -42,9 +46,11 @@ class Element implements IElement
      * API element constructor.
      * @param string $type Either string, int, float, bool or array
      * @param string $name API element name.
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function __construct($type, $name)
     {
+        parent::__construct();
         $this->setType($type);
         $this->setName($name);
     }
@@ -55,7 +61,11 @@ class Element implements IElement
      */
     public function getType()
     {
-        return $this->data[self::JSON_TYPE];
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
+        return $this->get(self::JSON_TYPE);
     }
 
     /**
@@ -64,12 +74,17 @@ class Element implements IElement
      */
     public function getName()
     {
-        return $this->data[self::JSON_NAME];
+        /**
+         * InvalidArgumentException will never be thrown, because of the static
+         * definition of the key.
+         */
+        return $this->get(self::JSON_NAME);
     }
 
     /**
      * Set optional the API element PHP type.
      * @param string $type
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     protected function setType($type)
     {
@@ -84,12 +99,13 @@ class Element implements IElement
                 implode(', ', static::$allowedTypes)
             ));
         }
-        $this->data[self::JSON_TYPE] = $type;
+        $this->set(self::JSON_TYPE, $type);
     }
 
     /**
      * Set the API element name.
      * @param string $name
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     protected function setName($name)
     {
@@ -98,81 +114,90 @@ class Element implements IElement
                 'Expected API element name to be string!'
             );
         }
-        $this->data[self::JSON_NAME] = $name;
+        $this->set(self::JSON_NAME, $name);
     }
 
     /**
      * Cast a given output value to the type defined in this class.
      * @param mixed $value
      * @return bool|int|float|string|\phpsap\DateTime\SapDateTime
-     * @throws \Exception
      */
     public function cast($value)
     {
+        static $methods;
+        if ($methods === null) {
+            $methods = [
+                self::TYPE_DATE      => static function ($value) {
+                    return SapDateTime::createFromFormat(SapDateTime::SAP_DATE, $value);
+                },
+                self::TYPE_TIME      => static function ($value) {
+                    return SapDateTime::createFromFormat(SapDateTime::SAP_TIME, $value);
+                },
+                self::TYPE_TIMESTAMP => static function ($value) {
+                    return SapDateTime::createFromFormat(SapDateTime::SAP_TIMESTAMP, $value);
+                },
+                self::TYPE_WEEK      => static function ($value) {
+                    return SapDateTime::createFromFormat(SapDateTime::SAP_WEEK, $value);
+                },
+                self::TYPE_HEXBIN    => static function ($value) {
+                    return hex2bin(trim($value));
+                }
+            ];
+        }
         $type = $this->getType();
-        switch ($type) {
-            case self::TYPE_DATE:
-                $result = SapDateTime::createFromFormat(SapDateTime::SAP_DATE, $value);
-                break;
-            case self::TYPE_TIME:
-                $result = SapDateTime::createFromFormat(SapDateTime::SAP_TIME, $value);
-                break;
-            case self::TYPE_TIMESTAMP:
-                $result = SapDateTime::createFromFormat(SapDateTime::SAP_TIMESTAMP, $value);
-                break;
-            case self::TYPE_WEEK:
-                $result = SapDateTime::createFromFormat(SapDateTime::SAP_WEEK, $value);
-                break;
-            case self::TYPE_HEXBIN:
-                $result = hex2bin(trim($value));
-                break;
-            default:
-                $result = $value;
-                settype($result, $type);
-                break;
+        if (array_key_exists($type, $methods)) {
+            $method = $methods[$type];
+            return $method($value);
         }
-        return $result;
+        settype($value, $type);
+        return $value;
     }
 
     /**
-     * Specify data which should be serialized to JSON
-     * @link  https://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by json_encode,
-     * which is a value of any type other than a resource.
-     */
-    public function jsonSerialize()
-    {
-        return $this->data;
-    }
-
-    /**
-     * Decode a formerly JSON encoded Element object.
-     * @param string|\stdClass|array $json
+     * Create an instance of this class from an array.
+     * @param array $array Array containing the properties of this class.
      * @return \phpsap\classes\Api\Element
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public static function jsonDecode($json)
+    public static function fromArray($array)
     {
-        if (is_object($json)) {
-            $json = json_encode($json);
+        static::fromArrayValidation($array);
+        return new self($array[self::JSON_TYPE], $array[self::JSON_NAME]);
+    }
+
+    /**
+     * Validate the array for fromArray().
+     * @param mixed $array
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     */
+    protected static function fromArrayValidation($array)
+    {
+        if (!is_array($array)) {
+            throw new InvalidArgumentException(sprintf(
+                'Expected array, but got \'%s\'!',
+                gettype($array)
+            ));
         }
-        if (is_string($json)) {
-            $json = json_decode($json, true);
-        }
-        if (!is_array($json)) {
-            throw new InvalidArgumentException('Invalid JSON!');
-        }
-        $fields = [
-            self::JSON_TYPE,
-            self::JSON_NAME
-        ];
-        foreach ($fields as $field) {
-            if (!array_key_exists($field, $json)) {
+        foreach (static::$allowedKeys as $key) {
+            if (!array_key_exists($key, $array)) {
                 throw new InvalidArgumentException(sprintf(
-                    'Invalid JSON: API Element is missing %s!',
-                    $field
+                    'Invalid JSON: %s is missing %s!',
+                    static::class,
+                    $key
                 ));
             }
         }
-        return new self($json[self::JSON_TYPE], $json[self::JSON_NAME]);
+    }
+
+    /**
+     * Decode a formerly JSON encoded IElement object.
+     * @param string $json JSON encoded Element object.
+     * @return \phpsap\classes\Api\Element
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     */
+    public static function jsonDecode($json)
+    {
+        $array = static::jsonToArray($json);
+        return static::fromArray($array);
     }
 }

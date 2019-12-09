@@ -2,11 +2,14 @@
 
 namespace tests\phpsap\classes\Config;
 
+use PHPUnit_Framework_TestCase;
+use phpsap\classes\Util\JsonSerializable;
+use stdClass;
+use phpsap\interfaces\Config\IConfiguration;
 use phpsap\classes\Config\AbstractConfiguration;
 use phpsap\classes\Config\ConfigCommon;
 use phpsap\classes\Config\ConfigTypeA;
 use phpsap\classes\Config\ConfigTypeB;
-use phpsap\interfaces\Config\IConfiguration;
 use tests\phpsap\classes\helper\AbstractConfigurationInstance;
 
 /**
@@ -19,32 +22,35 @@ use tests\phpsap\classes\helper\AbstractConfigurationInstance;
  * @author  Gregor J.
  * @license MIT
  */
-class AbstractConfigurationTest extends \PHPUnit_Framework_TestCase
+class AbstractConfigurationTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test the inheritance of the AbstractConfiguration class.
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
     public function testInheritance()
     {
-        AbstractConfigurationInstance::$validConfigKeys = [];
+        AbstractConfigurationInstance::$allowedKeys = [];
         $config = new AbstractConfigurationInstance();
-        static::assertInstanceOf(\JsonSerializable::class, $config);
+        static::assertInstanceOf(JsonSerializable::class, $config);
         static::assertInstanceOf(IConfiguration::class, $config);
         static::assertInstanceOf(AbstractConfiguration::class, $config);
     }
 
     /**
      * Test successful set() get() has() and remove().
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws \PHPUnit_Framework_AssertionFailedError
      */
     public function testSuccessfulSetGetHasAndRemove()
     {
-        AbstractConfigurationInstance::$validConfigKeys = [
+        AbstractConfigurationInstance::$allowedKeys = [
             'vQVWBaPY', 'PpTzacjc'
         ];
         $config = new AbstractConfigurationInstance();
-        $config
-            ->set('vQVWBaPY', 'AYP2RY1vaS')
-            ->set('PpTzacjc', 9167);
+        $config->set('vQVWBaPY', 'AYP2RY1vaS');
+        $config->set('PpTzacjc', 9167);
         static::assertTrue($config->has('vQVWBaPY'));
         static::assertSame('AYP2RY1vaS', $config->get('vQVWBaPY'));
         static::assertTrue($config->has('PpTzacjc'));
@@ -64,77 +70,23 @@ class AbstractConfigurationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider for invalid key names.
-     */
-    public static function provideInvalidKeyNames()
-    {
-        return [
-            [''],
-            [9217],
-            [783.9],
-            [true],
-            [false],
-            [null],
-            [['8hvws0dCVF']],
-            [new \stdClass()]
-        ];
-    }
-
-    /**
-     * Test invalid key names for has().
-     * @param mixed $key
-     * @dataProvider provideInvalidKeyNames
-     * @expectedException LogicException
-     * @expectedExceptionMessage Expected configuration key to be a string value.
-     */
-    public function testInvalidKeyNamesForHas($key)
-    {
-        (new AbstractConfigurationInstance())->has($key);
-    }
-
-    /**
-     * Test invalid key names for has().
-     * @param mixed $key
-     * @dataProvider provideInvalidKeyNames
-     * @expectedException LogicException
-     * @expectedExceptionMessage Expected configuration key to be a string value.
-     */
-    public function testInvalidKeyNamesForSet($key)
-    {
-        (new AbstractConfigurationInstance())->set($key, 'D1bi58rP32');
-    }
-
-    /**
-     * Test unknown configuration key for has().
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unknown configuration key 'gpOZijhM'!
-     */
-    public function testUnknownConfigurationKeyForHas()
-    {
-        AbstractConfigurationInstance::$validConfigKeys = ['ckyVAAPl'];
-        (new AbstractConfigurationInstance())->has('gpOZijhM');
-    }
-
-    /**
      * Test unknown configuration key for set().
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unknown configuration key 'JDsUJLrq'!
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Unknown key 'JDsUJLrq'!
      */
     public function testUnknownConfigurationKeyForSet()
     {
-        AbstractConfigurationInstance::$validConfigKeys = ['asemoqTU'];
+        AbstractConfigurationInstance::$allowedKeys = ['asemoqTU'];
         (new AbstractConfigurationInstance())->set('JDsUJLrq', '84VUPgAS2i');
     }
 
     /**
      * Test get()ting an unset configuration key.
-     * @expectedException \phpsap\exceptions\ConfigKeyNotFoundException
-     * @expectedExceptionMessage Configuration key 'SXOtJQme' not found!
      */
     public function testGettingUnsetConfigurationKey()
     {
-        AbstractConfigurationInstance::$validConfigKeys = ['SXOtJQme'];
-        (new AbstractConfigurationInstance())->get('SXOtJQme');
+        AbstractConfigurationInstance::$allowedKeys = ['SXOtJQme'];
+        static::assertNull((new AbstractConfigurationInstance())->get('SXOtJQme'));
     }
 
     /**
@@ -148,7 +100,7 @@ class AbstractConfigurationTest extends \PHPUnit_Framework_TestCase
             [true],
             [false],
             [['FsgNGucN' => 7133]],
-            [new \stdClass()]
+            [new stdClass()]
         ];
     }
 
@@ -156,12 +108,12 @@ class AbstractConfigurationTest extends \PHPUnit_Framework_TestCase
      * Test invalid value for set().
      * @param mixed $value
      * @dataProvider provideInvalidValueForSet
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected configuration value for 'FsgNGucN' to either be a string or integer value!
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Invalid value! Expected a simple value ('integer', 'string'), but got
      */
     public function testInvalidValueForSet($value)
     {
-        AbstractConfigurationInstance::$validConfigKeys = ['FsgNGucN'];
+        AbstractConfigurationInstance::$allowedKeys = ['FsgNGucN'];
         (new AbstractConfigurationInstance())->set('FsgNGucN', $value);
     }
 
@@ -171,7 +123,7 @@ class AbstractConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public static function provideValidConfigurationForConstructor()
     {
-        $conf = new \stdClass();
+        $conf = new stdClass();
         $conf->zadgcjmt = 'wntQeayy41';
         return [
             [$conf],
@@ -184,10 +136,12 @@ class AbstractConfigurationTest extends \PHPUnit_Framework_TestCase
      * Test valid configuration parameters for the constructor.
      * @param string|array|\stdClass $config
      * @dataProvider provideValidConfigurationForConstructor
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws \PHPUnit_Framework_AssertionFailedError
      */
     public function testValidConfigurationForConstructor($config)
     {
-        AbstractConfigurationInstance::$validConfigKeys = ['zadgcjmt'];
+        AbstractConfigurationInstance::$allowedKeys = ['zadgcjmt'];
         $conf = new AbstractConfigurationInstance($config);
         static::assertTrue($conf->has('zadgcjmt'));
         static::assertSame('wntQeayy41', $conf->get('zadgcjmt'));
@@ -208,8 +162,7 @@ class AbstractConfigurationTest extends \PHPUnit_Framework_TestCase
             [5126],
             [97.65],
             [true],
-            [false],
-            [new \DateTime()]
+            [false]
         ];
     }
 
@@ -217,8 +170,8 @@ class AbstractConfigurationTest extends \PHPUnit_Framework_TestCase
      * Test valid configuration parameters for the constructor.
      * @param mixed $config
      * @dataProvider provideInvalidConfigurationForConstructor
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected configuration to be a JSON encoded array!
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Invalid JSON object! Expected tests\phpsap\classes\helper\AbstractConfigurationInstance JSON object or array!
      */
     public function testInvalidConfigurationForConstructor($config)
     {
@@ -232,24 +185,26 @@ class AbstractConfigurationTest extends \PHPUnit_Framework_TestCase
     public static function provideJsonDecodeConfigTypeA()
     {
         return [
-            [[ConfigTypeA::JSON_ASHOST => 'ItulITyML1'], '{"ashost":"ItulITyML1"}'],
-            [[ConfigTypeA::JSON_SYSNR => '5345'], '{"sysnr":"5345"}'],
-            [[ConfigTypeA::JSON_GWHOST => '6sqPJLVVgS'], '{"gwhost":"6sqPJLVVgS"}'],
-            [[ConfigTypeA::JSON_GWSERV => 'pzkPI1ZV7f'], '{"gwserv":"pzkPI1ZV7f"}']
+            [[ConfigTypeA::JSON_ASHOST => 'ItulITyML1'], '{"'.ConfigTypeA::JSON_ASHOST.'":"ItulITyML1"}'],
+            [[ConfigTypeA::JSON_SYSNR => '5345'], '{"'.ConfigTypeA::JSON_SYSNR.'":"5345"}'],
+            [[ConfigTypeA::JSON_GWHOST => '6sqPJLVVgS'], '{"'.ConfigTypeA::JSON_GWHOST.'":"6sqPJLVVgS"}'],
+            [[ConfigTypeA::JSON_GWSERV => 'pzkPI1ZV7f'], '{"'.ConfigTypeA::JSON_GWSERV.'":"pzkPI1ZV7f"}']
         ];
     }
 
     /**
      * Test jsonDecode() for configuration type A.
-     * @param array $array
+     * @param array  $array
      * @param string $json
      * @dataProvider provideJsonDecodeConfigTypeA
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws \PHPUnit_Framework_Exception
      */
     public function testJsonDecodeConfigTypeA($array, $json)
     {
-        $config = AbstractConfiguration::jsonDecode($array);
+        $config = AbstractConfiguration::jsonDecode($json);
         static::assertInstanceOf(ConfigTypeA::class, $config);
-        static::assertJsonStringEqualsJsonString($json, json_encode($config));
+        static::assertSame($array, $config->toArray());
     }
 
     /**
@@ -259,48 +214,47 @@ class AbstractConfigurationTest extends \PHPUnit_Framework_TestCase
     public static function provideJsonDecodeConfigTypeB()
     {
         return [
-            [[ConfigTypeB::JSON_MSHOST => '4htV2O3BMH'], '{"mshost":"4htV2O3BMH"}'],
-            [[ConfigTypeB::JSON_R3NAME => 'XmJsmqU3ua'], '{"r3name":"XmJsmqU3ua"}'],
-            [[ConfigTypeB::JSON_GROUP => 'Tczw3KTagh'], '{"group":"Tczw3KTagh"}']
+            [[ConfigTypeB::JSON_MSHOST => '4htV2O3BMH'], '{"'.ConfigTypeB::JSON_MSHOST.'":"4htV2O3BMH"}'],
+            [[ConfigTypeB::JSON_R3NAME => 'XmJsmqU3ua'], '{"'.ConfigTypeB::JSON_R3NAME.'":"XmJsmqU3ua"}'],
+            [[ConfigTypeB::JSON_GROUP => 'Tczw3KTagh'], '{"'.ConfigTypeB::JSON_GROUP.'":"Tczw3KTagh"}']
         ];
     }
 
     /**
      * Test jsonDecode() for configuration type B.
-     * @param array $array
+     * @param array  $array
      * @param string $json
      * @dataProvider provideJsonDecodeConfigTypeB
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws \PHPUnit_Framework_Exception
      */
     public function testJsonDecodeConfigTypeB($array, $json)
     {
-        $config = AbstractConfiguration::jsonDecode($array);
+        $config = AbstractConfiguration::jsonDecode($json);
         static::assertInstanceOf(ConfigTypeB::class, $config);
-        static::assertJsonStringEqualsJsonString($json, json_encode($config));
+        static::assertSame($array, $config->toArray());
     }
 
-    /**
-     * Data provider for invalid jsonDecode() configuration.
-     * @return array
-     */
-    public static function provideInvalidJsonDecodeConfiguration()
+    public static function provideNonSpecificJson()
     {
         return [
-            [[ConfigCommon::JSON_CLIENT => '2107']],
-            [[ConfigCommon::JSON_CODEPAGE => '6692']],
-            [[ConfigCommon::JSON_LANG => 'EN']],
-            [[ConfigCommon::JSON_SAPROUTER => '/H/UHWGvuoGxO/S/6770/H/']],
-            [['ifmOmNbx' => 6862]]
+            ['{}'],
+            ['{"'.ConfigCommon::JSON_CLIENT.'":"001"}'],
+            ['{"'.ConfigCommon::JSON_USER.'":"username"}'],
+            ['{"'.ConfigCommon::JSON_PASSWD.'":"password"}']
         ];
     }
 
     /**
-     * @param array $array
-     * @dataProvider provideInvalidJsonDecodeConfiguration
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot automatically determine the configuration type from the given configuration keys!
+     * Test decoding a JSON that is not type specific.
+     * @param string $json
+     * @dataProvider             provideNonSpecificJson
+     * @expectedException \phpsap\exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Cannot automatically determine the configuration type
+     * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function testInvalidJsonDecodeConfiguration($array)
+    public function testNonSpecificJson($json)
     {
-        AbstractConfiguration::jsonDecode($array);
+        AbstractConfiguration::jsonDecode($json);
     }
 }

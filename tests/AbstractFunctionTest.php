@@ -294,6 +294,8 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         ]);
         static::assertInstanceOf(AbstractFunction::class, $fnc);
         $fnc->setParam('OkUxzPbS', 'FVnhTAoQ');
+        static::assertSame('FVnhTAoQ', $fnc->getParam('OkUxzPbS'));
+
         $params = $fnc->getParams();
         static::assertInternalType('array', $params);
 
@@ -337,6 +339,12 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         static::assertArrayHasKey('rpJNsIjC', $params['gksKixRv'][1]);
         static::assertInternalType('integer', $params['gksKixRv'][1]['rpJNsIjC']);
         static::assertSame(28939, $params['gksKixRv'][1]['rpJNsIjC']);
+
+        /**
+         * Now reset all parameters.
+         */
+        $fnc->resetParams();
+        static::assertSame([], $fnc->getParams());
     }
 
     /**

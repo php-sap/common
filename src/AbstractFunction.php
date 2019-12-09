@@ -174,6 +174,17 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     }
 
     /**
+     * Return a single previously set parameter.
+     * @param string $key Name of the parameter to get.
+     * @return array|bool|float|int|string
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     */
+    public function getParam($key)
+    {
+        return $this->get($key);
+    }
+
+    /**
      * Returns all previously set parameters.
      * @return array
      */

@@ -55,7 +55,7 @@ class RemoteApi implements IApi
 
     /**
      * Get all tables of the remote function.
-     * @return \phpsap\interfaces\Api\IArray[]
+     * @return \phpsap\classes\Api\Table[]
      */
     public function getTables()
     {
@@ -213,10 +213,10 @@ class RemoteApi implements IApi
      */
     private function constructArray($value)
     {
-        if (!array_key_exists(IValue::JSON_DIRECTION, $value)) {
+        if (!array_key_exists(IArray::JSON_DIRECTION, $value)) {
             throw new InvalidArgumentException('API Value is missing direction.');
         }
-        if ($value[IValue::JSON_DIRECTION] === IArray::DIRECTION_TABLE) {
+        if ($value[IArray::JSON_DIRECTION] === IArray::DIRECTION_TABLE) {
             return Table::fromArray($value);
         }
         return Struct::fromArray($value);

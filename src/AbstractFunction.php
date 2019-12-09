@@ -12,7 +12,7 @@ use phpsap\interfaces\IFunction;
 /**
  * Class AbstractFunction
  *
- * Handle a SAP remote function call.
+ * Manage a SAP remote function call.
  *
  * @package phpsap\classes
  * @author  Gregor J.
@@ -131,8 +131,8 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     }
 
     /**
-     * Connect to the SAP remote system and retrieve the API of the SAP remote function.
-     * This ignores any API settings in this class.
+     * Connect to the SAP remote system and retrieve the API of the SAP remote
+     * function. This ignores any API settings in this class.
      * @return \phpsap\classes\Api\RemoteApi
      * @throws \phpsap\exceptions\IncompleteConfigException
      * @throws \phpsap\exceptions\ConnectionFailedException
@@ -174,7 +174,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     }
 
     /**
-     * Retrieve all SAP remote function call parameters that have been set.
+     * Returns all previously set parameters.
      * @return array
      */
     public function getParams()
@@ -183,9 +183,9 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     }
 
     /**
-     * Set a SAP remote function call parameter.
-     * @param string                      $key
-     * @param bool|int|float|string|array $value
+     * Set a single SAP remote function call parameter.
+     * @param string                      $key   Name of the parameter to set.
+     * @param bool|int|float|string|array $value Value of the parameter.
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
@@ -198,7 +198,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Extract all expected SAP remote function call parameters from the given array
      * and set them.
-     * @param array $params
+     * @param array $params An array of SAP remote function call parameters.
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
@@ -248,7 +248,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     }
 
     /**
-     * Decode a formerly JSON encoded function object.
+     * Decode a formerly JSON encoded SAP remote function object.
      * @param string $json
      * @return \phpsap\classes\AbstractFunction
      * @throws \phpsap\exceptions\InvalidArgumentException

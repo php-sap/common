@@ -207,7 +207,7 @@ class JsonSerializable implements IJsonSerializable
                 gettype($key)
             ));
         }
-        if (!preg_match('~^[a-z\d]+$~i', $key, $matches)) {
+        if (!preg_match('~^[a-z\d_\-]+$~i', $key, $matches)) {
             throw new InvalidArgumentException(
                 'Invalid key! Key must contain only alphanumeric characters!'
             );

@@ -27,7 +27,7 @@ class RemoteApi implements IApi
     /**
      * Add an input value of the remote function.
      * @param \phpsap\interfaces\Api\IValue $value
-     * @return \phpsap\classes\Api\RemoteApi
+     * @return $this
      */
     public function add(IValue $value)
     {
@@ -37,20 +37,20 @@ class RemoteApi implements IApi
 
     /**
      * Get all input values of the remote function.
-     * @return \phpsap\interfaces\Api\IValue[]
+     * @return \phpsap\classes\Api\Value[]
      */
     public function getInputValues()
     {
-        return $this->getValues(IValue::DIRECTION_INPUT);
+        return $this->getValues(Value::DIRECTION_INPUT);
     }
 
     /**
      * Get all output values of the remote function.
-     * @return \phpsap\interfaces\Api\IValue[]
+     * @return \phpsap\classes\Api\Value[]
      */
     public function getOutputValues()
     {
-        return $this->getValues(IValue::DIRECTION_OUTPUT);
+        return $this->getValues(Value::DIRECTION_OUTPUT);
     }
 
     /**
@@ -59,7 +59,7 @@ class RemoteApi implements IApi
      */
     public function getTables()
     {
-        return $this->getValues(IArray::DIRECTION_TABLE);
+        return $this->getValues(Table::DIRECTION_TABLE);
     }
 
     /**
@@ -72,99 +72,13 @@ class RemoteApi implements IApi
         $result = [];
         foreach ($this->data as $value) {
             /**
-             * @var \phpsap\interfaces\Api\IValue $value
+             * @var \phpsap\classes\Api\Value $value
              */
             if ($value->getDirection() === $direction) {
                 $result[] = $value;
             }
         }
         return $result;
-    }
-
-    /**
-     * Typecast the values of a given array to their according types of the input
-     * values of the remote function.
-     * @param array $array The data array to cast.
-     * @return array
-     * @throws \phpsap\exceptions\ArrayElementMissingException
-     * @throws \phpsap\exceptions\InvalidArgumentException
-     */
-    public function castInputValues($array)
-    {
-        return $this->castValues(IValue::DIRECTION_INPUT, $array);
-    }
-
-    /**
-     * Typecast the values of a given array to their according types of the output
-     * values of the remote function.
-     * @param array $array The data array to cast.
-     * @return array
-     * @throws \phpsap\exceptions\ArrayElementMissingException
-     * @throws \phpsap\exceptions\InvalidArgumentException
-     */
-    public function castOutputValues($array)
-    {
-        return $this->castValues(IValue::DIRECTION_OUTPUT, $array);
-    }
-
-    /**
-     * Typecast the values of a given array to their according types of the table
-     * values of the remote function.
-     * @param array $array The data array to cast.
-     * @return array
-     * @throws \phpsap\exceptions\ArrayElementMissingException
-     * @throws \phpsap\exceptions\InvalidArgumentException
-     */
-    public function castTables($array)
-    {
-        return $this->castValues(IArray::DIRECTION_TABLE, $array);
-    }
-
-    /**
-     * Type cast the given array according to the input/output/table values of the
-     * API.
-     * @param string $direction The direction to get the casting values for.
-     * @param array  $array     The data array to cast.
-     * @return array
-     * @throws \phpsap\exceptions\ArrayElementMissingException
-     * @throws \phpsap\exceptions\InvalidArgumentException
-     */
-    protected function castValues($direction, $array)
-    {
-        if (!is_array($array)) {
-            throw new InvalidArgumentException(
-                'Expected data for typecasting to be an array!'
-            );
-        }
-        $values = $this->getValues($direction);
-        foreach ($values as $value) {
-            /**
-             * @var \phpsap\classes\Api\Value $value
-             * Get the name of the current API value, so there isn't a function call
-             * every time the name is needed.
-             */
-            $name = $value->getName();
-            if (array_key_exists($name, $array)) {
-                /**
-                 * The API value exists and can be type casted.
-                 */
-                $array[$name] = $value->cast($array[$name]);
-            } elseif ($value->isOptional() === false) {
-                /**
-                 * The API value doesn't exist, but is required.
-                 */
-                throw new ArrayElementMissingException(sprintf(
-                    'Mandatory %s value %s is missing!',
-                    $direction,
-                    $name
-                ));
-            }
-            /**
-             * In case the API value doesn't exist, but isn't required, nothing
-             * happens.
-             */
-        }
-        return $array;
     }
 
     /**
@@ -196,10 +110,10 @@ class RemoteApi implements IApi
      */
     private function constructValue($value)
     {
-        if (!array_key_exists(IValue::JSON_TYPE, $value)) {
+        if (!array_key_exists(Value::JSON_TYPE, $value)) {
             throw new InvalidArgumentException('API Value is missing type.');
         }
-        if ($value[IValue::JSON_TYPE] === IArray::TYPE_ARRAY) {
+        if ($value[Value::JSON_TYPE] === Table::TYPE_ARRAY) {
             return $this->constructArray($value);
         }
         return Value::fromArray($value);

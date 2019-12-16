@@ -3,7 +3,6 @@
 namespace phpsap\classes\Api;
 
 use phpsap\exceptions\InvalidArgumentException;
-use phpsap\exceptions\ArrayElementMissingException;
 use phpsap\interfaces\Api\IArray;
 use phpsap\interfaces\Api\IValue;
 use phpsap\interfaces\Api\IApi;

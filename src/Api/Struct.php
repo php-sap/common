@@ -92,8 +92,7 @@ class Struct extends Value implements IArray
     public function getMembers()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_MEMBERS);
     }

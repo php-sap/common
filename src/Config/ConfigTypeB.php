@@ -2,6 +2,7 @@
 
 namespace phpsap\classes\Config;
 
+use phpsap\exceptions\IncompleteConfigException;
 use phpsap\interfaces\Config\IConfigTypeB;
 
 /**
@@ -35,15 +36,21 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
 
     /**
      * Get the host name of the message server.
-     * @return string host name of the message server
+     * @return string
+     * @throws \phpsap\exceptions\IncompleteConfigException
      */
     public function getMshost()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
-        return $this->get(self::JSON_MSHOST);
+        if (($result = $this->get(self::JSON_MSHOST)) === null) {
+            throw new IncompleteConfigException(sprintf(
+                'Configuration is missing mandatory key %s!',
+                self::JSON_MSHOST
+            ));
+        }
+        return $result;
     }
 
     /**
@@ -60,13 +67,12 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
 
     /**
      * Get the name of SAP system, optional; default: destination
-     * @return string name of SAP system.
+     * @return string|null The name of the SAP system or NULL in case no name has been defined.
      */
     public function getR3name()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_R3NAME);
     }
@@ -90,8 +96,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
     public function getGroup()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_GROUP);
     }

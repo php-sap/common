@@ -2,6 +2,7 @@
 
 namespace phpsap\classes\Config;
 
+use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigCommon;
 
@@ -31,16 +32,108 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     ];
 
     /**
+     * Get the username to use for authentication.
+     * @return string
+     * @throws \phpsap\exceptions\IncompleteConfigException
+     */
+    public function getUser()
+    {
+        /**
+         * InvalidArgumentException will never be thrown.
+         */
+        if (($result = $this->get(self::JSON_USER)) === null) {
+            throw new IncompleteConfigException(sprintf(
+                'Configuration is missing mandatory key %s!',
+                self::JSON_USER
+            ));
+        }
+        return $result;
+    }
+
+    /**
+     * Set the username to use for authentication.
+     * @param string $user The username.
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     */
+    public function setUser($user)
+    {
+        $this->set(self::JSON_USER, $user);
+        return $this;
+    }
+
+    /**
+     * Get the password to use for authentication.
+     * @return string
+     * @throws \phpsap\exceptions\IncompleteConfigException
+     */
+    public function getPasswd()
+    {
+        /**
+         * InvalidArgumentException will never be thrown.
+         */
+        if (($result = $this->get(self::JSON_PASSWD)) === null) {
+            throw new IncompleteConfigException(sprintf(
+                'Configuration is missing mandatory key %s!',
+                self::JSON_PASSWD
+            ));
+        }
+        return $result;
+    }
+
+    /**
+     * Get the password to use for authentication.
+     * @param string $passwd The password.
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     */
+    public function setPasswd($passwd)
+    {
+        $this->set(self::JSON_PASSWD, $passwd);
+        return $this;
+    }
+
+    /**
+     * Get the client.
+     * @return string
+     * @throws \phpsap\exceptions\IncompleteConfigException
+     */
+    public function getClient()
+    {
+        /**
+         * InvalidArgumentException will never be thrown.
+         */
+        if (($result = $this->get(self::JSON_CLIENT)) === null) {
+            throw new IncompleteConfigException(sprintf(
+                'Configuration is missing mandatory key %s!',
+                self::JSON_CLIENT
+            ));
+        }
+        return $result;
+    }
+
+    /**
+     * Set the client.
+     * @param string $client The client.
+     * @return $this
+     * @throws \phpsap\exceptions\InvalidArgumentException
+     */
+    public function setClient($client)
+    {
+        $this->set(self::JSON_CLIENT, $client);
+        return $this;
+    }
+
+    /**
      * In case the connection needs to be made through a firewall using a SAPRouter,
      * the parameters are in the following format:
      * /H/hostname/S/portnumber/H/
-     * @return string the saprouter
+     * @return string|null The saprouter or NULL in case the saprouter hasn't been set.
      */
     public function getSaprouter()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_SAPROUTER);
     }
@@ -70,13 +163,12 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
 
     /**
      * Get the trace level (0-3). See constants TRACE_*.
-     * @return int the trace level
+     * @return int|null The trace level or NULL in case the trace level hasn't been set.
      */
     public function getTrace()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_TRACE);
     }
@@ -105,13 +197,12 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * non-ISO-Latin-1 user name or password. The RFC library will then use that
      * codepage for the initial handshake, thus preserving the characters in
      * username/password.
-     * @return int the codepage
+     * @return int|null The codepage or NULL in case the codepage hasn't been set.
      */
     public function getCodepage()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_CODEPAGE);
     }
@@ -132,95 +223,19 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     }
 
     /**
-     * Get the username to use for authentication.
-     * @return string the username
-     */
-    public function getUser()
-    {
-        /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
-         */
-        return $this->get(self::JSON_USER);
-    }
-
-    /**
-     * Set the username to use for authentication.
-     * @param string $user The username.
-     * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
-     */
-    public function setUser($user)
-    {
-        $this->set(self::JSON_USER, $user);
-        return $this;
-    }
-
-    /**
-     * Get the password to use for authentication.
-     * @return string the password
-     */
-    public function getPasswd()
-    {
-        /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
-         */
-        return $this->get(self::JSON_PASSWD);
-    }
-
-    /**
-     * Get the password to use for authentication.
-     * @param string $passwd The password.
-     * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
-     */
-    public function setPasswd($passwd)
-    {
-        $this->set(self::JSON_PASSWD, $passwd);
-        return $this;
-    }
-
-    /**
-     * Get the destination in RfcOpen.
-     * @return string Get the destination in RfcOpen.
-     */
-    public function getClient()
-    {
-        /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
-         */
-        return $this->get(self::JSON_CLIENT);
-    }
-
-    /**
-     * Set the destination in RfcOpen.
-     * @param string $client The destination in RfcOpen.
-     * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
-     */
-    public function setClient($client)
-    {
-        $this->set(self::JSON_CLIENT, $client);
-        return $this;
-    }
-
-    /**
      * Get the logon Language.
-     * @return string The logon language.
+     * @return string|null The logon language or NULL in case the logon language hasn't been set.
      */
     public function getLang()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_LANG);
     }
 
     /**
-     * Set the logon Language.
+     * Set the logon language.
      * @param string $lang The logon language.
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
@@ -240,13 +255,12 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
 
     /**
      * Get the destination in RfcOpenConnection.
-     * @return string the logon language
+     * @return string|null The destination or NULL in case the destination hasn't been set.
      */
     public function getDest()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_DEST);
     }

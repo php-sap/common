@@ -57,8 +57,7 @@ class Value extends Element implements IValue
     public function getDirection()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_DIRECTION);
     }
@@ -70,8 +69,7 @@ class Value extends Element implements IValue
     public function isOptional()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_OPTIONAL);
     }

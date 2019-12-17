@@ -62,8 +62,7 @@ class Element extends JsonSerializable implements IElement
     public function getType()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_TYPE);
     }
@@ -75,8 +74,7 @@ class Element extends JsonSerializable implements IElement
     public function getName()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_NAME);
     }

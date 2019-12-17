@@ -2,6 +2,7 @@
 
 namespace phpsap\classes\Config;
 
+use phpsap\exceptions\IncompleteConfigException;
 use phpsap\interfaces\Config\IConfigTypeA;
 
 /**
@@ -36,20 +37,26 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
 
     /**
      * Get the host name of a specific SAP application server.
-     * @return string host name of a specific SAP application server
+     * @return string The hostname of a specific SAP application server.
+     * @throws \phpsap\exceptions\IncompleteConfigException
      */
     public function getAshost()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
-        return $this->get(self::JSON_ASHOST);
+        if (($result = $this->get(self::JSON_ASHOST)) === null) {
+            throw new IncompleteConfigException(sprintf(
+                'Configuration is missing mandatory key %s!',
+                self::JSON_ASHOST
+            ));
+        }
+        return $result;
     }
 
     /**
      * Set the host name of a specific SAP application server.
-     * @param string $ashost The host name of a specific SAP application server.
+     * @param string $ashost The hostname of a specific SAP application server.
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
@@ -61,15 +68,21 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
 
     /**
      * Get the SAP system number.
-     * @return string SAP system number
+     * @return string The SAP system number.
+     * @throws \phpsap\exceptions\IncompleteConfigException
      */
     public function getSysnr()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
-        return $this->get(self::JSON_SYSNR);
+        if (($result = $this->get(self::JSON_SYSNR)) === null) {
+            throw new IncompleteConfigException(sprintf(
+                'Configuration is missing mandatory key %s!',
+                self::JSON_SYSNR
+            ));
+        }
+        return $result;
     }
 
     /**
@@ -85,21 +98,20 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
     }
 
     /**
-     * optional; default: gateway on application server
-     * @return string gateway on application server
+     * Get the gateway host on the application server.
+     * @return string|null The gateway host or NULL in case no gateway host has been defined.
      */
     public function getGwhost()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_GWHOST);
     }
 
     /**
-     * optional; default: gateway on application server
-     * @param string $gwhost The gateway on the application server.
+     * Set the gateway host on the application server.
+     * @param string $gwhost The gateway host.
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
@@ -110,21 +122,20 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
     }
 
     /**
-     * optional; default: gateway on application server
-     * @return string gateway on application server
+     * Get the gateway service on the application server.
+     * @return string|null The gateway service or NULL in case no gateway service has been defined.
      */
     public function getGwserv()
     {
         /**
-         * InvalidArgumentException will never be thrown, because of the static
-         * definition of the key.
+         * InvalidArgumentException will never be thrown.
          */
         return $this->get(self::JSON_GWSERV);
     }
 
     /**
-     * optional; default: gateway on application server
-     * @param string $gwserv The gateway on the application server.
+     * Get the gateway service on the application server.
+     * @param string $gwserv The gateway service on the application server.
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */

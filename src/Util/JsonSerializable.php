@@ -93,7 +93,7 @@ class JsonSerializable implements IJsonSerializable
     /**
      * Get the value of the given key from the data.
      * @param string $key The key to retrieve from the data.
-     * @return bool|int|float|string|array The value of the key, or null in case the key didn't exist.
+     * @return null|bool|int|float|string|array The value of the key, or null in case the key didn't exist.
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
     protected function get($key)

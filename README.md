@@ -5,13 +5,11 @@
 [![Maintainability][maintainability-badge]][maintainability]
 [![Test Coverage][coverage-badge]][coverage]
 
-Exceptions and abstract classes containing logic for [PHP/SAP][phpsap] that is not specific to the underlying PHP module.
-
-[See PHP/SAP Common for documentation][doc]
+Exceptions and abstract classes containing logic for [PHP/SAP][phpsap] that is
+not specific to the underlying PHP module.
 
 [phpsap]: https://php-sap.github.io
 [license-mit]: https://img.shields.io/badge/license-MIT-blue.svg
-[doc]: https://php-sap.github.io/common "Common classes and exceptions | PHP/SAP"
 [travis-badge]: https://travis-ci.org/php-sap/common.svg?branch=master
 [travis-ci]: https://travis-ci.org/php-sap/common
 [maintainability-badge]: https://api.codeclimate.com/v1/badges/843db325cd8b83ff8eca/maintainability

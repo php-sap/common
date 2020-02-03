@@ -11,22 +11,16 @@
     }
   ],
   "homepage": "https://php-sap.github.io",
-  "support": {
-    "docs": "https://php-sap.github.io/common"
-  },
   "keywords": [
     "phpsap",
     "php-sap"
   ],
   "minimum-stability": "stable",
   "require": {
-    "php": ">=5.5.0",
+    "php": "^5.5|^7.0",
     "ext-json": "*",
-    "php-sap/interfaces": "^1.0",
-    "psr/container": "^1.0"
-  },
-  "suggest": {
-    "php-sap/datetime": "Cast and/or export SAP week date, time and timestamp formats to/from DateTime."
+    "php-sap/interfaces": "^2.0",
+    "php-sap/datetime": "^1.1"
   },
   "autoload": {
     "psr-4": {

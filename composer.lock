@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3577086b98f94be501d434e6894c4158",
+    "content-hash": "938cb0053362cca80dd4a25df129a3fe",
     "packages": [
         {
             "name": "php-sap/datetime",

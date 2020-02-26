@@ -127,6 +127,13 @@ class Element extends JsonSerializable implements IElement
         if ($methods === null) {
             $methods = [
                 self::TYPE_DATE      => static function ($value) {
+                    /**
+                     * In case the date value consists only of zeros, this
+                     * is most likely a mistake of the SAP remote function.
+                     */
+                    if (preg_match('~^[0]+$~', $value)) {
+                        return null;
+                    }
                     return SapDateTime::createFromFormat(SapDateTime::SAP_DATE, $value);
                 },
                 self::TYPE_TIME      => static function ($value) {

@@ -3,6 +3,7 @@
 namespace phpsap\classes\Api;
 
 use phpsap\classes\Util\JsonSerializable;
+use phpsap\DateTime\SapDateInterval;
 use phpsap\DateTime\SapDateTime;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IElement;
@@ -129,7 +130,7 @@ class Element extends JsonSerializable implements IElement
                     return SapDateTime::createFromFormat(SapDateTime::SAP_DATE, $value);
                 },
                 self::TYPE_TIME      => static function ($value) {
-                    return SapDateTime::createFromFormat(SapDateTime::SAP_TIME, $value);
+                    return SapDateInterval::createFromDateString($value);
                 },
                 self::TYPE_TIMESTAMP => static function ($value) {
                     return SapDateTime::createFromFormat(SapDateTime::SAP_TIMESTAMP, $value);

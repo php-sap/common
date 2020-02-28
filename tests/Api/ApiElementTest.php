@@ -185,9 +185,13 @@ class ApiElementTest extends PHPUnit_Framework_TestCase
         $actual = $dateElement->cast('20191030');
         static::assertSame('2019-10-30', $actual->format('Y-m-d'));
 
+        $dateElement = new Element(Element::TYPE_DATE, 'Cf8FwZZe');
+        $actual = $dateElement->cast('00000000');
+        static::assertNull($actual);
+
         $timeElement = new Element(Element::TYPE_TIME, 'Ma0NRVdj');
         $actual = $timeElement->cast('102030');
-        static::assertSame('10:20:30', $actual->format('H:i:s'));
+        static::assertSame('10:20:30', $actual->format('%H:%I:%S'));
 
         $timestampElement = new Element(Element::TYPE_TIMESTAMP, '2SNTkpDJ');
         $actual = $timestampElement->cast('20191030102030');

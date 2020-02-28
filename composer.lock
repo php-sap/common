@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "938cb0053362cca80dd4a25df129a3fe",
+    "content-hash": "d71b0d1ab135606227c4155d8fff2203",
     "packages": [
         {
             "name": "php-sap/datetime",
-            "version": "v1.2.0",
+            "version": "v1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/datetime.git",
-                "reference": "4685556927b824ce89698b7e1a011788ddab237b"
+                "reference": "0e7bfd6fd58182aeb7050e6523c8e3d7e818b6e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/datetime/zipball/4685556927b824ce89698b7e1a011788ddab237b",
-                "reference": "4685556927b824ce89698b7e1a011788ddab237b",
+                "url": "https://api.github.com/repos/php-sap/datetime/zipball/0e7bfd6fd58182aeb7050e6523c8e3d7e818b6e7",
+                "reference": "0e7bfd6fd58182aeb7050e6523c8e3d7e818b6e7",
                 "shasum": ""
             },
             "require": {
@@ -54,7 +54,7 @@
                 "timestamp",
                 "week"
             ],
-            "time": "2020-02-26T11:43:57+00:00"
+            "time": "2020-02-28T14:52:56+00:00"
         },
         {
             "name": "php-sap/interfaces",
@@ -1289,7 +1289,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.5|^7.0",
+        "php": "^5.5",
         "ext-json": "*"
     },
     "platform-dev": []

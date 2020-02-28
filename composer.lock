@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "php-sap/datetime",
-            "version": "v1.2.2",
+            "version": "v1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/datetime.git",
-                "reference": "0e7bfd6fd58182aeb7050e6523c8e3d7e818b6e7"
+                "reference": "65ae359ff05c26fc2ce58ad119966f82a8bf00f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/datetime/zipball/0e7bfd6fd58182aeb7050e6523c8e3d7e818b6e7",
-                "reference": "0e7bfd6fd58182aeb7050e6523c8e3d7e818b6e7",
+                "url": "https://api.github.com/repos/php-sap/datetime/zipball/65ae359ff05c26fc2ce58ad119966f82a8bf00f6",
+                "reference": "65ae359ff05c26fc2ce58ad119966f82a8bf00f6",
                 "shasum": ""
             },
             "require": {
@@ -54,7 +54,7 @@
                 "timestamp",
                 "week"
             ],
-            "time": "2020-02-28T14:52:56+00:00"
+            "time": "2020-02-28T15:36:33+00:00"
         },
         {
             "name": "php-sap/interfaces",

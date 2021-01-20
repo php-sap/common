@@ -19,7 +19,7 @@
   "require": {
     "php": "^7.0",
     "ext-json": "*",
-    "php-sap/interfaces": "^2.0",
+    "php-sap/interfaces": "dev-master",
     "php-sap/datetime": "^1.2"
   },
   "autoload": {

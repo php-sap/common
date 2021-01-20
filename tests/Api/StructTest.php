@@ -2,6 +2,7 @@
 
 namespace tests\phpsap\classes\Api;
 
+use phpsap\interfaces\Api\IStruct;
 use PHPUnit_Framework_TestCase;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
@@ -33,6 +34,7 @@ class StructTest extends PHPUnit_Framework_TestCase
         ]);
         //heritage
         static::assertInstanceOf(JsonSerializable::class, $struct);
+        static::assertInstanceOf(IStruct::class, $struct);
         static::assertInstanceOf(IArray::class, $struct);
         static::assertInstanceOf(Struct::class, $struct);
         static::assertInstanceOf(IValue::class, $struct);
@@ -43,7 +45,7 @@ class StructTest extends PHPUnit_Framework_TestCase
         static::assertSame('9rlCO8It', $struct->getName());
         static::assertSame(IValue::DIRECTION_INPUT, $struct->getDirection());
         static::assertFalse($struct->isOptional());
-        static::assertSame(IArray::TYPE_ARRAY, $struct->getType());
+        static::assertSame(Struct::TYPE_STRUCT, $struct->getType());
         //test members
         $members = $struct->getMembers();
         static::assertInternalType('array', $members);
@@ -156,13 +158,13 @@ class StructTest extends PHPUnit_Framework_TestCase
      */
     public function testJsonDecode()
     {
-        $json = '{"type":"array","name":"l9M7gn6p","direction":"input",'
+        $json = '{"type":"struct","name":"l9M7gn6p","direction":"input",'
                 .'"optional":true,"members":[{"type":"int","name":"lnrxpRjh"}]}';
         $element = Struct::jsonDecode($json);
         static::assertInstanceOf(Struct::class, $element);
-        static::assertSame(IArray::TYPE_ARRAY, $element->getType());
+        static::assertSame(Struct::TYPE_STRUCT, $element->getType());
         static::assertSame('l9M7gn6p', $element->getName());
-        static::assertSame(IArray::DIRECTION_INPUT, $element->getDirection());
+        static::assertSame(Struct::DIRECTION_INPUT, $element->getDirection());
         static::assertTrue($element->isOptional());
         static::assertInternalType('array', $element->getMembers());
         $members = $element->getMembers();
@@ -170,7 +172,7 @@ class StructTest extends PHPUnit_Framework_TestCase
             /**
              * @var \phpsap\interfaces\Api\IElement $member
              */
-            static::assertSame(IArray::TYPE_INTEGER, $member->getType());
+            static::assertSame(Struct::TYPE_INTEGER, $member->getType());
             static::assertSame('lnrxpRjh', $member->getName());
         }
     }
@@ -194,7 +196,7 @@ class StructTest extends PHPUnit_Framework_TestCase
     public static function provideIncompleteJsonObjects()
     {
         $return = ApiValueTest::provideIncompleteJsonObjects();
-        $return[] = ['{"type":"array","name":"Mvewn5c7","direction":"output","optional":false}'];
+        $return[] = ['{"type":"struct","name":"Mvewn5c7","direction":"output","optional":false}'];
         return $return;
     }
 
@@ -247,15 +249,15 @@ class StructTest extends PHPUnit_Framework_TestCase
     public static function provideJsonDecodeInvalidMembers()
     {
         return [
-            ['{"type":"array","name":"fiNvZSEH","direction":"output",'
+            ['{"type":"struct","name":"fiNvZSEH","direction":"output",'
              .'"optional":true,"members":964}'],
-            ['{"type":"array","name":"eLkiWCkL","direction":"output",'
+            ['{"type":"struct","name":"eLkiWCkL","direction":"output",'
              .'"optional":true,"members":5.7}'],
-            ['{"type":"array","name":"zF2vTk2P","direction":"output",'
+            ['{"type":"struct","name":"zF2vTk2P","direction":"output",'
              .'"optional":true,"members":"mKgpyVXb"}'],
-            ['{"type":"array","name":"RvU15SUm","direction":"output",'
+            ['{"type":"struct","name":"RvU15SUm","direction":"output",'
              .'"optional":true,"members":true}'],
-            ['{"type":"array","name":"txI85Gco","direction":"output",'
+            ['{"type":"struct","name":"txI85Gco","direction":"output",'
              .'"optional":true,"members":false}']
         ];
     }

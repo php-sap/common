@@ -2,6 +2,7 @@
 
 namespace tests\phpsap\classes\Api;
 
+use phpsap\interfaces\Api\ITable;
 use PHPUnit_Framework_TestCase;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
@@ -27,11 +28,12 @@ class TableTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructorAndInheritance()
     {
-        $table = new Table('cpfNGceT', true, [
+        $table = new Table('cpfNGceT', Table::DIRECTION_TABLE, true, [
             new Element(Element::TYPE_STRING, 'QoTyE1xK')
         ]);
         //heritage
         static::assertInstanceOf(JsonSerializable::class, $table);
+        static::assertInstanceOf(ITable::class, $table);
         static::assertInstanceOf(IArray::class, $table);
         static::assertInstanceOf(Table::class, $table);
         static::assertInstanceOf(IValue::class, $table);
@@ -40,9 +42,9 @@ class TableTest extends PHPUnit_Framework_TestCase
         static::assertInstanceOf(Element::class, $table);
         //basic in-out
         static::assertSame('cpfNGceT', $table->getName());
-        static::assertSame(IArray::DIRECTION_TABLE, $table->getDirection());
+        static::assertSame(Table::DIRECTION_TABLE, $table->getDirection());
         static::assertTrue($table->isOptional());
-        static::assertSame(IArray::TYPE_ARRAY, $table->getType());
+        static::assertSame(Table::TYPE_TABLE, $table->getType());
         //test members
         $members = $table->getMembers();
         static::assertInternalType('array', $members);
@@ -66,7 +68,7 @@ class TableTest extends PHPUnit_Framework_TestCase
      */
     public function testNonArrayMembers($members)
     {
-        new Table('ObFY2MbO', true, $members);
+        new Table('ObFY2MbO', Table::DIRECTION_TABLE, true, $members);
     }
 
     /**
@@ -75,7 +77,7 @@ class TableTest extends PHPUnit_Framework_TestCase
      */
     public function testNonIElementMembers()
     {
-        new Table('XPn2Pf2n', true, [new stdClass()]);
+        new Table('XPn2Pf2n', Table::DIRECTION_TABLE, true, [new stdClass()]);
     }
 
     /**
@@ -85,7 +87,7 @@ class TableTest extends PHPUnit_Framework_TestCase
      */
     public function testTableCast()
     {
-        $table = new Table('kdIriJOc', true, [
+        $table = new Table('kdIriJOc', Table::DIRECTION_TABLE, true, [
             new Element(Element::TYPE_BOOLEAN, '58J0oSzo'),
             new Element(Element::TYPE_INTEGER, '1U2pHwPS'),
             new Element(Element::TYPE_FLOAT, 'jKPjRoH5'),
@@ -134,7 +136,7 @@ class TableTest extends PHPUnit_Framework_TestCase
      */
     public function testTableCastMissingElement()
     {
-        $table = new Table('MLOWwQXa', true, [
+        $table = new Table('MLOWwQXa', Table::DIRECTION_TABLE, true, [
             new Element(Element::TYPE_STRING, 'IlRdvEQp')
         ]);
         $raw = [
@@ -157,13 +159,13 @@ class TableTest extends PHPUnit_Framework_TestCase
      */
     public function testJsonDecode()
     {
-        $json = '{"type":"array","name":"wWnIOYQc","direction":"table",'
+        $json = '{"type":"table","name":"wWnIOYQc","direction":"table",'
                 .'"optional":false,"members":[{"type":"bool","name":"MievIEPs"}]}';
         $element = Table::jsonDecode($json);
         static::assertInstanceOf(Table::class, $element);
-        static::assertSame(IArray::TYPE_ARRAY, $element->getType());
+        static::assertSame(Table::TYPE_TABLE, $element->getType());
         static::assertSame('wWnIOYQc', $element->getName());
-        static::assertSame(IArray::DIRECTION_TABLE, $element->getDirection());
+        static::assertSame(Table::DIRECTION_TABLE, $element->getDirection());
         static::assertFalse($element->isOptional());
         static::assertInternalType('array', $element->getMembers());
         $members = $element->getMembers();
@@ -171,7 +173,7 @@ class TableTest extends PHPUnit_Framework_TestCase
             /**
              * @var \phpsap\interfaces\Api\IElement $member
              */
-            static::assertSame(IArray::TYPE_BOOLEAN, $member->getType());
+            static::assertSame(Table::TYPE_BOOLEAN, $member->getType());
             static::assertSame('MievIEPs', $member->getName());
         }
     }
@@ -207,9 +209,9 @@ class TableTest extends PHPUnit_Framework_TestCase
     public static function provideJsonDecodeInvalidDirection()
     {
         return [
-            ['{"type":"array","name":"3iumcKfi","direction":"input","optional":true,'
+            ['{"type":"table","name":"3iumcKfi","direction":"input","optional":true,'
              .'"members":[{"type":"int","name":"R7atJFrf"}]}'],
-            ['{"type":"array","name":"0Uha2w0d","direction":"output","optional":true,'
+            ['{"type":"table","name":"0Uha2w0d","direction":"output","optional":true,'
              .'"members":[{"type":"int","name":"DhO5JG4n"}]}']
         ];
     }
@@ -263,15 +265,15 @@ class TableTest extends PHPUnit_Framework_TestCase
     public static function provideJsonDecodeInvalidMembers()
     {
         return [
-            ['{"type":"array","name":"96JeBc1U","direction":"table",'
+            ['{"type":"table","name":"96JeBc1U","direction":"table",'
              .'"optional":true,"members":13}'],
-            ['{"type":"array","name":"X1Lw0efh","direction":"table",'
+            ['{"type":"table","name":"X1Lw0efh","direction":"table",'
              .'"optional":true,"members":8.82}'],
-            ['{"type":"array","name":"AdrbBd9G","direction":"table",'
+            ['{"type":"table","name":"AdrbBd9G","direction":"table",'
              .'"optional":true,"members":"AbgHgWhx"}'],
-            ['{"type":"array","name":"RvU15SUm","direction":"table",'
+            ['{"type":"table","name":"RvU15SUm","direction":"table",'
              .'"optional":true,"members":true}'],
-            ['{"type":"array","name":"7LQXw6IT","direction":"table",'
+            ['{"type":"table","name":"7LQXw6IT","direction":"table",'
              .'"optional":true,"members":false}']
         ];
     }

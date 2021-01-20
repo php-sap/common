@@ -53,15 +53,15 @@ class RemoteApiTest extends PHPUnit_Framework_TestCase
                     new Element(Element::TYPE_STRING, 'QhTuNM8d'),
                     new Element(Element::TYPE_INTEGER, '6VpEpxCX')
                 ]),
-                '[{"type":"array","name":"yLF9w1ss","direction":"output",'
+                '[{"type":"struct","name":"yLF9w1ss","direction":"output",'
                 . '"optional":false,"members":[{"type":"string","name":"QhTuNM8d"},'
                 . '{"type":"int","name":"6VpEpxCX"}]}]'
             ],
             [
-                new Table('506E31r6', true, [
+                new Table('506E31r6', Table::DIRECTION_TABLE, true, [
                     new Element(Element::TYPE_FLOAT, 'zrctEv52')
                 ]),
-                '[{"type":"array","name":"506E31r6","direction":"table",'
+                '[{"type":"table","name":"506E31r6","direction":"table",'
                 . '"optional":true,"members":[{"type":"float","name":"zrctEv52"}]}]'
             ]
         ];
@@ -132,7 +132,7 @@ class RemoteApiTest extends PHPUnit_Framework_TestCase
         $api1[] = $value;
         //output struct
         $struct = new stdClass();
-        $struct->type = Struct::TYPE_ARRAY;
+        $struct->type = Struct::TYPE_STRUCT;
         $struct->name = 'pS5Irn27';
         $struct->direction = Struct::DIRECTION_OUTPUT;
         $struct->optional = false;
@@ -148,7 +148,7 @@ class RemoteApiTest extends PHPUnit_Framework_TestCase
         $api1[] = $struct;
         //output table
         $table = new stdClass();
-        $table->type = Table::TYPE_ARRAY;
+        $table->type = Table::TYPE_TABLE;
         $table->name = 'ZZ4wgCWW';
         $table->direction = Table::DIRECTION_TABLE;
         $table->optional = false;
@@ -174,7 +174,7 @@ class RemoteApiTest extends PHPUnit_Framework_TestCase
                 'optional' => false
             ],
             [
-                'type' => Struct::TYPE_ARRAY,
+                'type' => Struct::TYPE_STRUCT,
                 'name' => 'pS5Irn27',
                 'direction' => Struct::DIRECTION_OUTPUT,
                 'optional' => false,
@@ -190,7 +190,7 @@ class RemoteApiTest extends PHPUnit_Framework_TestCase
                 ]
             ],
             [
-                'type' => Table::TYPE_ARRAY,
+                'type' => Table::TYPE_TABLE,
                 'name' => 'ZZ4wgCWW',
                 'direction' => Table::DIRECTION_TABLE,
                 'optional' => false,
@@ -244,7 +244,7 @@ class RemoteApiTest extends PHPUnit_Framework_TestCase
          */
         $outputValues = $api->getOutputValues();
         $struct = array_pop($outputValues);
-        static::assertSame(Struct::TYPE_ARRAY, $struct->getType());
+        static::assertSame(Struct::TYPE_STRUCT, $struct->getType());
         static::assertSame('pS5Irn27', $struct->getName());
         static::assertSame(Struct::DIRECTION_OUTPUT, $struct->getDirection());
         static::assertInternalType('array', $struct->getMembers());
@@ -267,7 +267,7 @@ class RemoteApiTest extends PHPUnit_Framework_TestCase
          */
         $tables = $api->getTables();
         $table = array_pop($tables);
-        static::assertSame(Table::TYPE_ARRAY, $table->getType());
+        static::assertSame(Table::TYPE_TABLE, $table->getType());
         static::assertSame('ZZ4wgCWW', $table->getName());
         static::assertSame(Table::DIRECTION_TABLE, $table->getDirection());
         static::assertInternalType('array', $table->getMembers());
@@ -294,7 +294,7 @@ class RemoteApiTest extends PHPUnit_Framework_TestCase
     public static function provideInvalidJson()
     {
         $table = new stdClass();
-        $table->type = Table::TYPE_ARRAY;
+        $table->type = Table::TYPE_TABLE;
         return [
             [''],
             [' '],
@@ -344,13 +344,13 @@ class RemoteApiTest extends PHPUnit_Framework_TestCase
     /**
      * Test API value with missing direction definition.
      * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage API Value is missing direction.
+     * @expectedExceptionMessage Invalid JSON: phpsap\classes\Api\Struct is missing direction!
      */
     public function testApiArrayMissingDirection()
     {
         $def = [
             [
-                'type' => Struct::TYPE_ARRAY,
+                'type' => Struct::TYPE_STRUCT,
                 'name' => 'qUvgdjIiMY',
                 'optional' => false,
                 'members' => []

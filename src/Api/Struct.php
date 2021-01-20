@@ -4,7 +4,7 @@ namespace phpsap\classes\Api;
 
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\exceptions\ArrayElementMissingException;
-use phpsap\interfaces\Api\IArray;
+use phpsap\interfaces\Api\IStruct;
 use phpsap\interfaces\Api\IElement;
 
 /**
@@ -16,7 +16,7 @@ use phpsap\interfaces\Api\IElement;
  * @author  Gregor J.
  * @license MIT
  */
-class Struct extends Value implements IArray
+class Struct extends Value implements IStruct
 {
     /**
      * @var array Allowed JsonSerializable keys to set values for.
@@ -33,14 +33,14 @@ class Struct extends Value implements IArray
      * @var array List of allowed API element types.
      */
     protected static $allowedTypes = [
-        self::TYPE_ARRAY
+        self::TYPE_STRUCT
     ];
 
     /**
      * Get an array of all valid configuration keys and whether they are mandatory.
      * @return array
      */
-    protected function getAllowedKeys()
+    protected function getAllowedKeys(): array
     {
         //Merge the keys of Element, Value and Struct class.
         return array_merge(parent::getAllowedKeys(), self::$allowedKeys);
@@ -56,7 +56,7 @@ class Struct extends Value implements IArray
      */
     public function __construct($name, $direction, $isOptional, $members)
     {
-        parent::__construct(self::TYPE_ARRAY, $name, $direction, $isOptional);
+        parent::__construct(self::TYPE_STRUCT, $name, $direction, $isOptional);
         $this->setMembers($members);
     }
 
@@ -129,7 +129,7 @@ class Struct extends Value implements IArray
     public static function fromArray($array)
     {
         static::fromArrayValidation($array);
-        if ($array[self::JSON_TYPE] !== self::TYPE_ARRAY) {
+        if ($array[self::JSON_TYPE] !== self::TYPE_STRUCT) {
             throw new InvalidArgumentException('Invalid JSON: API Struct type is not an array!');
         }
         if (!is_array($array[self::JSON_MEMBERS])) {

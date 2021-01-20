@@ -2,10 +2,10 @@
 
 namespace tests\phpsap\classes\Api;
 
+use phpsap\classes\Api\Table;
 use PHPUnit_Framework_TestCase;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
-use phpsap\interfaces\Api\IArray;
 use phpsap\interfaces\Api\IElement;
 use phpsap\interfaces\Api\IValue;
 use phpsap\classes\Api\Element;
@@ -64,7 +64,7 @@ class ApiValueTest extends PHPUnit_Framework_TestCase
             ['Table'],
             ['in'],
             ['out'],
-            [IArray::DIRECTION_TABLE]
+            [Table::DIRECTION_TABLE]
         ];
     }
 

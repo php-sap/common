@@ -244,7 +244,7 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 Struct::JSON_NAME => 'ePmpwEHW',
-                Struct::JSON_TYPE => Struct::TYPE_ARRAY,
+                Struct::JSON_TYPE => Struct::TYPE_STRUCT,
                 Struct::JSON_DIRECTION => Struct::DIRECTION_INPUT,
                 Struct::JSON_OPTIONAL => false,
                 Struct::JSON_MEMBERS => [
@@ -260,7 +260,7 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 Table::JSON_NAME => 'gksKixRv',
-                Table::JSON_TYPE => Table::TYPE_ARRAY,
+                Table::JSON_TYPE => Table::TYPE_TABLE,
                 Table::JSON_DIRECTION => Table::DIRECTION_TABLE,
                 Table::JSON_OPTIONAL => false,
                 Table::JSON_MEMBERS => [

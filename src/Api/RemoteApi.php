@@ -3,7 +3,6 @@
 namespace phpsap\classes\Api;
 
 use phpsap\exceptions\InvalidArgumentException;
-use phpsap\interfaces\Api\IArray;
 use phpsap\interfaces\Api\IValue;
 use phpsap\interfaces\Api\IApi;
 
@@ -112,27 +111,13 @@ class RemoteApi implements IApi
         if (!array_key_exists(Value::JSON_TYPE, $value)) {
             throw new InvalidArgumentException('API Value is missing type.');
         }
-        if ($value[Value::JSON_TYPE] === Table::TYPE_ARRAY) {
-            return $this->constructArray($value);
-        }
-        return Value::fromArray($value);
-    }
-
-    /**
-     * Construct an array type element (table or struct) from the given JSON array.
-     * @param array $value
-     * @return \phpsap\interfaces\Api\IArray
-     * @throws \phpsap\exceptions\InvalidArgumentException
-     */
-    private function constructArray($value)
-    {
-        if (!array_key_exists(IArray::JSON_DIRECTION, $value)) {
-            throw new InvalidArgumentException('API Value is missing direction.');
-        }
-        if ($value[IArray::JSON_DIRECTION] === IArray::DIRECTION_TABLE) {
+        if ($value[Value::JSON_TYPE] === Table::TYPE_TABLE) {
             return Table::fromArray($value);
         }
-        return Struct::fromArray($value);
+        if ($value[Value::JSON_TYPE] === Struct::TYPE_STRUCT) {
+            return Struct::fromArray($value);
+        }
+        return Value::fromArray($value);
     }
 
     /**

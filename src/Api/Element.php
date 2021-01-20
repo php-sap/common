@@ -119,7 +119,7 @@ class Element extends JsonSerializable implements IElement
     /**
      * Cast a given output value to the type defined in this class.
      * @param mixed $value
-     * @return bool|int|float|string|\phpsap\DateTime\SapDateTime
+     * @return bool|int|float|string|\phpsap\DateTime\SapDateTime|\phpsap\DateTime\SapDateInterval
      */
     public function cast($value)
     {

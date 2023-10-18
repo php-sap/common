@@ -34,7 +34,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Get the username to use for authentication.
      * @return string
-     * @throws \phpsap\exceptions\IncompleteConfigException
+     * @throws IncompleteConfigException
      */
     public function getUser(): string
     {
@@ -54,7 +54,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Set the username to use for authentication.
      * @param string $user The username.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setUser($user): IConfigCommon
     {
@@ -65,7 +65,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Get the password to use for authentication.
      * @return string
-     * @throws \phpsap\exceptions\IncompleteConfigException
+     * @throws IncompleteConfigException
      */
     public function getPasswd(): string
     {
@@ -85,7 +85,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Get the password to use for authentication.
      * @param string $passwd The password.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setPasswd($passwd): IConfigCommon
     {
@@ -96,7 +96,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Get the client.
      * @return string
-     * @throws \phpsap\exceptions\IncompleteConfigException
+     * @throws IncompleteConfigException
      */
     public function getClient(): string
     {
@@ -116,7 +116,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Set the client.
      * @param string $client The client.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setClient($client): IConfigCommon
     {
@@ -144,7 +144,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * /H/hostname/S/portnumber/H/
      * @param string $saprouter The saprouter configuration parameter.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setSaprouter($saprouter): IConfigCommon
     {
@@ -178,7 +178,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Set the trace level (0-3). See constants TRACE_*.
      * @param int $trace The trace level.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setTrace($trace): IConfigCommon
     {
@@ -216,7 +216,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * username/password.
      * @param int $codepage The codepage.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setCodepage($codepage): IConfigCommon
     {
@@ -240,7 +240,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Set the logon language.
      * @param string $lang The logon language.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setLang($lang): IConfigCommon
     {
@@ -272,7 +272,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Set the destination in RfcOpenConnection.
      * @param string $dest The destination in RfcOpenConnection.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setDest($dest): IConfigCommon
     {

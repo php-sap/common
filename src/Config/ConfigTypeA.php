@@ -3,6 +3,7 @@
 namespace phpsap\classes\Config;
 
 use phpsap\exceptions\IncompleteConfigException;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigTypeA;
 
 /**
@@ -38,7 +39,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
     /**
      * Get the host name of a specific SAP application server.
      * @return string The hostname of a specific SAP application server.
-     * @throws \phpsap\exceptions\IncompleteConfigException
+     * @throws IncompleteConfigException
      */
     public function getAshost(): string
     {
@@ -58,7 +59,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * Set the host name of a specific SAP application server.
      * @param string $ashost The hostname of a specific SAP application server.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setAshost($ashost): IConfigTypeA
     {
@@ -69,7 +70,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
     /**
      * Get the SAP system number.
      * @return string The SAP system number.
-     * @throws \phpsap\exceptions\IncompleteConfigException
+     * @throws IncompleteConfigException
      */
     public function getSysnr(): string
     {
@@ -89,7 +90,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * Set the SAP system number.
      * @param string $sysnr The SAP system number.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setSysnr($sysnr): IConfigTypeA
     {
@@ -113,7 +114,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * Set the gateway host on the application server.
      * @param string $gwhost The gateway host.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setGwhost($gwhost): IConfigTypeA
     {
@@ -137,7 +138,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * Get the gateway service on the application server.
      * @param string $gwserv The gateway service on the application server.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setGwserv($gwserv): IConfigTypeA
     {

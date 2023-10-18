@@ -41,7 +41,7 @@ class Value extends Element implements IValue
      * @param string $name       API value name.
      * @param string $direction  Either input, output or table.
      * @param bool   $isOptional Is the API value optional?
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($type, $name, $direction, $isOptional)
     {
@@ -77,7 +77,7 @@ class Value extends Element implements IValue
     /**
      * Set the API value direction: input, output or table.
      * @param string $direction
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function setDirection($direction)
     {
@@ -98,7 +98,7 @@ class Value extends Element implements IValue
     /**
      * Set the API value optional flag.
      * @param bool $isOptional
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function setOptional($isOptional)
     {
@@ -113,8 +113,8 @@ class Value extends Element implements IValue
     /**
      * Create an instance of this class from an array.
      * @param array $array Array containing the properties of this class.
-     * @return \phpsap\classes\Api\Value
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @return Value
+     * @throws InvalidArgumentException
      */
     public static function fromArray($array)
     {

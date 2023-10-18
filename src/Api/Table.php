@@ -51,7 +51,7 @@ class Table extends Value implements ITable
      * @param string $direction  Either input, output, or table
      * @param bool   $isOptional Is the API table optional?
      * @param array  $members    Array of Elements as the columns of the table.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($name, $direction, $isOptional, $members)
     {
@@ -63,14 +63,14 @@ class Table extends Value implements ITable
      * Cast a given value to the implemented value.
      * @param array $table
      * @return array
-     * @throws \phpsap\exceptions\ArrayElementMissingException
+     * @throws ArrayElementMissingException
      */
     public function cast($table): array
     {
         foreach ($table as &$row) {
             foreach ($this->getMembers() as $member) {
                 /**
-                 * @var \phpsap\classes\Api\Element $member
+                 * @var Element $member
                  */
                 $name = $member->getName();
                 if (!array_key_exists($name, $row)) {
@@ -102,7 +102,7 @@ class Table extends Value implements ITable
     /**
      * Set the member elements of the table.
      * @param array $members
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function setMembers($members)
     {
@@ -125,8 +125,8 @@ class Table extends Value implements ITable
     /**
      * Create an instance of this class from an array.
      * @param array $array Array containing the properties of this class.
-     * @return \phpsap\classes\Api\Table
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @return Table
+     * @throws InvalidArgumentException
      */
     public static function fromArray($array)
     {

@@ -3,6 +3,7 @@
 namespace phpsap\classes\Config;
 
 use phpsap\exceptions\IncompleteConfigException;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigTypeB;
 
 /**
@@ -37,7 +38,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
     /**
      * Get the host name of the message server.
      * @return string
-     * @throws \phpsap\exceptions\IncompleteConfigException
+     * @throws IncompleteConfigException
      */
     public function getMshost(): string
     {
@@ -57,7 +58,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * Set the host name of the message server.
      * @param string $mshost The host name of the message server.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setMshost($mshost): IConfigTypeB
     {
@@ -81,7 +82,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * Set the name of SAP system, optional; default: destination
      * @param string $r3name The name of the SAP system.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setR3name($r3name): IConfigTypeB
     {
@@ -105,7 +106,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * Set the group name of the application servers, optional; default: PUBLIC.
      * @param string $group The group name of the application servers.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setGroup($group): IConfigTypeB
     {

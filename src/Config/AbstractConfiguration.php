@@ -5,6 +5,8 @@ namespace phpsap\classes\Config;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfiguration;
+use phpsap\interfaces\Util\IJsonSerializable;
+use stdClass;
 
 /**
  * Class phpsap\classes\Config\AbstractConfiguration
@@ -27,7 +29,7 @@ abstract class AbstractConfiguration extends JsonSerializable implements IConfig
 
     /**
      * Load the configuration either from a JSON encoded string or from an array.
-     * @param array|string|\stdClass $config the configuration
+     * @param array|string|stdClass $config the configuration
      * @throws InvalidArgumentException In case the configuration is neither JSON
      *                                  nor an array.
      */
@@ -50,10 +52,10 @@ abstract class AbstractConfiguration extends JsonSerializable implements IConfig
      * Decode a JSON encoded configuration and return the correct configuration
      * class (A or B) depending on the values set in the configuration.
      * @param string $json JSON encoded configuration.
-     * @return \phpsap\classes\Config\ConfigTypeA|\phpsap\classes\Config\ConfigTypeB
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @return ConfigTypeA|ConfigTypeB
+     * @throws InvalidArgumentException
      */
-    public static function jsonDecode($json): \phpsap\interfaces\Util\IJsonSerializable
+    public static function jsonDecode($json): IJsonSerializable
     {
         $config = static::jsonToArray($json);
         if (

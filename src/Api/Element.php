@@ -7,6 +7,7 @@ use phpsap\DateTime\SapDateInterval;
 use phpsap\DateTime\SapDateTime;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IElement;
+use phpsap\interfaces\Util\IJsonSerializable;
 
 /**
  * Class Element
@@ -47,7 +48,7 @@ class Element extends JsonSerializable implements IElement
      * API element constructor.
      * @param string $type Either string, int, float, bool or array
      * @param string $name API element name.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($type, $name)
     {
@@ -83,7 +84,7 @@ class Element extends JsonSerializable implements IElement
     /**
      * Set optional the API element PHP type.
      * @param string $type
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function setType($type)
     {
@@ -104,7 +105,7 @@ class Element extends JsonSerializable implements IElement
     /**
      * Set the API element name.
      * @param string $name
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function setName($name)
     {
@@ -119,7 +120,7 @@ class Element extends JsonSerializable implements IElement
     /**
      * Cast a given output value to the type defined in this class.
      * @param mixed $value
-     * @return bool|int|float|string|\phpsap\DateTime\SapDateTime|\phpsap\DateTime\SapDateInterval
+     * @return bool|int|float|string|SapDateTime|SapDateInterval
      */
     public function cast($value)
     {
@@ -162,8 +163,8 @@ class Element extends JsonSerializable implements IElement
     /**
      * Create an instance of this class from an array.
      * @param array $array Array containing the properties of this class.
-     * @return \phpsap\classes\Api\Element
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @return Element
+     * @throws InvalidArgumentException
      */
     public static function fromArray($array)
     {
@@ -174,7 +175,7 @@ class Element extends JsonSerializable implements IElement
     /**
      * Validate the array for fromArray().
      * @param mixed $array
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected static function fromArrayValidation($array)
     {
@@ -198,10 +199,10 @@ class Element extends JsonSerializable implements IElement
     /**
      * Decode a formerly JSON encoded IElement object.
      * @param string $json JSON encoded Element object.
-     * @return \phpsap\classes\Api\Element
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @return Element
+     * @throws InvalidArgumentException
      */
-    public static function jsonDecode($json): \phpsap\interfaces\Util\IJsonSerializable
+    public static function jsonDecode($json): IJsonSerializable
     {
         $array = static::jsonToArray($json);
         return static::fromArray($array);

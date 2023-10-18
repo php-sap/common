@@ -4,10 +4,15 @@ namespace phpsap\classes;
 
 use phpsap\classes\Api\RemoteApi;
 use phpsap\classes\Util\JsonSerializable;
+use phpsap\exceptions\ConnectionFailedException;
+use phpsap\exceptions\FunctionCallException;
+use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
+use phpsap\exceptions\UnknownFunctionException;
 use phpsap\interfaces\Config\IConfiguration;
 use phpsap\interfaces\Api\IApi;
 use phpsap\interfaces\IFunction;
+use phpsap\interfaces\Util\IJsonSerializable;
 
 /**
  * Class AbstractFunction
@@ -21,7 +26,7 @@ use phpsap\interfaces\IFunction;
 abstract class AbstractFunction extends JsonSerializable implements IFunction
 {
     /**
-     * @var \phpsap\interfaces\Config\IConfiguration
+     * @var IConfiguration
      */
     protected $config;
 
@@ -31,16 +36,16 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     private $name;
 
     /**
-     * @var \phpsap\classes\Api\RemoteApi[]
+     * @var RemoteApi[]
      */
     private static $api = [];
 
     /**
      * Get an array of all valid input parameters.
      * @return array
-     * @throws \phpsap\exceptions\ConnectionFailedException
-     * @throws \phpsap\exceptions\IncompleteConfigException
-     * @throws \phpsap\exceptions\UnknownFunctionException
+     * @throws ConnectionFailedException
+     * @throws IncompleteConfigException
+     * @throws UnknownFunctionException
      */
     protected function getAllowedKeys()
     {
@@ -65,9 +70,9 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * connect to the SAP remote system, you need a connection configuration.
      * @param string                                        $name   SAP remote function name.
      * @param array|null                                    $params SAP remote function call parameters. Default: null
-     * @param \phpsap\interfaces\Config\IConfiguration|null $config Connection configuration. Default: null
-     * @param \phpsap\interfaces\Api\IApi|null              $api    SAP remote function call API. Default: null
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @param IConfiguration|null $config Connection configuration. Default: null
+     * @param IApi|null              $api    SAP remote function call API. Default: null
+     * @throws InvalidArgumentException
      */
     public function __construct($name, array $params = null, IConfiguration $config = null, IApi $api = null)
     {
@@ -87,7 +92,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Set the SAP remote function name.
      * @param string $name
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function setName($name)
     {
@@ -110,7 +115,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
 
     /**
      * Get the SAP connection configuration for this remote function.
-     * @return \phpsap\interfaces\Config\IConfiguration|null
+     * @return IConfiguration|null
      */
     public function getConfiguration(): ?IConfiguration
     {
@@ -121,7 +126,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * Set the SAP connection configuration for this remote function.
      * Using this configuration, the SAP remote function API can be queried and
      * SAP remote function calls can be invoked.
-     * @param \phpsap\interfaces\Config\IConfiguration $config
+     * @param IConfiguration $config
      * @return $this
      */
     public function setConfiguration(IConfiguration $config): IFunction
@@ -133,10 +138,10 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Connect to the SAP remote system and retrieve the API of the SAP remote
      * function. This ignores any API settings in this class.
-     * @return \phpsap\classes\Api\RemoteApi
-     * @throws \phpsap\exceptions\IncompleteConfigException
-     * @throws \phpsap\exceptions\ConnectionFailedException
-     * @throws \phpsap\exceptions\UnknownFunctionException
+     * @return RemoteApi
+     * @throws IncompleteConfigException
+     * @throws ConnectionFailedException
+     * @throws UnknownFunctionException
      */
     abstract public function extractApi(): IApi;
 
@@ -144,10 +149,10 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * Get the remote function API.
      * In case no SAP remote function call API has been defined, it will be queried
      * on the fly by connecting to the SAP remote system.
-     * @return \phpsap\classes\Api\RemoteApi
-     * @throws \phpsap\exceptions\ConnectionFailedException
-     * @throws \phpsap\exceptions\IncompleteConfigException
-     * @throws \phpsap\exceptions\UnknownFunctionException
+     * @return RemoteApi
+     * @throws ConnectionFailedException
+     * @throws IncompleteConfigException
+     * @throws UnknownFunctionException
      */
     public function getApi(): IApi
     {
@@ -163,7 +168,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * By setting the API, it will not be queried from the SAP remote system.
      * In order to connect to the SAP remote system, you need a connection
      * configuration- see setConfiguration().
-     * @param \phpsap\interfaces\Api\IApi $api
+     * @param IApi $api
      * @return $this
      */
     public function setApi(IApi $api): IFunction
@@ -177,7 +182,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * Return a single previously set parameter.
      * @param string $key Name of the parameter to get.
      * @return array|bool|float|int|string
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getParam($key)
     {
@@ -198,7 +203,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @param string                      $key   Name of the parameter to set.
      * @param bool|int|float|string|array $value Value of the parameter.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setParam($key, $value)
     {
@@ -211,7 +216,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * and set them.
      * @param array $params An array of SAP remote function call parameters.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setParams(array $params): IFunction
     {
@@ -234,20 +239,20 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * Invoke the SAP remote function call with all parameters.
      * Attention: A configuration is necessary to invoke a SAP remote function call!
      * @return array
-     * @throws \phpsap\exceptions\IncompleteConfigException Either a configuration class has not been set,
+     * @throws IncompleteConfigException Either a configuration class has not been set,
      *                                                      or it is missing a mandatory configuration key.
-     * @throws \phpsap\exceptions\ConnectionFailedException
-     * @throws \phpsap\exceptions\UnknownFunctionException
-     * @throws \phpsap\exceptions\FunctionCallException
+     * @throws ConnectionFailedException
+     * @throws UnknownFunctionException
+     * @throws FunctionCallException
      */
     abstract public function invoke(): array;
 
     /**
      * @inheritDoc
      * @return array
-     * @throws \phpsap\exceptions\ConnectionFailedException
-     * @throws \phpsap\exceptions\IncompleteConfigException
-     * @throws \phpsap\exceptions\UnknownFunctionException
+     * @throws ConnectionFailedException
+     * @throws IncompleteConfigException
+     * @throws UnknownFunctionException
      */
     public function jsonSerialize()
     {
@@ -261,10 +266,10 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Decode a formerly JSON encoded SAP remote function object.
      * @param string $json
-     * @return \phpsap\classes\AbstractFunction
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @return AbstractFunction
+     * @throws InvalidArgumentException
      */
-    public static function jsonDecode($json): \phpsap\interfaces\Util\IJsonSerializable
+    public static function jsonDecode($json): IJsonSerializable
     {
         $array = static::jsonToArray($json);
         if (

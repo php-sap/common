@@ -19,7 +19,7 @@ use phpsap\exceptions\InvalidArgumentException;
 class JsonSerializable implements IJsonSerializable
 {
     /**
-     * @var \stdClass
+     * @var stdClass
      */
     private $data;
 
@@ -61,7 +61,7 @@ class JsonSerializable implements IJsonSerializable
     /**
      * Initializing the data.
      * @param array|null $data Associative array of keys and values to set.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($data = null)
     {
@@ -83,7 +83,7 @@ class JsonSerializable implements IJsonSerializable
      * Determine whether the data contains the given key.
      * @param string $key The key to look for.
      * @return bool
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function has($key)
     {
@@ -94,7 +94,7 @@ class JsonSerializable implements IJsonSerializable
      * Get the value of the given key from the data.
      * @param string $key The key to retrieve from the data.
      * @return null|bool|int|float|string|array The value of the key, or null in case the key didn't exist.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function get($key)
     {
@@ -108,7 +108,7 @@ class JsonSerializable implements IJsonSerializable
      * Set the given key to the given value in the data.
      * @param string                      $key    The key to set the value for.
      * @param bool|int|float|string|array $value  The value to set.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function set($key, $value)
     {
@@ -127,7 +127,7 @@ class JsonSerializable implements IJsonSerializable
      * behaves differently than the set() method. This method will never throw an
      * exception because of an invalid key.
      * @param array $data Associative array of keys and values to set.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function setMultiple($data)
     {
@@ -149,7 +149,7 @@ class JsonSerializable implements IJsonSerializable
      * anymore, only the value!
      * @param string $key The key to set the value for.
      * @param mixed $value The value to set.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function setValue($key, $value)
     {
@@ -166,7 +166,7 @@ class JsonSerializable implements IJsonSerializable
     /**
      * Remove a given key from the data.
      * @param string $key The key to remove.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function remove($key)
     {
@@ -197,7 +197,7 @@ class JsonSerializable implements IJsonSerializable
      * Only strings containing alphanumeric characters are allowed as keys.
      * @param mixed $key
      * @return string
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function validateKey($key)
     {
@@ -219,7 +219,7 @@ class JsonSerializable implements IJsonSerializable
      * Decode a formerly JSON encoded object.
      * @param string $json JSON encoded object.
      * @return $this
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function jsonDecode($json): IJsonSerializable
     {
@@ -232,7 +232,7 @@ class JsonSerializable implements IJsonSerializable
      * @param string $json JSON encoded object.
      * @return array|null Array of the JSON encoded object or null, in case there
      *                    was an error.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected static function jsonToArray($json)
     {
@@ -250,10 +250,10 @@ class JsonSerializable implements IJsonSerializable
 
     /**
      * Convert any given representation of a JSON object to an array.
-     * @param \stdClass|array|string $obj  JSON encoded object (string), or a JSON
+     * @param stdClass|array|string $obj  JSON encoded object (string), or a JSON
      *                                     decoded object (stdClass or array).
      * @return array|null
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected static function objToArray($obj)
     {

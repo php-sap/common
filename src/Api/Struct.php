@@ -52,7 +52,7 @@ class Struct extends Value implements IStruct
      * @param string $direction  Either input or output.
      * @param bool   $isOptional Is the API struct optional?
      * @param array  $members    Array of Elements as the members of the struct.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($name, $direction, $isOptional, $members)
     {
@@ -64,13 +64,13 @@ class Struct extends Value implements IStruct
      * Cast a given value to the implemented value.
      * @param array $struct The output array to typecast.
      * @return array
-     * @throws \phpsap\exceptions\ArrayElementMissingException
+     * @throws ArrayElementMissingException
      */
     public function cast($struct): array
     {
         foreach ($this->getMembers() as $member) {
             /**
-             * @var \phpsap\classes\Api\Element $member
+             * @var Element $member
              */
             $name = $member->getName();
             if (!array_key_exists($name, $struct)) {
@@ -100,7 +100,7 @@ class Struct extends Value implements IStruct
     /**
      * Set the member elements of the table.
      * @param array $members
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function setMembers($members)
     {
@@ -123,8 +123,8 @@ class Struct extends Value implements IStruct
     /**
      * Create an instance of this class from an array.
      * @param array $array Array containing the properties of this class.
-     * @return \phpsap\classes\Api\Struct
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @return Struct
+     * @throws InvalidArgumentException
      */
     public static function fromArray($array)
     {

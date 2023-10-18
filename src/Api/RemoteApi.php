@@ -5,6 +5,7 @@ namespace phpsap\classes\Api;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IValue;
 use phpsap\interfaces\Api\IApi;
+use phpsap\interfaces\Util\IJsonSerializable;
 
 /**
  * Class RemoteApi
@@ -24,7 +25,7 @@ class RemoteApi implements IApi
 
     /**
      * Add an input value of the remote function.
-     * @param \phpsap\interfaces\Api\IValue $value
+     * @param IValue $value
      * @return $this
      */
     public function add(IValue $value): IApi
@@ -35,7 +36,7 @@ class RemoteApi implements IApi
 
     /**
      * Get all input values of the remote function.
-     * @return \phpsap\classes\Api\Value[]
+     * @return Value[]
      */
     public function getInputValues(): array
     {
@@ -44,7 +45,7 @@ class RemoteApi implements IApi
 
     /**
      * Get all output values of the remote function.
-     * @return \phpsap\classes\Api\Value[]
+     * @return Value[]
      */
     public function getOutputValues(): array
     {
@@ -53,7 +54,7 @@ class RemoteApi implements IApi
 
     /**
      * Get all tables of the remote function.
-     * @return \phpsap\classes\Api\Table[]
+     * @return Table[]
      */
     public function getTables(): array
     {
@@ -70,7 +71,7 @@ class RemoteApi implements IApi
         $result = [];
         foreach ($this->data as $value) {
             /**
-             * @var \phpsap\classes\Api\Value $value
+             * @var Value $value
              */
             if ($value->getDirection() === $direction) {
                 $result[] = $value;
@@ -82,7 +83,7 @@ class RemoteApi implements IApi
     /**
      * Create a remote API from a given array.
      * @param array|null $values Array of remote API elements. Default: null
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($values = null)
     {
@@ -103,8 +104,8 @@ class RemoteApi implements IApi
     /**
      * Construct an API value (IValue) from a given array.
      * @param array $value
-     * @return \phpsap\interfaces\Api\IValue
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @return IValue
+     * @throws InvalidArgumentException
      */
     private function constructValue($value)
     {
@@ -123,10 +124,10 @@ class RemoteApi implements IApi
     /**
      * Decode a formerly JSON encoded IApi object.
      * @param string $json JSON encoded remote API object.
-     * @return \phpsap\classes\Api\RemoteApi
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @return RemoteApi
+     * @throws InvalidArgumentException
      */
-    public static function jsonDecode($json): \phpsap\interfaces\Util\IJsonSerializable
+    public static function jsonDecode($json): IJsonSerializable
     {
         if (is_string($json)) {
             $array = json_decode($json, true);

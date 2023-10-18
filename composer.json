@@ -17,10 +17,10 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "php": "^7.0",
+    "php": ">=7.4",
     "ext-json": "*",
-    "php-sap/interfaces": "^3.0",
-    "php-sap/datetime": "^1.2"
+    "php-sap/interfaces": "^4.0",
+    "php-sap/datetime": "^1.4"
   },
   "autoload": {
     "psr-4": {

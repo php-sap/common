@@ -242,6 +242,10 @@ class AbstractConfigurationTest extends TestCase
         static::assertSame($array, $config->toArray());
     }
 
+    /**
+     * Data provider of non-specific configuration JSON strings.
+     * @return array[]
+     */
     public static function provideNonSpecificJson()
     {
         return [

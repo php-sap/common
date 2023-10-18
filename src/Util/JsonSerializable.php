@@ -21,12 +21,12 @@ class JsonSerializable implements IJsonSerializable
     /**
      * @var stdClass
      */
-    private $data;
+    private stdClass $data;
 
     /**
      * @var array Allowed data types for values.
      */
-    protected static $allowedDataTypes = [
+    protected static array $allowedDataTypes = [
         'integer',
         'string',
         'boolean',
@@ -38,7 +38,7 @@ class JsonSerializable implements IJsonSerializable
     /**
      * @var array Allowed keys to set values for.
      */
-    protected static $allowedKeys = [];
+    protected static array $allowedKeys = [];
 
     /**
      * Get an array of all valid keys this class is able to set().

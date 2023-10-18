@@ -20,7 +20,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
     /**
      * @var array Valid config keys for testing.
      */
-    public static $allowedKeys = ['zadgcjmt'];
+    public static array $allowedKeys = ['zadgcjmt'];
 
     /**
      * Retrieves a configuration value for a given key.

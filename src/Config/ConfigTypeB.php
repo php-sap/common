@@ -21,7 +21,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
     /**
      * @var array Allowed JsonSerializable keys to set values for.
      */
-    protected static $allowedKeys = [
+    protected static array $allowedKeys = [
         self::JSON_MSHOST,
         self::JSON_R3NAME,
         self::JSON_GROUP,

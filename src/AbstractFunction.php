@@ -28,17 +28,17 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * @var IConfiguration
      */
-    protected $config;
+    protected IConfiguration $config;
 
     /**
      * @var string SAP remote function name.
      */
-    private $name;
+    private string $name;
 
     /**
      * @var RemoteApi[]
      */
-    private static $api = [];
+    private static array $api = [];
 
     /**
      * Get an array of all valid input parameters.

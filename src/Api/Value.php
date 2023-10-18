@@ -20,7 +20,7 @@ class Value extends Element implements IValue
     /**
      * @var array Allowed JsonSerializable keys to set values for.
      */
-    protected static $allowedKeys = [
+    protected static array $allowedKeys = [
         self::JSON_TYPE,
         self::JSON_NAME,
         self::JSON_DIRECTION,
@@ -30,7 +30,7 @@ class Value extends Element implements IValue
     /**
      * @var array List of allowed API value directions.
      */
-    protected static $allowedDirections = [
+    protected static array $allowedDirections = [
         self::DIRECTION_INPUT,
         self::DIRECTION_OUTPUT
     ];

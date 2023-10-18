@@ -21,7 +21,7 @@ class RemoteApi implements IApi
     /**
      * @var array
      */
-    private $data = [];
+    private array $data = [];
 
     /**
      * Add an input value of the remote function.

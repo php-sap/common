@@ -15,7 +15,7 @@ use phpsap\classes\Util\JsonSerializable;
  */
 class PublicJsonSerializable extends JsonSerializable
 {
-    public static $allowedKeys = [];
+    public static array $allowedKeys = [];
 
     /**
      * @inheritDoc

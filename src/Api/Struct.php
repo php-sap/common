@@ -21,7 +21,7 @@ class Struct extends Value implements IStruct
     /**
      * @var array Allowed JsonSerializable keys to set values for.
      */
-    protected static $allowedKeys = [
+    protected static array $allowedKeys = [
         self::JSON_TYPE,
         self::JSON_NAME,
         self::JSON_DIRECTION,
@@ -32,7 +32,7 @@ class Struct extends Value implements IStruct
     /**
      * @var array List of allowed API element types.
      */
-    protected static $allowedTypes = [
+    protected static array $allowedTypes = [
         self::TYPE_STRUCT
     ];
 

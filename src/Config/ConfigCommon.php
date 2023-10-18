@@ -20,7 +20,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * @var array Allowed JsonSerializable keys to set values for.
      */
-    protected static $allowedKeys = [
+    protected static array $allowedKeys = [
         self::JSON_USER,
         self::JSON_PASSWD,
         self::JSON_CLIENT,

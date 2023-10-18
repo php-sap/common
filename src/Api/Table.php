@@ -22,7 +22,7 @@ class Table extends Value implements ITable
     /**
      * @var array Allowed JsonSerializable keys to set values for.
      */
-    protected static $allowedKeys = [
+    protected static array $allowedKeys = [
         self::JSON_TYPE,
         self::JSON_NAME,
         self::JSON_DIRECTION,
@@ -34,12 +34,12 @@ class Table extends Value implements ITable
     /**
      * @var array List of allowed API element types.
      */
-    protected static $allowedTypes = [self::TYPE_TABLE];
+    protected static array $allowedTypes = [self::TYPE_TABLE];
 
     /**
      * @var array List of allowed API value directions.
      */
-    protected static $allowedDirections = [
+    protected static array $allowedDirections = [
         self::DIRECTION_INPUT,
         self::DIRECTION_OUTPUT,
         self::DIRECTION_TABLE

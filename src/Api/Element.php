@@ -24,7 +24,7 @@ class Element extends JsonSerializable implements IElement
     /**
      * @var array Allowed JsonSerializable keys to set values for.
      */
-    protected static $allowedKeys = [
+    protected static array $allowedKeys = [
         self::JSON_TYPE,
         self::JSON_NAME
     ];
@@ -32,7 +32,7 @@ class Element extends JsonSerializable implements IElement
     /**
      * @var array List of allowed API element types.
      */
-    protected static $allowedTypes = [
+    protected static array $allowedTypes = [
         self::TYPE_BOOLEAN,
         self::TYPE_INTEGER,
         self::TYPE_FLOAT,

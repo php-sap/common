@@ -21,7 +21,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
     /**
      * @var array Allowed JsonSerializable keys to set values for.
      */
-    protected static $allowedKeys = [
+    protected static array $allowedKeys = [
         self::JSON_ASHOST,
         self::JSON_SYSNR,
         self::JSON_GWHOST,

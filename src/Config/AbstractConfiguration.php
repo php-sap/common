@@ -22,7 +22,7 @@ abstract class AbstractConfiguration extends JsonSerializable implements IConfig
     /**
      * @var array Allowed data types for values.
      */
-    protected static $allowedDataTypes = [
+    protected static array $allowedDataTypes = [
         'integer',
         'string'
     ];

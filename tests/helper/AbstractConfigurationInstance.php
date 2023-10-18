@@ -27,6 +27,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * @param string $key
      * @return string|int
      * @throws InvalidArgumentException
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function get($key)
     {
@@ -38,6 +39,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * @param string     $key
      * @param string|int $value
      * @throws InvalidArgumentException In case of an invalid configuration key or value.
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function set($key, $value)
     {
@@ -48,6 +50,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * Removes a configuration value for a given key.
      * @param string $key
      * @throws InvalidArgumentException
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function remove($key)
     {
@@ -59,6 +62,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * @param string $key
      * @return bool
      * @throws InvalidArgumentException
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function has($key): bool
     {

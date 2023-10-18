@@ -20,6 +20,7 @@ class PublicJsonSerializable extends JsonSerializable
 
     /**
      * @inheritDoc
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function reset()
     {
@@ -28,6 +29,7 @@ class PublicJsonSerializable extends JsonSerializable
 
     /**
      * @inheritDoc
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function has($key): bool
     {
@@ -36,6 +38,7 @@ class PublicJsonSerializable extends JsonSerializable
 
     /**
      * @inheritDoc
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function get($key)
     {
@@ -44,6 +47,7 @@ class PublicJsonSerializable extends JsonSerializable
 
     /**
      * @inheritDoc
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function set($key, $value)
     {
@@ -52,6 +56,7 @@ class PublicJsonSerializable extends JsonSerializable
 
     /**
      * @inheritDoc
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setMultiple($data)
     {
@@ -60,6 +65,7 @@ class PublicJsonSerializable extends JsonSerializable
 
     /**
      * @inheritDoc
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function remove($key)
     {
@@ -68,6 +74,7 @@ class PublicJsonSerializable extends JsonSerializable
 
     /**
      * @inheritDoc
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public static function jsonToArray($json): ?array
     {
@@ -76,6 +83,7 @@ class PublicJsonSerializable extends JsonSerializable
 
     /**
      * @inheritDoc
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public static function objToArray($obj): ?array
     {

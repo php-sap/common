@@ -60,6 +60,7 @@ class Element extends JsonSerializable implements IElement
     /**
      * The PHP type of the element.
      * @return string
+     * @throws InvalidArgumentException
      */
     public function getType(): string
     {
@@ -72,6 +73,7 @@ class Element extends JsonSerializable implements IElement
     /**
      * The name of the element.
      * @return string
+     * @throws InvalidArgumentException
      */
     public function getName(): string
     {
@@ -121,6 +123,7 @@ class Element extends JsonSerializable implements IElement
      * Cast a given output value to the type defined in this class.
      * @param mixed $value
      * @return bool|int|float|string|SapDateTime|SapDateInterval
+     * @throws InvalidArgumentException
      */
     public function cast($value)
     {

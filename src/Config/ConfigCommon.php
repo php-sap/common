@@ -35,6 +35,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Get the username to use for authentication.
      * @return string
      * @throws IncompleteConfigException
+     * @throws InvalidArgumentException
      */
     public function getUser(): string
     {
@@ -66,6 +67,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Get the password to use for authentication.
      * @return string
      * @throws IncompleteConfigException
+     * @throws InvalidArgumentException
      */
     public function getPasswd(): string
     {
@@ -97,6 +99,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Get the client.
      * @return string
      * @throws IncompleteConfigException
+     * @throws InvalidArgumentException
      */
     public function getClient(): string
     {
@@ -129,6 +132,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * the parameters are in the following format:
      * /H/hostname/S/portnumber/H/
      * @return string|null The saprouter or NULL in case the saprouter hasn't been set.
+     * @throws InvalidArgumentException
      */
     public function getSaprouter(): ?string
     {
@@ -165,6 +169,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Get the trace level (0-3). See constants TRACE_*.
      * @return int|null The trace level or NULL in case the trace level hasn't been set.
+     * @throws InvalidArgumentException
      */
     public function getTrace(): ?int
     {
@@ -200,6 +205,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * codepage for the initial handshake, thus preserving the characters in
      * username/password.
      * @return int|null The codepage or NULL in case the codepage hasn't been set.
+     * @throws InvalidArgumentException
      */
     public function getCodepage(): ?int
     {
@@ -227,6 +233,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Get the logon Language.
      * @return string|null The logon language or NULL in case the logon language hasn't been set.
+     * @throws InvalidArgumentException
      */
     public function getLang(): ?string
     {
@@ -259,6 +266,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Get the destination in RfcOpenConnection.
      * @return string|null The destination or NULL in case the destination hasn't been set.
+     * @throws InvalidArgumentException
      */
     public function getDest(): ?string
     {

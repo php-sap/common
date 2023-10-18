@@ -9,6 +9,8 @@ use phpsap\interfaces\Config\IConfiguration;
 use phpsap\classes\Config\AbstractConfiguration;
 use phpsap\classes\Config\ConfigCommon;
 use phpsap\classes\Config\ConfigTypeB;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_Exception;
 
@@ -25,8 +27,9 @@ class ConfigTypeBTest extends TestCase
 {
     /**
      * Test ConfigTypeB inheritance.
-     * @throws PHPUnit_Framework_Exception
-     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testInheritance()
     {

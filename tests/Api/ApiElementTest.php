@@ -6,6 +6,7 @@ use Exception;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IStruct;
 use phpsap\interfaces\Api\ITable;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_Exception;
 use stdClass;
@@ -23,8 +24,10 @@ class ApiElementTest extends TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.
-     * @throws PHPUnit_Framework_Exception
+     * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testConstructorAndInheritedClasses()
     {
@@ -116,8 +119,10 @@ class ApiElementTest extends TestCase
     /**
      * Test valid element types.
      * @param string $type
-     * @dataProvider provideValidElementTypes
+     * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @dataProvider provideValidElementTypes
      */
     public function testValidElementTypes($type)
     {
@@ -220,8 +225,10 @@ class ApiElementTest extends TestCase
 
     /**
      * Test JSON decode.
-     * @throws PHPUnit_Framework_Exception
      * @throws InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testJsonDecode()
     {

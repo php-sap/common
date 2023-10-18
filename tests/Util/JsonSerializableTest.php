@@ -3,6 +3,8 @@
 namespace tests\phpsap\classes\Util;
 
 use phpsap\exceptions\InvalidArgumentException;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_AssertionFailedError;
 use PHPUnit_Framework_Exception;
@@ -24,8 +26,9 @@ class JsonSerializableTest extends TestCase
 {
     /**
      * Test the class inheritance chain.
-     * @throws PHPUnit_Framework_Exception
-     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testInheritance()
     {
@@ -37,8 +40,9 @@ class JsonSerializableTest extends TestCase
 
     /**
      * Test the successful storage of data.
-     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testSuccessfulDataStorage()
     {
@@ -110,8 +114,10 @@ class JsonSerializableTest extends TestCase
     /**
      * Test valid JSON objects to array conversion.
      * @param stdClass|array|string $obj
-     * @dataProvider provideValidJsonObjects
+     * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @dataProvider provideValidJsonObjects
      */
     public function testValidJsonObjects($obj)
     {
@@ -211,8 +217,10 @@ class JsonSerializableTest extends TestCase
 
     /**
      * Test decoding a JSON encoded object.
-     * @throws PHPUnit_Framework_Exception
      * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testDecodingObjectFromJson()
     {

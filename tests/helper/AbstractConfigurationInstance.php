@@ -26,6 +26,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * Retrieves a configuration value for a given key.
      * @param string $key
      * @return string|int
+     * @throws InvalidArgumentException
      */
     public function get($key)
     {
@@ -47,6 +48,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
     /**
      * Removes a configuration value for a given key.
      * @param string $key
+     * @throws InvalidArgumentException
      */
     public function remove($key)
     {
@@ -57,6 +59,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * Returns true if the configuration has a value for the given key.
      * @param string $key
      * @return bool
+     * @throws InvalidArgumentException
      */
     public function has($key): bool
     {
@@ -67,6 +70,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * Test set() function.
      * @param $value
      * @return $this
+     * @throws InvalidArgumentException
      */
     public function setZadgcjmt($value)
     {

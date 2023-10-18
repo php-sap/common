@@ -4,6 +4,8 @@ namespace tests\phpsap\classes\Api;
 
 use phpsap\classes\Api\Table;
 use phpsap\exceptions\InvalidArgumentException;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_AssertionFailedError;
 use PHPUnit_Framework_Exception;
@@ -24,9 +26,10 @@ class ApiValueTest extends TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.
-     * @throws PHPUnit_Framework_AssertionFailedError
-     * @throws PHPUnit_Framework_Exception
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testConstructorAndInheritedClasses()
     {
@@ -118,9 +121,10 @@ class ApiValueTest extends TestCase
 
     /**
      * Test JSON decode.
-     * @throws PHPUnit_Framework_AssertionFailedError
-     * @throws PHPUnit_Framework_Exception
      * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testJsonDecode()
     {

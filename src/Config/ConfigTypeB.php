@@ -39,6 +39,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * Get the host name of the message server.
      * @return string
      * @throws IncompleteConfigException
+     * @throws InvalidArgumentException
      */
     public function getMshost(): string
     {
@@ -69,6 +70,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
     /**
      * Get the name of SAP system, optional; default: destination
      * @return string|null The name of the SAP system or NULL in case no name has been defined.
+     * @throws InvalidArgumentException
      */
     public function getR3name(): ?string
     {
@@ -93,6 +95,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
     /**
      * Get the group name of the application servers, optional; default: PUBLIC.
      * @return string group name of the application servers
+     * @throws InvalidArgumentException
      */
     public function getGroup(): ?string
     {

@@ -40,6 +40,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * Get the host name of a specific SAP application server.
      * @return string The hostname of a specific SAP application server.
      * @throws IncompleteConfigException
+     * @throws InvalidArgumentException
      */
     public function getAshost(): string
     {
@@ -71,6 +72,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * Get the SAP system number.
      * @return string The SAP system number.
      * @throws IncompleteConfigException
+     * @throws InvalidArgumentException
      */
     public function getSysnr(): string
     {
@@ -101,6 +103,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
     /**
      * Get the gateway host on the application server.
      * @return string|null The gateway host or NULL in case no gateway host has been defined.
+     * @throws InvalidArgumentException
      */
     public function getGwhost(): ?string
     {
@@ -125,6 +128,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
     /**
      * Get the gateway service on the application server.
      * @return string|null The gateway service or NULL in case no gateway service has been defined.
+     * @throws InvalidArgumentException
      */
     public function getGwserv(): ?string
     {

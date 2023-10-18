@@ -4,6 +4,7 @@ namespace tests\phpsap\classes\Config;
 
 use Exception;
 use phpsap\exceptions\InvalidArgumentException;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use phpsap\classes\Util\JsonSerializable;
 use PHPUnit_Framework_AssertionFailedError;
@@ -30,8 +31,9 @@ class AbstractConfigurationTest extends TestCase
 {
     /**
      * Test the inheritance of the AbstractConfiguration class.
-     * @throws PHPUnit_Framework_Exception
-     * @throws InvalidArgumentException
+     * @throws ExpectationFailedException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testInheritance()
     {
@@ -44,8 +46,9 @@ class AbstractConfigurationTest extends TestCase
 
     /**
      * Test successful set() get() has() and remove().
+     * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testSuccessfulSetGetHasAndRemove()
     {
@@ -139,9 +142,10 @@ class AbstractConfigurationTest extends TestCase
     /**
      * Test valid configuration parameters for the constructor.
      * @param string|array|stdClass $config
-     * @dataProvider provideValidConfigurationForConstructor
+     * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @dataProvider provideValidConfigurationForConstructor
      */
     public function testValidConfigurationForConstructor($config)
     {
@@ -201,11 +205,13 @@ class AbstractConfigurationTest extends TestCase
 
     /**
      * Test jsonDecode() for configuration type A.
-     * @param array  $array
+     * @param array $array
      * @param string $json
-     * @dataProvider provideJsonDecodeConfigTypeA
+     * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws PHPUnit_Framework_Exception
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @dataProvider provideJsonDecodeConfigTypeA
      */
     public function testJsonDecodeConfigTypeA($array, $json)
     {
@@ -229,11 +235,13 @@ class AbstractConfigurationTest extends TestCase
 
     /**
      * Test jsonDecode() for configuration type B.
-     * @param array  $array
+     * @param array $array
      * @param string $json
-     * @dataProvider provideJsonDecodeConfigTypeB
      * @throws InvalidArgumentException
-     * @throws PHPUnit_Framework_Exception
+     * @throws \PHPUnit\Framework\Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @dataProvider provideJsonDecodeConfigTypeB
      */
     public function testJsonDecodeConfigTypeB($array, $json)
     {

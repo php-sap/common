@@ -11,6 +11,8 @@ use phpsap\classes\Api\RemoteApi;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IApi;
 use phpsap\interfaces\Api\IValue;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_AssertionFailedError;
 use PHPUnit_Framework_Exception;
@@ -27,8 +29,9 @@ class RemoteApiTest extends TestCase
 {
     /**
      * Test for the inherited classes and interfaces.
-     * @throws PHPUnit_Framework_Exception
-     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testInheritance()
     {
@@ -73,10 +76,11 @@ class RemoteApiTest extends TestCase
 
     /**
      * Test adding API values and compare the JSON encoded output of the remote API.
-     * @param IValue $value    The value to add.
-     * @param string                        $expected The expected JSON output.
+     * @param IValue $value The value to add.
+     * @param string $expected The expected JSON output.
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @dataProvider provideApiValue
-     * @throws InvalidArgumentException
      */
     public function testAddingAndEncodingApiValue($value, $expected)
     {
@@ -223,9 +227,10 @@ class RemoteApiTest extends TestCase
     /**
      * Test creating API class from an array.
      * @param array|string $config
-     * @throws PHPUnit_Framework_AssertionFailedError
-     * @throws PHPUnit_Framework_Exception
      * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @dataProvider provideEncodedRemoteApi
      */
     public function testEncodedRemoteApi($config)

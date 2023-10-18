@@ -65,6 +65,7 @@ class Struct extends Value implements IStruct
      * @param array $value The output array to typecast.
      * @return array
      * @throws ArrayElementMissingException
+     * @throws InvalidArgumentException
      */
     public function cast($value): array
     {
@@ -88,6 +89,7 @@ class Struct extends Value implements IStruct
     /**
      * Return an array of member elements.
      * @return array
+     * @throws InvalidArgumentException
      */
     public function getMembers(): array
     {

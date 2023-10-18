@@ -2,7 +2,11 @@
 
 namespace tests\phpsap\classes\Config;
 
+use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
+use phpsap\interfaces\exceptions\IInvalidArgumentException;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_Exception;
 use stdClass;
@@ -27,8 +31,9 @@ class ConfigCommonTest extends TestCase
 {
     /**
      * Test ConfigCommon inheritance.
-     * @throws PHPUnit_Framework_Exception
-     * @throws InvalidArgumentException
+     * @throws ExpectationFailedException
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testInheritance()
     {
@@ -42,6 +47,10 @@ class ConfigCommonTest extends TestCase
     /**
      * Test set*() and get*() methods.
      * @throws InvalidArgumentException
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws IncompleteConfigException
+     * @throws IInvalidArgumentException
      */
     public function testSetAndGet()
     {

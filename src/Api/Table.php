@@ -64,6 +64,7 @@ class Table extends Value implements ITable
      * @param array $value
      * @return array
      * @throws ArrayElementMissingException
+     * @throws InvalidArgumentException
      */
     public function cast($value): array
     {
@@ -90,6 +91,7 @@ class Table extends Value implements ITable
     /**
      * Return an array of member elements.
      * @return array
+     * @throws InvalidArgumentException
      */
     public function getMembers(): array
     {

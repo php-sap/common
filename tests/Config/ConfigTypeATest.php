@@ -3,6 +3,8 @@
 namespace tests\phpsap\classes\Config;
 
 use phpsap\exceptions\InvalidArgumentException;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Config\IConfigTypeA;
@@ -25,8 +27,9 @@ class ConfigTypeATest extends TestCase
 {
     /**
      * Test ConfigTypeA inheritance.
-     * @throws PHPUnit_Framework_Exception
-     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testInheritance()
     {

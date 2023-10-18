@@ -5,6 +5,8 @@ namespace tests\phpsap\classes\Api;
 use phpsap\exceptions\ArrayElementMissingException;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\ITable;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_Exception;
 use stdClass;
@@ -26,8 +28,10 @@ class TableTest extends TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.
-     * @throws PHPUnit_Framework_Exception
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testConstructorAndInheritance()
     {
@@ -87,7 +91,9 @@ class TableTest extends TestCase
     /**
      * Test typecasting of table input.
      * @throws ArrayElementMissingException
+     * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testTableCast()
     {
@@ -158,8 +164,10 @@ class TableTest extends TestCase
 
     /**
      * Test JSON decode.
-     * @throws PHPUnit_Framework_Exception
      * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testJsonDecode()
     {

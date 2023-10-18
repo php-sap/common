@@ -11,9 +11,17 @@ use phpsap\classes\Api\Value;
 use phpsap\classes\Config\ConfigTypeA;
 use phpsap\classes\Config\ConfigTypeB;
 use phpsap\classes\Util\JsonSerializable;
+use phpsap\exceptions\ConnectionFailedException;
 use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
+use phpsap\exceptions\UnknownFunctionException;
+use phpsap\interfaces\exceptions\IConnectionFailedException;
+use phpsap\interfaces\exceptions\IIncompleteConfigException;
+use phpsap\interfaces\exceptions\IInvalidArgumentException;
+use phpsap\interfaces\exceptions\IUnknownFunctionException;
 use phpsap\interfaces\IFunction;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_AssertionFailedError;
 use PHPUnit_Framework_Exception;
@@ -33,8 +41,9 @@ class AbstractFunctionTest extends TestCase
 {
     /**
      * Test class inheritance.
-     * @throws PHPUnit_Framework_Exception
-     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testInheritance()
     {
@@ -66,6 +75,11 @@ class AbstractFunctionTest extends TestCase
     /**
      * Test invalid function names.
      * @param mixed $name
+     * @throws IConnectionFailedException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
+     * @throws InvalidArgumentException
      * @dataProvider provideInvalidNames
      */
     public function testInvalidNames($name)
@@ -77,8 +91,9 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test setting and getting the SAP remote function name.
-     * @throws PHPUnit_Framework_Exception
-     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testSettingAndGettingName()
     {
@@ -89,8 +104,14 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test setting and getting different SAP connection configurations.
-     * @throws PHPUnit_Framework_Exception
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws IConnectionFailedException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
      * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testSettingAndGettingConfiguration()
     {
@@ -103,9 +124,13 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test extracting and getting the SAP remote function API.
-     * @throws PHPUnit_Framework_Exception
+     * @throws ConnectionFailedException
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws IncompleteConfigException
      * @throws InvalidArgumentException
+     * @throws UnknownFunctionException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testExtractGetAndSetApi()
     {
@@ -192,10 +217,17 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test setting the API of a remote function via constructor.
-     * @throws PHPUnit_Framework_AssertionFailedError
-     * @throws PHPUnit_Framework_Exception
+     * @throws ConnectionFailedException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws IConnectionFailedException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
      * @throws IncompleteConfigException
      * @throws InvalidArgumentException
+     * @throws UnknownFunctionException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testSetApiConstructor()
     {
@@ -236,8 +268,14 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test set and get parameters.
-     * @throws PHPUnit_Framework_Exception
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws IConnectionFailedException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
      * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testSetAndGetParameters()
     {
@@ -355,8 +393,14 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test JSON serialization.
-     * @throws PHPUnit_Framework_Exception
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws IConnectionFailedException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
      */
     public function testJsonSerialization()
     {
@@ -380,9 +424,13 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test JSON deserialization.
-     * @throws PHPUnit_Framework_Exception
-     * @throws InvalidArgumentException
      * @throws IncompleteConfigException
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ConnectionFailedException
+     * @throws UnknownFunctionException
      */
     public function testJsonDeserialization()
     {
@@ -450,6 +498,11 @@ class AbstractFunctionTest extends TestCase
     /**
      * Test invalid JSON
      * @param mixed $json
+     * @throws IConnectionFailedException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
+     * @throws InvalidArgumentException
      * @dataProvider provideInvalidJson
      */
     public function testInvalidJson($json)

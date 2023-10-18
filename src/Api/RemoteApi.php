@@ -37,6 +37,7 @@ class RemoteApi implements IApi
     /**
      * Get all input values of the remote function.
      * @return Value[]
+     * @throws InvalidArgumentException
      */
     public function getInputValues(): array
     {
@@ -46,6 +47,7 @@ class RemoteApi implements IApi
     /**
      * Get all output values of the remote function.
      * @return Value[]
+     * @throws InvalidArgumentException
      */
     public function getOutputValues(): array
     {
@@ -55,6 +57,7 @@ class RemoteApi implements IApi
     /**
      * Get all tables of the remote function.
      * @return Table[]
+     * @throws InvalidArgumentException
      */
     public function getTables(): array
     {
@@ -65,6 +68,7 @@ class RemoteApi implements IApi
      * Get the API values according to their direction: input, output, table.
      * @param string $direction
      * @return array
+     * @throws InvalidArgumentException
      */
     protected function getValues($direction): array
     {

@@ -89,6 +89,9 @@ class AbstractConfigurationTest extends TestCase
 
     /**
      * Test get()ting an unset configuration key.
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testGettingUnsetConfigurationKey()
     {

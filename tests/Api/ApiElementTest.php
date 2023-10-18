@@ -214,6 +214,8 @@ class ApiElementTest extends TestCase
 
     /**
      * Test JSON serializing an element class.
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testJsonSerialize()
     {

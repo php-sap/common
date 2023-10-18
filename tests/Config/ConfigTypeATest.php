@@ -2,7 +2,9 @@
 
 namespace tests\phpsap\classes\Config;
 
+use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
+use phpsap\interfaces\exceptions\IInvalidArgumentException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -43,6 +45,11 @@ class ConfigTypeATest extends TestCase
 
     /**
      * Test set*() and get*() methods.
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws IncompleteConfigException
+     * @throws IInvalidArgumentException
      */
     public function testSetAndGet()
     {

@@ -3,12 +3,14 @@
 namespace tests\phpsap\classes\Config;
 
 use phpsap\classes\Util\JsonSerializable;
+use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigTypeB;
 use phpsap\interfaces\Config\IConfiguration;
 use phpsap\classes\Config\AbstractConfiguration;
 use phpsap\classes\Config\ConfigCommon;
 use phpsap\classes\Config\ConfigTypeB;
+use phpsap\interfaces\exceptions\IInvalidArgumentException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -43,6 +45,11 @@ class ConfigTypeBTest extends TestCase
 
     /**
      * Test set*() and get*() methods.
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws IncompleteConfigException
+     * @throws IInvalidArgumentException
      */
     public function testSetAndGet()
     {

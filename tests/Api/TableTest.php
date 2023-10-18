@@ -141,6 +141,7 @@ class TableTest extends TestCase
 
     /**
      * Test casting raw data with an element missing.
+     * @throws InvalidArgumentException
      */
     public function testTableCastMissingElement()
     {

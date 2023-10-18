@@ -37,8 +37,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * Sets a configuration value for a given key.
      * @param string     $key
      * @param string|int $value
-     * @throws LogicException In case of an invalid configuration key.
-     * @throws InvalidArgumentException In case of an invalid configuration value.
+     * @throws InvalidArgumentException In case of an invalid configuration key or value.
      */
     public function set($key, $value)
     {

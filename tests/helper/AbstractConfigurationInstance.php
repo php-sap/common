@@ -42,7 +42,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      */
     public function set($key, $value)
     {
-        return parent::set($key, $value);
+        parent::set($key, $value);
     }
 
     /**
@@ -52,7 +52,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      */
     public function remove($key)
     {
-        return parent::remove($key);
+        parent::remove($key);
     }
 
     /**

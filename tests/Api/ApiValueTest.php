@@ -59,7 +59,7 @@ class ApiValueTest extends TestCase
      * Data provider for invalid direction strings.
      * @return array
      */
-    public static function provideInvalidValueDirections()
+    public static function provideInvalidValueDirections(): array
     {
         return [
             [''],
@@ -88,7 +88,7 @@ class ApiValueTest extends TestCase
      * Data provider for non-boolean values.
      * @return array
      */
-    public static function provideNonBooleans()
+    public static function provideNonBooleans(): array
     {
         return [
             ['true'],
@@ -162,7 +162,7 @@ class ApiValueTest extends TestCase
      * Data provider for incomplete JSON objects.
      * @return array
      */
-    public static function provideIncompleteJsonObjects()
+    public static function provideIncompleteJsonObjects(): array
     {
         $return = ApiElementTest::provideIncompleteJsonObjects();
         $return[] = ['{"type":"int","name":"TRD2cpKy"}'];

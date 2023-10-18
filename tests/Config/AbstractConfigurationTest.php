@@ -101,7 +101,7 @@ class AbstractConfigurationTest extends TestCase
      * Data provider for invalid values for set().
      * @return array
      */
-    public static function provideInvalidValueForSet()
+    public static function provideInvalidValueForSet(): array
     {
         return [
             [1.38],
@@ -129,7 +129,7 @@ class AbstractConfigurationTest extends TestCase
      * Data provider of valid configuration parameters for the constructor.
      * @return array
      */
-    public static function provideValidConfigurationForConstructor()
+    public static function provideValidConfigurationForConstructor(): array
     {
         $conf = new stdClass();
         $conf->zadgcjmt = 'wntQeayy41';
@@ -165,7 +165,7 @@ class AbstractConfigurationTest extends TestCase
      * @return array
      * @throws Exception
      */
-    public static function provideInvalidConfigurationForConstructor()
+    public static function provideInvalidConfigurationForConstructor(): array
     {
         return [
             [5126],
@@ -194,7 +194,7 @@ class AbstractConfigurationTest extends TestCase
      * Data provider of ConfigTypeA configuration for jsonDecode().
      * @return array
      */
-    public static function provideJsonDecodeConfigTypeA()
+    public static function provideJsonDecodeConfigTypeA(): array
     {
         return [
             [[ConfigTypeA::JSON_ASHOST => 'ItulITyML1'], '{"' . ConfigTypeA::JSON_ASHOST . '":"ItulITyML1"}'],
@@ -225,7 +225,7 @@ class AbstractConfigurationTest extends TestCase
      * Data provider of ConfigTypeB configuration for jsonDecode().
      * @return array
      */
-    public static function provideJsonDecodeConfigTypeB()
+    public static function provideJsonDecodeConfigTypeB(): array
     {
         return [
             [[ConfigTypeB::JSON_MSHOST => '4htV2O3BMH'], '{"' . ConfigTypeB::JSON_MSHOST . '":"4htV2O3BMH"}'],
@@ -255,7 +255,7 @@ class AbstractConfigurationTest extends TestCase
      * Data provider of non-specific configuration JSON strings.
      * @return array[]
      */
-    public static function provideNonSpecificJson()
+    public static function provideNonSpecificJson(): array
     {
         return [
             ['{}'],

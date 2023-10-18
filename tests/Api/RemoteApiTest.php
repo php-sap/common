@@ -46,7 +46,7 @@ class RemoteApiTest extends TestCase
      * @return array
      * @throws InvalidArgumentException
      */
-    public static function provideApiValue()
+    public static function provideApiValue(): array
     {
         return [
             [
@@ -92,7 +92,7 @@ class RemoteApiTest extends TestCase
      * Data provider for invalid constructor parameters.
      * @return array
      */
-    public static function provideInvalidConstructorParams()
+    public static function provideInvalidConstructorParams(): array
     {
         return [
             [''],
@@ -123,7 +123,7 @@ class RemoteApiTest extends TestCase
      * Data provider for encoded remote APIs.
      * @return array
      */
-    public static function provideEncodedRemoteApi()
+    public static function provideEncodedRemoteApi(): array
     {
         /**
          * Construct first variant as stdClass objects.
@@ -298,7 +298,7 @@ class RemoteApiTest extends TestCase
      * Data provider for invalid JSON.
      * @return array
      */
-    public static function provideInvalidJson()
+    public static function provideInvalidJson(): array
     {
         $table = new stdClass();
         $table->type = Table::TYPE_TABLE;

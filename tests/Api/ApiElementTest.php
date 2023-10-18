@@ -42,7 +42,7 @@ class ApiElementTest extends TestCase
      * Data provider for non-string parameters.
      * @return array
      */
-    public static function provideNonStrings()
+    public static function provideNonStrings(): array
     {
         return [
             [0],
@@ -72,7 +72,7 @@ class ApiElementTest extends TestCase
      * Data provider for invalid element types.
      * @return array
      */
-    public static function provideInvalidElementTypes()
+    public static function provideInvalidElementTypes(): array
     {
         return [
             ['STRING'],
@@ -105,7 +105,7 @@ class ApiElementTest extends TestCase
      * Data provider for valid element types.
      * @return array
      */
-    public static function provideValidElementTypes()
+    public static function provideValidElementTypes(): array
     {
         return [
             [IElement::TYPE_BOOLEAN],
@@ -133,7 +133,7 @@ class ApiElementTest extends TestCase
      * Data provider for invalid element names.
      * @return array
      */
-    public static function provideInvalidElementNames()
+    public static function provideInvalidElementNames(): array
     {
         $return = static::provideNonStrings();
         $return[] = [''];
@@ -156,7 +156,7 @@ class ApiElementTest extends TestCase
      * Data provider for some typecast data.
      * @return array
      */
-    public static function provideTypecastData()
+    public static function provideTypecastData(): array
     {
         return [
             [Element::TYPE_BOOLEAN, '1', true],
@@ -244,7 +244,7 @@ class ApiElementTest extends TestCase
      * array.
      * @return array
      */
-    public static function provideInvalidJson()
+    public static function provideInvalidJson(): array
     {
         $cfg = new stdClass();
         $cfg->name = 'MqUyFBxx';
@@ -278,7 +278,7 @@ class ApiElementTest extends TestCase
      * array.
      * @return array
      */
-    public static function provideInvalidJsonString()
+    public static function provideInvalidJsonString(): array
     {
         return [
             [''],
@@ -306,7 +306,7 @@ class ApiElementTest extends TestCase
      * Data provider for incomplete JSON objects.
      * @return array
      */
-    public static function provideIncompleteJsonObjects()
+    public static function provideIncompleteJsonObjects(): array
     {
         return [
             ['{"name":"I2g8g23n"}'],
@@ -334,7 +334,7 @@ class ApiElementTest extends TestCase
      * Data provider for non-array type values.
      * @return array
      */
-    public static function provideNonArray()
+    public static function provideNonArray(): array
     {
         return [
             ['dNtKMbKSJ8'],

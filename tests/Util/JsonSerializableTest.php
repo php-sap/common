@@ -99,7 +99,7 @@ class JsonSerializableTest extends TestCase
      * Data provider for valid JSON objects.
      * @return array
      */
-    public static function provideValidJsonObjects()
+    public static function provideValidJsonObjects(): array
     {
         $obj1 = '{"2at0q6hz":"3g8Z57oK","GNhrr5BB":9800}';
         return [
@@ -131,7 +131,7 @@ class JsonSerializableTest extends TestCase
      * Data provider for invalid keys.
      * @return array
      */
-    public static function provideInvalidKeys()
+    public static function provideInvalidKeys(): array
     {
         return [
             [''],
@@ -187,7 +187,7 @@ class JsonSerializableTest extends TestCase
      * Data provider for invalid arrays.
      * @return array
      */
-    public static function provideInvalidArrays()
+    public static function provideInvalidArrays(): array
     {
         return [
             ['nB47gijE'],
@@ -241,7 +241,7 @@ class JsonSerializableTest extends TestCase
      * Data provider for invalid JSON.
      * @return array
      */
-    public static function provideInvalidJson()
+    public static function provideInvalidJson(): array
     {
         return [
             [''],
@@ -278,7 +278,7 @@ class JsonSerializableTest extends TestCase
      * Data provider of invalid JSON objects.
      * @return array
      */
-    public static function provideInvalidJsonObjects()
+    public static function provideInvalidJsonObjects(): array
     {
         return [
             [66],

@@ -69,7 +69,7 @@ class StructTest extends TestCase
      * Data provider for non-arrays.
      * @return array
      */
-    public static function provideNonArrays()
+    public static function provideNonArrays(): array
     {
         return [
             ['array'],
@@ -202,7 +202,7 @@ class StructTest extends TestCase
      * Data provider for incomplete JSON objects.
      * @return array
      */
-    public static function provideIncompleteJsonObjects()
+    public static function provideIncompleteJsonObjects(): array
     {
         $return = ApiValueTest::provideIncompleteJsonObjects();
         $return[] = ['{"type":"struct","name":"Mvewn5c7","direction":"output","optional":false}'];
@@ -225,7 +225,7 @@ class StructTest extends TestCase
      * Data provider for JSON objects with invalid type value.
      * @return array
      */
-    public static function provideJsonDecodeInvalidStruct()
+    public static function provideJsonDecodeInvalidStruct(): array
     {
         return [
             ['{"type":"bool","name":"WG0ujcyy","direction":"input","optional":true,'
@@ -255,7 +255,7 @@ class StructTest extends TestCase
      * Data provider for JSON objects with invalid members.
      * @return array
      */
-    public static function provideJsonDecodeInvalidMembers()
+    public static function provideJsonDecodeInvalidMembers(): array
     {
         return [
             ['{"type":"struct","name":"fiNvZSEH","direction":"output",'

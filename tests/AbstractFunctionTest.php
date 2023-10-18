@@ -55,7 +55,7 @@ class AbstractFunctionTest extends TestCase
      * Data provider for invalid function names.
      * @return array
      */
-    public static function provideInvalidNames()
+    public static function provideInvalidNames(): array
     {
         return [
             [''],
@@ -470,7 +470,7 @@ class AbstractFunctionTest extends TestCase
      * Data provider for invalid JSON.
      * @return array
      */
-    public static function provideInvalidJson()
+    public static function provideInvalidJson(): array
     {
         return [
             [

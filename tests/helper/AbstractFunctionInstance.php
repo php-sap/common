@@ -21,12 +21,12 @@ class AbstractFunctionInstance extends AbstractFunction
     /**
      * @var array Fake extractApi() response.
      */
-    public static $fakeApi = [];
+    public static array $fakeApi = [];
 
     /**
      * @var array Fake invoke() response.
      */
-    public static $fakeInvoke = [];
+    public static array $fakeInvoke = [];
 
     /**
      * @inheritDoc

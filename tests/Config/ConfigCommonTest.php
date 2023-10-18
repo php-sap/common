@@ -77,7 +77,7 @@ class ConfigCommonTest extends TestCase
      * Data provider for invalid saprouter values.
      * @return array
      */
-    public static function provideInvalidSaprouterValues()
+    public static function provideInvalidSaprouterValues(): array
     {
         return [
             [''],
@@ -107,7 +107,7 @@ class ConfigCommonTest extends TestCase
      * Data provider for invalid trace values.
      * @return array
      */
-    public static function provideInvalidTraceValues()
+    public static function provideInvalidTraceValues(): array
     {
         return [
             [''],
@@ -138,7 +138,7 @@ class ConfigCommonTest extends TestCase
      * Data provider for invalid lang values.
      * @return array
      */
-    public static function provideInvalidLangValues()
+    public static function provideInvalidLangValues(): array
     {
         return [
             [''],

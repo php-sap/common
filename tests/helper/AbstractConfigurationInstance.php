@@ -72,7 +72,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setZadgcjmt($value)
+    public function setZadgcjmt($value): AbstractConfigurationInstance
     {
         $this->set('zadgcjmt', $value);
         return $this;

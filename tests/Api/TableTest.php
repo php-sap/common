@@ -218,7 +218,7 @@ class TableTest extends TestCase
      * Data provider for JSON objects with invalid type value.
      * @return array
      */
-    public static function provideJsonDecodeInvalidDirection()
+    public static function provideJsonDecodeInvalidDirection(): array
     {
         return [
             ['{"type":"table","name":"3iumcKfi","direction":"input","optional":true,'
@@ -244,7 +244,7 @@ class TableTest extends TestCase
      * Data provider for JSON objects with invalid type value.
      * @return array
      */
-    public static function provideJsonDecodeInvalidType()
+    public static function provideJsonDecodeInvalidType(): array
     {
         return [
             ['{"type":"bool","name":"azc5s1Nb","direction":"table","optional":true,'
@@ -274,7 +274,7 @@ class TableTest extends TestCase
      * Data provider for JSON objects with invalid members.
      * @return array
      */
-    public static function provideJsonDecodeInvalidMembers()
+    public static function provideJsonDecodeInvalidMembers(): array
     {
         return [
             ['{"type":"table","name":"96JeBc1U","direction":"table",'

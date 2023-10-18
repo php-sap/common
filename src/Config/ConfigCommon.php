@@ -148,7 +148,8 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function setSaprouter($saprouter)
     {
-        if ($saprouter !== null
+        if (
+            $saprouter !== null
             && (!is_string($saprouter)
             || !preg_match('~^/H/[a-z\d.\-]+/S/[\d]+/H/$~i', $saprouter))
         ) {
@@ -181,7 +182,8 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function setTrace($trace)
     {
-        if ($trace !== null
+        if (
+            $trace !== null
             && (!is_int($trace) || $trace > self::TRACE_FULL || $trace < self::TRACE_OFF)
         ) {
             throw new InvalidArgumentException(
@@ -242,7 +244,8 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function setLang($lang)
     {
-        if ($lang !== null
+        if (
+            $lang !== null
             && (!is_string($lang) || !preg_match('~^[A-Z]{2}$~', $lang))
         ) {
             throw new InvalidArgumentException(

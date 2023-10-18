@@ -185,10 +185,10 @@ class AbstractConfigurationTest extends PHPUnit_Framework_TestCase
     public static function provideJsonDecodeConfigTypeA()
     {
         return [
-            [[ConfigTypeA::JSON_ASHOST => 'ItulITyML1'], '{"'.ConfigTypeA::JSON_ASHOST.'":"ItulITyML1"}'],
-            [[ConfigTypeA::JSON_SYSNR => '5345'], '{"'.ConfigTypeA::JSON_SYSNR.'":"5345"}'],
-            [[ConfigTypeA::JSON_GWHOST => '6sqPJLVVgS'], '{"'.ConfigTypeA::JSON_GWHOST.'":"6sqPJLVVgS"}'],
-            [[ConfigTypeA::JSON_GWSERV => 'pzkPI1ZV7f'], '{"'.ConfigTypeA::JSON_GWSERV.'":"pzkPI1ZV7f"}']
+            [[ConfigTypeA::JSON_ASHOST => 'ItulITyML1'], '{"' . ConfigTypeA::JSON_ASHOST . '":"ItulITyML1"}'],
+            [[ConfigTypeA::JSON_SYSNR => '5345'], '{"' . ConfigTypeA::JSON_SYSNR . '":"5345"}'],
+            [[ConfigTypeA::JSON_GWHOST => '6sqPJLVVgS'], '{"' . ConfigTypeA::JSON_GWHOST . '":"6sqPJLVVgS"}'],
+            [[ConfigTypeA::JSON_GWSERV => 'pzkPI1ZV7f'], '{"' . ConfigTypeA::JSON_GWSERV . '":"pzkPI1ZV7f"}']
         ];
     }
 
@@ -214,9 +214,9 @@ class AbstractConfigurationTest extends PHPUnit_Framework_TestCase
     public static function provideJsonDecodeConfigTypeB()
     {
         return [
-            [[ConfigTypeB::JSON_MSHOST => '4htV2O3BMH'], '{"'.ConfigTypeB::JSON_MSHOST.'":"4htV2O3BMH"}'],
-            [[ConfigTypeB::JSON_R3NAME => 'XmJsmqU3ua'], '{"'.ConfigTypeB::JSON_R3NAME.'":"XmJsmqU3ua"}'],
-            [[ConfigTypeB::JSON_GROUP => 'Tczw3KTagh'], '{"'.ConfigTypeB::JSON_GROUP.'":"Tczw3KTagh"}']
+            [[ConfigTypeB::JSON_MSHOST => '4htV2O3BMH'], '{"' . ConfigTypeB::JSON_MSHOST . '":"4htV2O3BMH"}'],
+            [[ConfigTypeB::JSON_R3NAME => 'XmJsmqU3ua'], '{"' . ConfigTypeB::JSON_R3NAME . '":"XmJsmqU3ua"}'],
+            [[ConfigTypeB::JSON_GROUP => 'Tczw3KTagh'], '{"' . ConfigTypeB::JSON_GROUP . '":"Tczw3KTagh"}']
         ];
     }
 
@@ -239,9 +239,9 @@ class AbstractConfigurationTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['{}'],
-            ['{"'.ConfigCommon::JSON_CLIENT.'":"001"}'],
-            ['{"'.ConfigCommon::JSON_USER.'":"username"}'],
-            ['{"'.ConfigCommon::JSON_PASSWD.'":"password"}']
+            ['{"' . ConfigCommon::JSON_CLIENT . '":"001"}'],
+            ['{"' . ConfigCommon::JSON_USER . '":"username"}'],
+            ['{"' . ConfigCommon::JSON_PASSWD . '":"password"}']
         ];
     }
 

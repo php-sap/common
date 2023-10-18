@@ -56,14 +56,16 @@ abstract class AbstractConfiguration extends JsonSerializable implements IConfig
     public static function jsonDecode($json)
     {
         $config = static::jsonToArray($json);
-        if (array_key_exists(ConfigTypeA::JSON_ASHOST, $config)
+        if (
+            array_key_exists(ConfigTypeA::JSON_ASHOST, $config)
             || array_key_exists(ConfigTypeA::JSON_SYSNR, $config)
             || array_key_exists(ConfigTypeA::JSON_GWHOST, $config)
             || array_key_exists(ConfigTypeA::JSON_GWSERV, $config)
         ) {
             return new ConfigTypeA($config);
         }
-        if (array_key_exists(ConfigTypeB::JSON_MSHOST, $config)
+        if (
+            array_key_exists(ConfigTypeB::JSON_MSHOST, $config)
             || array_key_exists(ConfigTypeB::JSON_R3NAME, $config)
             || array_key_exists(ConfigTypeB::JSON_GROUP, $config)
         ) {

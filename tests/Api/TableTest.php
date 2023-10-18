@@ -160,7 +160,7 @@ class TableTest extends PHPUnit_Framework_TestCase
     public function testJsonDecode()
     {
         $json = '{"type":"table","name":"wWnIOYQc","direction":"table",'
-                .'"optional":false,"members":[{"type":"bool","name":"MievIEPs"}]}';
+                . '"optional":false,"members":[{"type":"bool","name":"MievIEPs"}]}';
         $element = Table::jsonDecode($json);
         static::assertInstanceOf(Table::class, $element);
         static::assertSame(Table::TYPE_TABLE, $element->getType());
@@ -210,9 +210,9 @@ class TableTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['{"type":"table","name":"3iumcKfi","direction":"input","optional":true,'
-             .'"members":[{"type":"int","name":"R7atJFrf"}]}'],
+             . '"members":[{"type":"int","name":"R7atJFrf"}]}'],
             ['{"type":"table","name":"0Uha2w0d","direction":"output","optional":true,'
-             .'"members":[{"type":"int","name":"DhO5JG4n"}]}']
+             . '"members":[{"type":"int","name":"DhO5JG4n"}]}']
         ];
     }
 
@@ -236,13 +236,13 @@ class TableTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['{"type":"bool","name":"azc5s1Nb","direction":"table","optional":true,'
-             .'"members":[{"type":"int","name":"REFsrhPg"}]}'],
+             . '"members":[{"type":"int","name":"REFsrhPg"}]}'],
             ['{"type":"int","name":"176PZCKM","direction":"table","optional":true,'
-             .'"members":[{"type":"int","name":"BLXWiyhY"}]}'],
+             . '"members":[{"type":"int","name":"BLXWiyhY"}]}'],
             ['{"type":"float","name":"hACHkDDV","direction":"table","optional":true,'
-             .'"members":[{"type":"int","name":"CsY4Od9s"}]}'],
+             . '"members":[{"type":"int","name":"CsY4Od9s"}]}'],
             ['{"type":"string","name":"sDbJFlkB","direction":"table",'
-             .'"optional":true,"members":[{"type":"int","name":"bVhCMbhQ"}]}']
+             . '"optional":true,"members":[{"type":"int","name":"bVhCMbhQ"}]}']
         ];
     }
 
@@ -266,15 +266,15 @@ class TableTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['{"type":"table","name":"96JeBc1U","direction":"table",'
-             .'"optional":true,"members":13}'],
+             . '"optional":true,"members":13}'],
             ['{"type":"table","name":"X1Lw0efh","direction":"table",'
-             .'"optional":true,"members":8.82}'],
+             . '"optional":true,"members":8.82}'],
             ['{"type":"table","name":"AdrbBd9G","direction":"table",'
-             .'"optional":true,"members":"AbgHgWhx"}'],
+             . '"optional":true,"members":"AbgHgWhx"}'],
             ['{"type":"table","name":"RvU15SUm","direction":"table",'
-             .'"optional":true,"members":true}'],
+             . '"optional":true,"members":true}'],
             ['{"type":"table","name":"7LQXw6IT","direction":"table",'
-             .'"optional":true,"members":false}']
+             . '"optional":true,"members":false}']
         ];
     }
 

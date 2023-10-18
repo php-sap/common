@@ -367,8 +367,8 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         $json = json_encode($fnc);
         static::assertInternalType('string', $json);
         $expected = '{"name":"GUGtjHBL",'
-                    .'"api":[{"type":"string","name":"UOvOMBva","direction":"input","optional":false}],'
-                    .'"params":{"UOvOMBva":"IGxIqMvU"}}';
+                    . '"api":[{"type":"string","name":"UOvOMBva","direction":"input","optional":false}],'
+                    . '"params":{"UOvOMBva":"IGxIqMvU"}}';
         static::assertSame($expected, $json);
     }
 
@@ -389,8 +389,8 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $json = '{"name":"MLPmcnyT",'
-                .'"api":[{"type":"string","name":"dvPoAdYG","direction":"input","optional":false}],'
-                .'"params":{"dvPoAdYG":"LHpcxfLz"}}';
+                . '"api":[{"type":"string","name":"dvPoAdYG","direction":"input","optional":false}],'
+                . '"params":{"dvPoAdYG":"LHpcxfLz"}}';
         $fnc = AbstractFunctionInstance::jsonDecode($json);
         static::assertInstanceOf(AbstractFunction::class, $fnc);
 
@@ -423,20 +423,20 @@ class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 '{"name":"rgVjZtqB",'
-                .'"params":{"JBBIPySA":"7897467303"}}'
+                . '"params":{"JBBIPySA":"7897467303"}}'
             ],
             [
                 '{"name":"rgVjZtqB",'
-                .'"api":[{"type":"string","name":"rgVjZtqB","direction":"input","optional":false}],'
+                . '"api":[{"type":"string","name":"rgVjZtqB","direction":"input","optional":false}],'
             ],
             [
                 '"api":[{"type":"string","name":"rgVjZtqB","direction":"input","optional":false}],'
-                .'"params":{"dvPoAdYG":"CLsVlAje"}}'
+                . '"params":{"dvPoAdYG":"CLsVlAje"}}'
             ],
             [
                 '{"name":"rgVjZtqB",'
-                .'"api":"RckvpiOa",'
-                .'"params":{"dvPoAdYG":"CLsVlAje"}}'
+                . '"api":"RckvpiOa",'
+                . '"params":{"dvPoAdYG":"CLsVlAje"}}'
             ],
         ];
     }

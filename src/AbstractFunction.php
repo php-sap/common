@@ -267,7 +267,8 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     public static function jsonDecode($json)
     {
         $array = static::jsonToArray($json);
-        if (array_key_exists(self::JSON_NAME, $array)
+        if (
+            array_key_exists(self::JSON_NAME, $array)
             && array_key_exists(self::JSON_API, $array)
             && array_key_exists(self::JSON_PARAM, $array)
         ) {

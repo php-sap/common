@@ -159,7 +159,7 @@ class StructTest extends PHPUnit_Framework_TestCase
     public function testJsonDecode()
     {
         $json = '{"type":"struct","name":"l9M7gn6p","direction":"input",'
-                .'"optional":true,"members":[{"type":"int","name":"lnrxpRjh"}]}';
+                . '"optional":true,"members":[{"type":"int","name":"lnrxpRjh"}]}';
         $element = Struct::jsonDecode($json);
         static::assertInstanceOf(Struct::class, $element);
         static::assertSame(Struct::TYPE_STRUCT, $element->getType());
@@ -220,13 +220,13 @@ class StructTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['{"type":"bool","name":"WG0ujcyy","direction":"input","optional":true,'
-             .'"members":[{"type":"int","name":"H423vcVw"}]}'],
+             . '"members":[{"type":"int","name":"H423vcVw"}]}'],
             ['{"type":"int","name":"TAmi4UC3","direction":"input","optional":true,'
-             .'"members":[{"type":"int","name":"TVS46Ay9"}]}'],
+             . '"members":[{"type":"int","name":"TVS46Ay9"}]}'],
             ['{"type":"float","name":"dgDE3yR3","direction":"input","optional":true,'
-             .'"members":[{"type":"int","name":"RnlONMhA"}]}'],
+             . '"members":[{"type":"int","name":"RnlONMhA"}]}'],
             ['{"type":"string","name":"akGRYSzR","direction":"input",'
-             .'"optional":true,"members":[{"type":"int","name":"UBrbUzrK"}]}']
+             . '"optional":true,"members":[{"type":"int","name":"UBrbUzrK"}]}']
         ];
     }
 
@@ -250,15 +250,15 @@ class StructTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['{"type":"struct","name":"fiNvZSEH","direction":"output",'
-             .'"optional":true,"members":964}'],
+             . '"optional":true,"members":964}'],
             ['{"type":"struct","name":"eLkiWCkL","direction":"output",'
-             .'"optional":true,"members":5.7}'],
+             . '"optional":true,"members":5.7}'],
             ['{"type":"struct","name":"zF2vTk2P","direction":"output",'
-             .'"optional":true,"members":"mKgpyVXb"}'],
+             . '"optional":true,"members":"mKgpyVXb"}'],
             ['{"type":"struct","name":"RvU15SUm","direction":"output",'
-             .'"optional":true,"members":true}'],
+             . '"optional":true,"members":true}'],
             ['{"type":"struct","name":"txI85Gco","direction":"output",'
-             .'"optional":true,"members":false}']
+             . '"optional":true,"members":false}']
         ];
     }
 

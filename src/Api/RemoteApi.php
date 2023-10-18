@@ -27,7 +27,7 @@ class RemoteApi implements IApi
      * @param \phpsap\interfaces\Api\IValue $value
      * @return $this
      */
-    public function add(IValue $value)
+    public function add(IValue $value): IApi
     {
         $this->data[] = $value;
         return $this;
@@ -37,7 +37,7 @@ class RemoteApi implements IApi
      * Get all input values of the remote function.
      * @return \phpsap\classes\Api\Value[]
      */
-    public function getInputValues()
+    public function getInputValues(): array
     {
         return $this->getValues(Value::DIRECTION_INPUT);
     }
@@ -46,7 +46,7 @@ class RemoteApi implements IApi
      * Get all output values of the remote function.
      * @return \phpsap\classes\Api\Value[]
      */
-    public function getOutputValues()
+    public function getOutputValues(): array
     {
         return $this->getValues(Value::DIRECTION_OUTPUT);
     }
@@ -55,7 +55,7 @@ class RemoteApi implements IApi
      * Get all tables of the remote function.
      * @return \phpsap\classes\Api\Table[]
      */
-    public function getTables()
+    public function getTables(): array
     {
         return $this->getValues(Table::DIRECTION_TABLE);
     }
@@ -126,7 +126,7 @@ class RemoteApi implements IApi
      * @return \phpsap\classes\Api\RemoteApi
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public static function jsonDecode($json)
+    public static function jsonDecode($json): \phpsap\interfaces\Util\IJsonSerializable
     {
         if (is_string($json)) {
             $array = json_decode($json, true);

@@ -39,7 +39,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * @return string
      * @throws \phpsap\exceptions\IncompleteConfigException
      */
-    public function getMshost()
+    public function getMshost(): string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -59,7 +59,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setMshost($mshost)
+    public function setMshost($mshost): IConfigTypeB
     {
         $this->set(self::JSON_MSHOST, $mshost);
         return $this;
@@ -69,7 +69,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * Get the name of SAP system, optional; default: destination
      * @return string|null The name of the SAP system or NULL in case no name has been defined.
      */
-    public function getR3name()
+    public function getR3name(): ?string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -83,7 +83,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setR3name($r3name)
+    public function setR3name($r3name): IConfigTypeB
     {
         $this->set(self::JSON_R3NAME, $r3name);
         return $this;
@@ -93,7 +93,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * Get the group name of the application servers, optional; default: PUBLIC.
      * @return string group name of the application servers
      */
-    public function getGroup()
+    public function getGroup(): ?string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -107,7 +107,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setGroup($group)
+    public function setGroup($group): IConfigTypeB
     {
         $this->set(self::JSON_GROUP, $group);
         return $this;

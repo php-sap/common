@@ -60,7 +60,7 @@ class Element extends JsonSerializable implements IElement
      * The PHP type of the element.
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -72,7 +72,7 @@ class Element extends JsonSerializable implements IElement
      * The name of the element.
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -201,7 +201,7 @@ class Element extends JsonSerializable implements IElement
      * @return \phpsap\classes\Api\Element
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public static function jsonDecode($json)
+    public static function jsonDecode($json): \phpsap\interfaces\Util\IJsonSerializable
     {
         $array = static::jsonToArray($json);
         return static::fromArray($array);

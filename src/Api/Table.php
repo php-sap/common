@@ -65,7 +65,7 @@ class Table extends Value implements ITable
      * @return array
      * @throws \phpsap\exceptions\ArrayElementMissingException
      */
-    public function cast($table)
+    public function cast($table): array
     {
         foreach ($table as &$row) {
             foreach ($this->getMembers() as $member) {
@@ -91,7 +91,7 @@ class Table extends Value implements ITable
      * Return an array of member elements.
      * @return array
      */
-    public function getMembers()
+    public function getMembers(): array
     {
         /**
          * InvalidArgumentException will never be thrown.

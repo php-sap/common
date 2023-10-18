@@ -103,7 +103,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * Get the SAP remote function name.
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -112,7 +112,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * Get the SAP connection configuration for this remote function.
      * @return \phpsap\interfaces\Config\IConfiguration|null
      */
-    public function getConfiguration()
+    public function getConfiguration(): ?IConfiguration
     {
         return $this->config;
     }
@@ -124,7 +124,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @param \phpsap\interfaces\Config\IConfiguration $config
      * @return $this
      */
-    public function setConfiguration(IConfiguration $config)
+    public function setConfiguration(IConfiguration $config): IFunction
     {
         $this->config = $config;
         return $this;
@@ -138,7 +138,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @throws \phpsap\exceptions\ConnectionFailedException
      * @throws \phpsap\exceptions\UnknownFunctionException
      */
-    abstract public function extractApi();
+    abstract public function extractApi(): IApi;
 
     /**
      * Get the remote function API.
@@ -149,7 +149,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @throws \phpsap\exceptions\IncompleteConfigException
      * @throws \phpsap\exceptions\UnknownFunctionException
      */
-    public function getApi()
+    public function getApi(): IApi
     {
         $name = $this->getName();
         if (!array_key_exists($name, self::$api)) {
@@ -166,7 +166,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @param \phpsap\interfaces\Api\IApi $api
      * @return $this
      */
-    public function setApi(IApi $api)
+    public function setApi(IApi $api): IFunction
     {
         $name = $this->getName();
         self::$api[$name] = $api;
@@ -188,7 +188,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * Returns all previously set parameters.
      * @return array
      */
-    public function getParams()
+    public function getParams(): array
     {
         return $this->toArray();
     }
@@ -213,7 +213,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setParams(array $params)
+    public function setParams(array $params): IFunction
     {
         $this->setMultiple($params);
         return $this;
@@ -224,7 +224,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * over.
      * @return $this
      */
-    public function resetParams()
+    public function resetParams(): IFunction
     {
         $this->reset();
         return $this;
@@ -240,7 +240,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @throws \phpsap\exceptions\UnknownFunctionException
      * @throws \phpsap\exceptions\FunctionCallException
      */
-    abstract public function invoke();
+    abstract public function invoke(): array;
 
     /**
      * @inheritDoc
@@ -264,7 +264,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @return \phpsap\classes\AbstractFunction
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public static function jsonDecode($json)
+    public static function jsonDecode($json): \phpsap\interfaces\Util\IJsonSerializable
     {
         $array = static::jsonToArray($json);
         if (

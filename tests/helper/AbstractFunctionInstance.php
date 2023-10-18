@@ -30,7 +30,7 @@ class AbstractFunctionInstance extends AbstractFunction
      * @inheritDoc
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function extractApi()
+    public function extractApi(): \phpsap\interfaces\Api\IApi
     {
         return new RemoteApi(self::$fakeApi);
     }
@@ -38,7 +38,7 @@ class AbstractFunctionInstance extends AbstractFunction
     /**
      * @inheritDoc
      */
-    public function invoke()
+    public function invoke(): array
     {
         return self::$fakeInvoke;
     }

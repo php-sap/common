@@ -54,7 +54,7 @@ class Value extends Element implements IValue
      * Get the direction of the API value.
      * @return string
      */
-    public function getDirection()
+    public function getDirection(): string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -66,7 +66,7 @@ class Value extends Element implements IValue
      * Is the value optional?
      * @return bool
      */
-    public function isOptional()
+    public function isOptional(): bool
     {
         /**
          * InvalidArgumentException will never be thrown.

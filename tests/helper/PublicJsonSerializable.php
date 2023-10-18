@@ -85,7 +85,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @return $this
      */
-    public static function jsonDecode($json)
+    public static function jsonDecode($json): \phpsap\interfaces\Util\IJsonSerializable
     {
         return parent::jsonDecode($json);
     }

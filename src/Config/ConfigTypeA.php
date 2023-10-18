@@ -40,7 +40,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * @return string The hostname of a specific SAP application server.
      * @throws \phpsap\exceptions\IncompleteConfigException
      */
-    public function getAshost()
+    public function getAshost(): string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -60,7 +60,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setAshost($ashost)
+    public function setAshost($ashost): IConfigTypeA
     {
         $this->set(self::JSON_ASHOST, $ashost);
         return $this;
@@ -71,7 +71,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * @return string The SAP system number.
      * @throws \phpsap\exceptions\IncompleteConfigException
      */
-    public function getSysnr()
+    public function getSysnr(): string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -91,7 +91,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setSysnr($sysnr)
+    public function setSysnr($sysnr): IConfigTypeA
     {
         $this->set(self::JSON_SYSNR, $sysnr);
         return $this;
@@ -101,7 +101,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * Get the gateway host on the application server.
      * @return string|null The gateway host or NULL in case no gateway host has been defined.
      */
-    public function getGwhost()
+    public function getGwhost(): ?string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -115,7 +115,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setGwhost($gwhost)
+    public function setGwhost($gwhost): IConfigTypeA
     {
         $this->set(self::JSON_GWHOST, $gwhost);
         return $this;
@@ -125,7 +125,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * Get the gateway service on the application server.
      * @return string|null The gateway service or NULL in case no gateway service has been defined.
      */
-    public function getGwserv()
+    public function getGwserv(): ?string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -139,7 +139,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setGwserv($gwserv)
+    public function setGwserv($gwserv): IConfigTypeA
     {
         $this->set(self::JSON_GWSERV, $gwserv);
         return $this;

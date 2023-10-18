@@ -66,7 +66,7 @@ class Struct extends Value implements IStruct
      * @return array
      * @throws \phpsap\exceptions\ArrayElementMissingException
      */
-    public function cast($struct)
+    public function cast($struct): array
     {
         foreach ($this->getMembers() as $member) {
             /**
@@ -89,7 +89,7 @@ class Struct extends Value implements IStruct
      * Return an array of member elements.
      * @return array
      */
-    public function getMembers()
+    public function getMembers(): array
     {
         /**
          * InvalidArgumentException will never be thrown.

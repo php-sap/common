@@ -221,7 +221,7 @@ class JsonSerializable implements IJsonSerializable
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public static function jsonDecode($json)
+    public static function jsonDecode($json): IJsonSerializable
     {
         $array = self::jsonToArray($json);
         return new static($array);

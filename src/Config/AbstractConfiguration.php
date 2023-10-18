@@ -53,7 +53,7 @@ abstract class AbstractConfiguration extends JsonSerializable implements IConfig
      * @return \phpsap\classes\Config\ConfigTypeA|\phpsap\classes\Config\ConfigTypeB
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public static function jsonDecode($json)
+    public static function jsonDecode($json): \phpsap\interfaces\Util\IJsonSerializable
     {
         $config = static::jsonToArray($json);
         if (

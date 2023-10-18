@@ -36,7 +36,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return string
      * @throws \phpsap\exceptions\IncompleteConfigException
      */
-    public function getUser()
+    public function getUser(): string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -56,7 +56,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setUser($user)
+    public function setUser($user): IConfigCommon
     {
         $this->set(self::JSON_USER, $user);
         return $this;
@@ -67,7 +67,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return string
      * @throws \phpsap\exceptions\IncompleteConfigException
      */
-    public function getPasswd()
+    public function getPasswd(): string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -87,7 +87,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setPasswd($passwd)
+    public function setPasswd($passwd): IConfigCommon
     {
         $this->set(self::JSON_PASSWD, $passwd);
         return $this;
@@ -98,7 +98,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return string
      * @throws \phpsap\exceptions\IncompleteConfigException
      */
-    public function getClient()
+    public function getClient(): string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -118,7 +118,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setClient($client)
+    public function setClient($client): IConfigCommon
     {
         $this->set(self::JSON_CLIENT, $client);
         return $this;
@@ -130,7 +130,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * /H/hostname/S/portnumber/H/
      * @return string|null The saprouter or NULL in case the saprouter hasn't been set.
      */
-    public function getSaprouter()
+    public function getSaprouter(): ?string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -146,7 +146,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setSaprouter($saprouter)
+    public function setSaprouter($saprouter): IConfigCommon
     {
         if (
             $saprouter !== null
@@ -166,7 +166,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Get the trace level (0-3). See constants TRACE_*.
      * @return int|null The trace level or NULL in case the trace level hasn't been set.
      */
-    public function getTrace()
+    public function getTrace(): ?int
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -180,7 +180,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setTrace($trace)
+    public function setTrace($trace): IConfigCommon
     {
         if (
             $trace !== null
@@ -201,7 +201,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * username/password.
      * @return int|null The codepage or NULL in case the codepage hasn't been set.
      */
-    public function getCodepage()
+    public function getCodepage(): ?int
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -218,7 +218,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setCodepage($codepage)
+    public function setCodepage($codepage): IConfigCommon
     {
         $this->set(self::JSON_CODEPAGE, $codepage);
         return $this;
@@ -228,7 +228,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Get the logon Language.
      * @return string|null The logon language or NULL in case the logon language hasn't been set.
      */
-    public function getLang()
+    public function getLang(): ?string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -242,7 +242,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setLang($lang)
+    public function setLang($lang): IConfigCommon
     {
         if (
             $lang !== null
@@ -260,7 +260,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * Get the destination in RfcOpenConnection.
      * @return string|null The destination or NULL in case the destination hasn't been set.
      */
-    public function getDest()
+    public function getDest(): ?string
     {
         /**
          * InvalidArgumentException will never be thrown.
@@ -274,7 +274,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws \phpsap\exceptions\InvalidArgumentException
      */
-    public function setDest($dest)
+    public function setDest($dest): IConfigCommon
     {
         $this->set(self::JSON_DEST, $dest);
         return $this;

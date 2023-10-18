@@ -19,8 +19,7 @@
   "require": {
     "php": ">=7.4",
     "ext-json": "*",
-    "php-sap/interfaces": "^4.0",
-    "php-sap/datetime": "^1.4"
+    "php-sap/interfaces": "^4.0"
   },
   "autoload": {
     "psr-4": {

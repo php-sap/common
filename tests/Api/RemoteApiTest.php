@@ -105,11 +105,11 @@ class RemoteApiTest extends TestCase
      * Test invalid constructor parameters.
      * @param mixed $input
      * @dataProvider provideInvalidConstructorParams
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Expected array of API values.
      */
     public function testInvalidConstructorParams($input)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected array of API values.');
         new RemoteApi($input);
     }
 
@@ -247,7 +247,7 @@ class RemoteApiTest extends TestCase
         static::assertSame(Struct::TYPE_STRUCT, $struct->getType());
         static::assertSame('pS5Irn27', $struct->getName());
         static::assertSame(Struct::DIRECTION_OUTPUT, $struct->getDirection());
-        static::assertInternalType('array', $struct->getMembers());
+        static::assertIsArray($struct->getMembers());
         static::assertCount(2, $struct->getMembers());
         /**
          * Assert output struct members.
@@ -270,7 +270,7 @@ class RemoteApiTest extends TestCase
         static::assertSame(Table::TYPE_TABLE, $table->getType());
         static::assertSame('ZZ4wgCWW', $table->getName());
         static::assertSame(Table::DIRECTION_TABLE, $table->getDirection());
-        static::assertInternalType('array', $table->getMembers());
+        static::assertIsArray($table->getMembers());
         static::assertCount(2, $table->getMembers());
         /**
          * Assert table members.
@@ -316,18 +316,16 @@ class RemoteApiTest extends TestCase
      * Test invalid JSON exceptions.
      * @param mixed $value The value, that will cause an invalid JSON exception.
      * @dataProvider provideInvalidJson
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON!
      */
     public function testInvalidJson($value)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid JSON!');
         RemoteApi::jsonDecode($value);
     }
 
     /**
      * Test API value with missing type definition.
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage API Value is missing type.
      */
     public function testApiArrayMissingType()
     {
@@ -338,13 +336,13 @@ class RemoteApiTest extends TestCase
                 'optional' => false
             ]
         ];
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('API Value is missing type.');
         new RemoteApi($def);
     }
 
     /**
      * Test API value with missing direction definition.
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON: phpsap\classes\Api\Struct is missing direction!
      */
     public function testApiArrayMissingDirection()
     {
@@ -356,6 +354,8 @@ class RemoteApiTest extends TestCase
                 'members' => []
             ]
         ];
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Struct is missing direction!');
         new RemoteApi($def);
     }
 }

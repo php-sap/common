@@ -43,11 +43,11 @@ class ApiValueTest extends TestCase
      * Test non-string directions.
      * @param mixed $direction
      * @dataProvider \tests\phpsap\classes\Api\ApiElementTest::provideNonStrings
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Expected API value direction to be string!
      */
     public function testNonStringDirections($direction)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected API value direction to be string!');
         new Value(Value::TYPE_STRING, 'X6Gg7meM', $direction, false);
     }
 
@@ -72,11 +72,11 @@ class ApiValueTest extends TestCase
      * Test invalid direction strings.
      * @param string $direction
      * @dataProvider provideInvalidValueDirections
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Expected API value direction to be in:
      */
     public function testInvalidValueDirections($direction)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected API value direction to be in:');
         new Value(Value::TYPE_STRING, 'X6Gg7meM', $direction, false);
     }
 
@@ -105,11 +105,11 @@ class ApiValueTest extends TestCase
      * Test non-boolean values for the isOptional flag.
      * @param mixed $isOptional
      * @dataProvider provideNonBooleans
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Expected API value isOptional flag to be boolean!
      */
     public function testNonBooleanIsOptionalFlags($isOptional)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected API value isOptional flag to be boolean!');
         new Value(Value::TYPE_STRING, 'C1HZDtVZ', Value::DIRECTION_INPUT, $isOptional);
     }
 
@@ -133,11 +133,11 @@ class ApiValueTest extends TestCase
      * Test JSON decoding on invalid parameters.
      * @param mixed $json
      * @dataProvider \tests\phpsap\classes\Api\ApiElementTest::provideInvalidJson()
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON! Expected JSON encoded phpsap\classes\Api\Value string!
      */
     public function testInvalidJson($json)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid JSON! Expected JSON encoded phpsap\classes\Api\Value string!');
         Value::jsonDecode($json);
     }
 
@@ -145,11 +145,11 @@ class ApiValueTest extends TestCase
      * Test JSON decoding on invalid parameters.
      * @param mixed $json
      * @dataProvider \tests\phpsap\classes\Api\ApiElementTest::provideInvalidJsonString()
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON! Expected JSON encoded phpsap\classes\Api\Value string!
      */
     public function testInvalidJsonString($json)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid JSON! Expected JSON encoded phpsap\classes\Api\Value string!');
         Value::jsonDecode($json);
     }
 
@@ -173,11 +173,11 @@ class ApiValueTest extends TestCase
      * Test JSON decoding on incomplete JSON objects.
      * @param string $json
      * @dataProvider provideIncompleteJsonObjects
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON: phpsap\classes\Api\Value is missing
      */
     public function testIncompleteJson($json)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Value is missing');
         Value::jsonDecode($json);
     }
 
@@ -185,11 +185,11 @@ class ApiValueTest extends TestCase
      * Test fromArray() using non-array input.
      * @param mixed $input
      * @dataProvider \tests\phpsap\classes\Api\ApiElementTest::provideNonArray
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Expected array, but got
      */
     public function testNonArrayFromArray($input)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected array, but got');
         Value::fromArray($input);
     }
 }

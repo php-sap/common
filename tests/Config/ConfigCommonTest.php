@@ -52,7 +52,7 @@ class ConfigCommonTest extends TestCase
             ->setTrace(IConfigCommon::TRACE_FULL)
             ->setLang('EN')
             ->setDest('B92RGN3jJD')
-            ->setCodepage('4442');
+            ->setCodepage(4442);
         static::assertSame('WaRXigOeCQ', $config->getUser());
         static::assertSame('jn1KWjHeUe', $config->getPasswd());
         static::assertSame('1793', $config->getClient());
@@ -60,7 +60,7 @@ class ConfigCommonTest extends TestCase
         static::assertSame(IConfigCommon::TRACE_FULL, $config->getTrace());
         static::assertSame('EN', $config->getLang());
         static::assertSame('B92RGN3jJD', $config->getDest());
-        static::assertSame('4442', $config->getCodepage());
+        static::assertSame(4442, $config->getCodepage());
     }
 
     /**
@@ -85,11 +85,11 @@ class ConfigCommonTest extends TestCase
      * Test invalid saprouter values.
      * @param mixed $value
      * @dataProvider             provideInvalidSaprouterValues
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Expected SAPROUTER to be in following format:
      */
     public function testInvalidSaprouterValues($value)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected SAPROUTER to be in following format:');
         (new ConfigCommonInstance())->setSaprouter($value);
     }
 
@@ -116,11 +116,11 @@ class ConfigCommonTest extends TestCase
      * Test invalid trace values.
      * @param mixed $value
      * @dataProvider provideInvalidTraceValues
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage The trace level can only be 0-3!
      */
     public function testInvalidTraceValues($value)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The trace level can only be 0-3!');
         (new ConfigCommonInstance())->setTrace($value);
     }
 
@@ -146,11 +146,11 @@ class ConfigCommonTest extends TestCase
      * Test invalid lang values.
      * @param mixed $value
      * @dataProvider provideInvalidLangValues
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Expected two letter country code as language!
      */
     public function testInvalidLangValues($value)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected two letter country code as language!');
         (new ConfigCommonInstance())->setLang($value);
     }
 }

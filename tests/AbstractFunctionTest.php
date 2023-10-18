@@ -62,11 +62,11 @@ class AbstractFunctionTest extends TestCase
      * Test invalid function names.
      * @param mixed $name
      * @dataProvider provideInvalidNames
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Missing or malformed SAP remote function name
      */
     public function testInvalidNames($name)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing or malformed SAP remote function name');
         new AbstractFunctionInstance($name);
     }
 
@@ -115,7 +115,7 @@ class AbstractFunctionTest extends TestCase
         $api1 = $fnc1->getApi();
         static::assertInstanceOf(RemoteApi::class, $api1);
         $out1 = $api1->getOutputValues();
-        static::assertInternalType('array', $out1);
+        static::assertIsArray($out1);
         static::assertCount(1, $out1);
         $value1 = array_pop($out1);
         static::assertInstanceOf(Value::class, $value1);
@@ -138,7 +138,7 @@ class AbstractFunctionTest extends TestCase
         $api2 = $fnc2->getApi();
         static::assertInstanceOf(RemoteApi::class, $api2);
         $out2 = $api2->getOutputValues();
-        static::assertInternalType('array', $out2);
+        static::assertIsArray($out2);
         static::assertCount(1, $out2);
         $value2 = array_pop($out2);
         static::assertInstanceOf(Value::class, $value2);
@@ -153,7 +153,7 @@ class AbstractFunctionTest extends TestCase
         $api3 = $fnc2->extractApi();
         static::assertInstanceOf(RemoteApi::class, $api3);
         $out3 = $api3->getOutputValues();
-        static::assertInternalType('array', $out3);
+        static::assertIsArray($out3);
         static::assertCount(1, $out3);
         $value3 = array_pop($out3);
         static::assertInstanceOf(Value::class, $value3);
@@ -175,7 +175,7 @@ class AbstractFunctionTest extends TestCase
         $api4 = $fnc2->getApi();
         static::assertInstanceOf(RemoteApi::class, $api4);
         $input = $api4->getInputValues();
-        static::assertInternalType('array', $input);
+        static::assertIsArray($input);
         static::assertCount(1, $input);
         $value4 = array_pop($input);
         static::assertInstanceOf(Value::class, $value4);
@@ -219,7 +219,7 @@ class AbstractFunctionTest extends TestCase
         $api = $fnc->getApi();
         static::assertInstanceOf(RemoteApi::class, $api);
         $apiInputs = $api->getInputValues();
-        static::assertInternalType('array', $apiInputs);
+        static::assertIsArray($apiInputs);
         static::assertCount(1, $apiInputs);
         $apiInput0 = array_pop($apiInputs);
         static::assertInstanceOf(Value::class, $apiInput0);
@@ -298,47 +298,47 @@ class AbstractFunctionTest extends TestCase
         static::assertSame('FVnhTAoQ', $fnc->getParam('OkUxzPbS'));
 
         $params = $fnc->getParams();
-        static::assertInternalType('array', $params);
+        static::assertIsArray($params);
 
         static::assertArrayHasKey('OkUxzPbS', $params);
-        static::assertInternalType('string', $params['OkUxzPbS']);
+        static::assertIsString($params['OkUxzPbS']);
         static::assertSame('FVnhTAoQ', $params['OkUxzPbS']);
 
         static::assertArrayHasKey('ePmpwEHW', $params);
-        static::assertInternalType('array', $params['ePmpwEHW']);
+        static::assertIsArray($params['ePmpwEHW']);
 
         static::assertArrayHasKey('llnwSfRS', $params['ePmpwEHW']);
-        static::assertInternalType('string', $params['ePmpwEHW']['llnwSfRS']);
+        static::assertIsString($params['ePmpwEHW']['llnwSfRS']);
         static::assertSame('tzmvidMm', $params['ePmpwEHW']['llnwSfRS']);
 
         static::assertArrayHasKey('aqCcYeax', $params['ePmpwEHW']);
-        static::assertInternalType('integer', $params['ePmpwEHW']['aqCcYeax']);
+        static::assertIsInt($params['ePmpwEHW']['aqCcYeax']);
         static::assertSame(64430, $params['ePmpwEHW']['aqCcYeax']);
 
         static::assertArrayHasKey('gksKixRv', $params);
-        static::assertInternalType('array', $params['gksKixRv']);
+        static::assertIsArray($params['gksKixRv']);
         static::assertCount(2, $params['gksKixRv']);
 
         static::assertArrayHasKey(0, $params['gksKixRv']);
-        static::assertInternalType('array', $params['gksKixRv'][0]);
+        static::assertIsArray($params['gksKixRv'][0]);
 
         static::assertArrayHasKey('pLDXUMoT', $params['gksKixRv'][0]);
-        static::assertInternalType('string', $params['gksKixRv'][0]['pLDXUMoT']);
+        static::assertIsString($params['gksKixRv'][0]['pLDXUMoT']);
         static::assertSame('SPqbjvnb', $params['gksKixRv'][0]['pLDXUMoT']);
 
         static::assertArrayHasKey('rpJNsIjC', $params['gksKixRv'][0]);
-        static::assertInternalType('integer', $params['gksKixRv'][0]['rpJNsIjC']);
+        static::assertIsInt($params['gksKixRv'][0]['rpJNsIjC']);
         static::assertSame(27370, $params['gksKixRv'][0]['rpJNsIjC']);
 
         static::assertArrayHasKey(1, $params['gksKixRv']);
-        static::assertInternalType('array', $params['gksKixRv'][1]);
+        static::assertIsArray($params['gksKixRv'][1]);
 
         static::assertArrayHasKey('pLDXUMoT', $params['gksKixRv'][1]);
-        static::assertInternalType('string', $params['gksKixRv'][1]['pLDXUMoT']);
+        static::assertIsString($params['gksKixRv'][1]['pLDXUMoT']);
         static::assertSame('JpFtgGQA', $params['gksKixRv'][1]['pLDXUMoT']);
 
         static::assertArrayHasKey('rpJNsIjC', $params['gksKixRv'][1]);
-        static::assertInternalType('integer', $params['gksKixRv'][1]['rpJNsIjC']);
+        static::assertIsInt($params['gksKixRv'][1]['rpJNsIjC']);
         static::assertSame(28939, $params['gksKixRv'][1]['rpJNsIjC']);
 
         /**
@@ -366,7 +366,7 @@ class AbstractFunctionTest extends TestCase
         $fnc = new AbstractFunctionInstance('GUGtjHBL', ['UOvOMBva' => 'IGxIqMvU']);
         static::assertInstanceOf(AbstractFunction::class, $fnc);
         $json = json_encode($fnc);
-        static::assertInternalType('string', $json);
+        static::assertIsString($json);
         $expected = '{"name":"GUGtjHBL",'
                     . '"api":[{"type":"string","name":"UOvOMBva","direction":"input","optional":false}],'
                     . '"params":{"UOvOMBva":"IGxIqMvU"}}';
@@ -396,7 +396,7 @@ class AbstractFunctionTest extends TestCase
         static::assertInstanceOf(AbstractFunction::class, $fnc);
 
         $params = $fnc->getParams();
-        static::assertInternalType('array', $params);
+        static::assertIsArray($params);
         static::assertArrayHasKey('dvPoAdYG', $params);
         static::assertSame('LHpcxfLz', $params['dvPoAdYG']);
 
@@ -404,7 +404,7 @@ class AbstractFunctionTest extends TestCase
         static::assertInstanceOf(RemoteApi::class, $api);
 
         $inputValues = $api->getInputValues();
-        static::assertInternalType('array', $inputValues);
+        static::assertIsArray($inputValues);
         static::assertCount(1, $inputValues);
 
         $inputValue0 = array_pop($inputValues);
@@ -446,11 +446,11 @@ class AbstractFunctionTest extends TestCase
      * Test invalid JSON
      * @param mixed $json
      * @dataProvider provideInvalidJson
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON!
      */
     public function testInvalidJson($json)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid JSON!');
         AbstractFunctionInstance::$fakeApi = [
             [
                 Value::JSON_NAME => 'JBBIPySA',

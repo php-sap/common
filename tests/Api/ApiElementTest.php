@@ -55,11 +55,11 @@ class ApiElementTest extends TestCase
      * Test non-string parameters for element types.
      * @param mixed $type
      * @dataProvider provideNonStrings
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Expected API element type to be string!
      */
     public function testNonStringTypes($type)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected API element type to be string!');
         new Element($type, 'FRWU81mQ');
     }
 
@@ -88,11 +88,11 @@ class ApiElementTest extends TestCase
      * Test exception thrown on invalid element types.
      * @param string $type
      * @dataProvider provideInvalidElementTypes
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Expected API element type to be in:
      */
     public function testInvalidElementTypes($type)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected API element type to be in:');
         new Element($type, '9dnjz4WD');
     }
 
@@ -137,11 +137,11 @@ class ApiElementTest extends TestCase
      * Test invalid element names.
      * @param mixed $name
      * @dataProvider provideInvalidElementNames
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Expected API element name to be string!
      */
     public function testInvalidElementNames($name)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected API element name to be string!');
         new Element(Element::TYPE_STRING, $name);
     }
 
@@ -254,11 +254,11 @@ class ApiElementTest extends TestCase
      * Test JSON decoding on invalid parameters.
      * @param mixed $json
      * @dataProvider provideInvalidJson
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON! Expected JSON encoded phpsap\classes\Api\Element string!
      */
     public function testInvalidJson($json)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid JSON! Expected JSON encoded phpsap\classes\Api\Element string!');
         Element::jsonDecode($json);
     }
 
@@ -283,11 +283,11 @@ class ApiElementTest extends TestCase
      * Test JSON decoding on invalid parameters.
      * @param mixed $json
      * @dataProvider provideInvalidJsonString
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON! Expected JSON encoded phpsap\classes\Api\Element string!
      */
     public function testInvalidJsonString($json)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid JSON! Expected JSON encoded phpsap\classes\Api\Element string!');
         Element::jsonDecode($json);
     }
 
@@ -311,11 +311,11 @@ class ApiElementTest extends TestCase
      * Test JSON decoding on incomplete JSON objects.
      * @param string $json
      * @dataProvider provideIncompleteJsonObjects
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON: phpsap\classes\Api\Element is missing
      */
     public function testIncompleteJsonObjects($json)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Element is missing');
         Element::jsonDecode($json);
     }
 
@@ -341,11 +341,11 @@ class ApiElementTest extends TestCase
      * Test fromArray() using non-array input.
      * @param mixed $input
      * @dataProvider provideNonArray
-     * @expectedException \phpsap\exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Expected array, but got
      */
     public function testNonArrayFromArray($input)
     {
+        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected array, but got');
         Element::fromArray($input);
     }
 }

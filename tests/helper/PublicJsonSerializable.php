@@ -47,7 +47,7 @@ class PublicJsonSerializable extends JsonSerializable
      */
     public function set($key, $value)
     {
-        return parent::set($key, $value);
+        parent::set($key, $value);
     }
 
     /**

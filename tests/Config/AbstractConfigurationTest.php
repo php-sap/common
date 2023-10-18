@@ -2,7 +2,7 @@
 
 namespace tests\phpsap\classes\Config;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use phpsap\classes\Util\JsonSerializable;
 use stdClass;
 use phpsap\interfaces\Config\IConfiguration;
@@ -22,7 +22,7 @@ use tests\phpsap\classes\helper\AbstractConfigurationInstance;
  * @author  Gregor J.
  * @license MIT
  */
-class AbstractConfigurationTest extends PHPUnit_Framework_TestCase
+class AbstractConfigurationTest extends TestCase
 {
     /**
      * Test the inheritance of the AbstractConfiguration class.

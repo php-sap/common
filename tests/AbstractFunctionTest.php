@@ -12,6 +12,7 @@ use phpsap\classes\Config\ConfigTypeA;
 use phpsap\classes\Config\ConfigTypeB;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\IFunction;
+use PHPUnit\Framework\TestCase;
 use tests\phpsap\classes\helper\AbstractFunctionInstance;
 
 /**
@@ -23,7 +24,7 @@ use tests\phpsap\classes\helper\AbstractFunctionInstance;
  * @author  Gregor J.
  * @license MIT
  */
-class AbstractFunctionTest extends \PHPUnit_Framework_TestCase
+class AbstractFunctionTest extends TestCase
 {
     /**
      * Test class inheritance.

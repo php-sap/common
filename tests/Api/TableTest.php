@@ -3,7 +3,7 @@
 namespace tests\phpsap\classes\Api;
 
 use phpsap\interfaces\Api\ITable;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Api\IArray;
@@ -19,7 +19,7 @@ use phpsap\classes\Api\Value;
  * @author  Gregor J.
  * @license MIT
  */
-class TableTest extends PHPUnit_Framework_TestCase
+class TableTest extends TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.

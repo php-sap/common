@@ -9,7 +9,7 @@ use phpsap\classes\Api\Table;
 use phpsap\classes\Api\Value;
 use phpsap\classes\Api\RemoteApi;
 use phpsap\interfaces\Api\IApi;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
@@ -19,7 +19,7 @@ use stdClass;
  * @author  Gregor J.
  * @license MIT
  */
-class RemoteApiTest extends PHPUnit_Framework_TestCase
+class RemoteApiTest extends TestCase
 {
     /**
      * Test for the inherited classes and interfaces.

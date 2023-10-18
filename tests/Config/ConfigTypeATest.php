@@ -2,7 +2,7 @@
 
 namespace tests\phpsap\classes\Config;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Config\IConfigTypeA;
 use phpsap\interfaces\Config\IConfiguration;
@@ -19,7 +19,7 @@ use phpsap\classes\Config\ConfigTypeA;
  * @author  Gregor J.
  * @license MIT
  */
-class ConfigTypeATest extends PHPUnit_Framework_TestCase
+class ConfigTypeATest extends TestCase
 {
     /**
      * Test ConfigTypeA inheritance.

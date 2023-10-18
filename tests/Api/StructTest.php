@@ -3,7 +3,7 @@
 namespace tests\phpsap\classes\Api;
 
 use phpsap\interfaces\Api\IStruct;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Api\IArray;
@@ -19,7 +19,7 @@ use phpsap\classes\Api\Value;
  * @author  Gregor J.
  * @license MIT
  */
-class StructTest extends PHPUnit_Framework_TestCase
+class StructTest extends TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.

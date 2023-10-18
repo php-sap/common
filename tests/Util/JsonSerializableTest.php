@@ -2,7 +2,7 @@
 
 namespace tests\phpsap\classes\Util;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use phpsap\interfaces\Util\IJsonSerializable;
 use phpsap\classes\Util\JsonSerializable;
@@ -17,7 +17,7 @@ use tests\phpsap\classes\helper\PublicJsonSerializable;
  * @author  Gregor J.
  * @license MIT
  */
-class JsonSerializableTest extends PHPUnit_Framework_TestCase
+class JsonSerializableTest extends TestCase
 {
     /**
      * Test the class inheritance chain.

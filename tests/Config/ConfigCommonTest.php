@@ -2,7 +2,7 @@
 
 namespace tests\phpsap\classes\Config;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Config\IConfigCommon;
@@ -21,7 +21,7 @@ use tests\phpsap\classes\helper\ConfigCommonInstance;
  * @author  Gregor J.
  * @license MIT
  */
-class ConfigCommonTest extends PHPUnit_Framework_TestCase
+class ConfigCommonTest extends TestCase
 {
     /**
      * Test ConfigCommon inheritance.

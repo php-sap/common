@@ -4,7 +4,7 @@ namespace tests\phpsap\classes\Api;
 
 use phpsap\interfaces\Api\IStruct;
 use phpsap\interfaces\Api\ITable;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Api\IElement;
@@ -16,7 +16,7 @@ use phpsap\classes\Api\Element;
  * @author  Gregor J.
  * @license MIT
  */
-class ApiElementTest extends PHPUnit_Framework_TestCase
+class ApiElementTest extends TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.

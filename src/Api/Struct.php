@@ -62,27 +62,27 @@ class Struct extends Value implements IStruct
 
     /**
      * Cast a given value to the implemented value.
-     * @param array $struct The output array to typecast.
+     * @param array $value The output array to typecast.
      * @return array
      * @throws ArrayElementMissingException
      */
-    public function cast($struct): array
+    public function cast($value): array
     {
         foreach ($this->getMembers() as $member) {
             /**
              * @var Element $member
              */
             $name = $member->getName();
-            if (!array_key_exists($name, $struct)) {
+            if (!array_key_exists($name, $value)) {
                 throw new ArrayElementMissingException(sprintf(
                     'Element %s in struct %s is missing!',
                     $name,
                     $this->getName()
                 ));
             }
-            $struct[$name] = $member->cast($struct[$name]);
+            $value[$name] = $member->cast($value[$name]);
         }
-        return $struct;
+        return $value;
     }
 
     /**

@@ -61,13 +61,13 @@ class Table extends Value implements ITable
 
     /**
      * Cast a given value to the implemented value.
-     * @param array $table
+     * @param array $value
      * @return array
      * @throws ArrayElementMissingException
      */
-    public function cast($table): array
+    public function cast($value): array
     {
-        foreach ($table as &$row) {
+        foreach ($value as &$row) {
             foreach ($this->getMembers() as $member) {
                 /**
                  * @var Element $member
@@ -84,7 +84,7 @@ class Table extends Value implements ITable
             }
         }
         unset($row);
-        return $table;
+        return $value;
     }
 
     /**

@@ -66,7 +66,7 @@ class RemoteApi implements IApi
      * @param string $direction
      * @return array
      */
-    protected function getValues($direction)
+    protected function getValues($direction): array
     {
         $result = [];
         foreach ($this->data as $value) {
@@ -107,7 +107,7 @@ class RemoteApi implements IApi
      * @return IValue
      * @throws InvalidArgumentException
      */
-    private function constructValue($value)
+    private function constructValue($value): IValue
     {
         if (!array_key_exists(Value::JSON_TYPE, $value)) {
             throw new InvalidArgumentException('API Value is missing type.');

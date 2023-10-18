@@ -47,7 +47,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @throws IncompleteConfigException
      * @throws UnknownFunctionException
      */
-    protected function getAllowedKeys()
+    protected function getAllowedKeys(): array
     {
         $name = $this->getName();
         if (!array_key_exists($name, static::$allowedKeys)) {
@@ -205,7 +205,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setParam($key, $value)
+    public function setParam($key, $value): AbstractFunction
     {
         $this->set($key, $value);
         return $this;
@@ -254,7 +254,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @throws IncompleteConfigException
      * @throws UnknownFunctionException
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             self::JSON_NAME  => $this->getName(),

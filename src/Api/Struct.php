@@ -126,7 +126,7 @@ class Struct extends Value implements IStruct
      * @return Struct
      * @throws InvalidArgumentException
      */
-    public static function fromArray($array)
+    public static function fromArray($array): Struct
     {
         static::fromArrayValidation($array);
         if ($array[self::JSON_TYPE] !== self::TYPE_STRUCT) {

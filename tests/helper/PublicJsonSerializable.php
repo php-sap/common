@@ -28,7 +28,7 @@ class PublicJsonSerializable extends JsonSerializable
     /**
      * @inheritDoc
      */
-    public function has($key)
+    public function has($key): bool
     {
         return parent::has($key);
     }
@@ -68,7 +68,7 @@ class PublicJsonSerializable extends JsonSerializable
     /**
      * @inheritDoc
      */
-    public static function jsonToArray($json)
+    public static function jsonToArray($json): ?array
     {
         return parent::jsonToArray($json);
     }
@@ -76,7 +76,7 @@ class PublicJsonSerializable extends JsonSerializable
     /**
      * @inheritDoc
      */
-    public static function objToArray($obj)
+    public static function objToArray($obj): ?array
     {
         return parent::objToArray($obj);
     }

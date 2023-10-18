@@ -44,7 +44,7 @@ class JsonSerializable implements IJsonSerializable
      * Get an array of all valid keys this class is able to set().
      * @return array
      */
-    protected function getAllowedKeys()
+    protected function getAllowedKeys(): array
     {
         return static::$allowedKeys;
     }
@@ -53,7 +53,7 @@ class JsonSerializable implements IJsonSerializable
      * Get an array of all valid PHP data types allowed for the stored values.
      * @return array
      */
-    protected function getAllowedDataTypes()
+    protected function getAllowedDataTypes(): array
     {
         return static::$allowedDataTypes;
     }
@@ -85,7 +85,7 @@ class JsonSerializable implements IJsonSerializable
      * @return bool
      * @throws InvalidArgumentException
      */
-    protected function has($key)
+    protected function has($key): bool
     {
         return property_exists($this->data, $this->validateKey($key));
     }
@@ -187,7 +187,7 @@ class JsonSerializable implements IJsonSerializable
      * Export the data of this class as array.
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return get_object_vars($this->data);
     }
@@ -199,7 +199,7 @@ class JsonSerializable implements IJsonSerializable
      * @return string
      * @throws InvalidArgumentException
      */
-    private function validateKey($key)
+    private function validateKey($key): string
     {
         if (!is_string($key)) {
             throw new InvalidArgumentException(sprintf(
@@ -234,7 +234,7 @@ class JsonSerializable implements IJsonSerializable
      *                    was an error.
      * @throws InvalidArgumentException
      */
-    protected static function jsonToArray($json)
+    protected static function jsonToArray($json): ?array
     {
         if (is_string($json)) {
             $array = json_decode($json, true);
@@ -255,7 +255,7 @@ class JsonSerializable implements IJsonSerializable
      * @return array|null
      * @throws InvalidArgumentException
      */
-    protected static function objToArray($obj)
+    protected static function objToArray($obj): ?array
     {
         if (is_object($obj)) {
             $obj = json_encode($obj);

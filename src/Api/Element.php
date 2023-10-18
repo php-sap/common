@@ -166,7 +166,7 @@ class Element extends JsonSerializable implements IElement
      * @return Element
      * @throws InvalidArgumentException
      */
-    public static function fromArray($array)
+    public static function fromArray($array): Element
     {
         static::fromArrayValidation($array);
         return new self($array[self::JSON_TYPE], $array[self::JSON_NAME]);

@@ -58,7 +58,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * @param string $key
      * @return bool
      */
-    public function has($key)
+    public function has($key): bool
     {
         return parent::has($key);
     }

@@ -116,7 +116,7 @@ class Value extends Element implements IValue
      * @return Value
      * @throws InvalidArgumentException
      */
-    public static function fromArray($array)
+    public static function fromArray($array): Value
     {
         static::fromArrayValidation($array);
         return new self(

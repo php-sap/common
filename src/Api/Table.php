@@ -128,7 +128,7 @@ class Table extends Value implements ITable
      * @return Table
      * @throws InvalidArgumentException
      */
-    public static function fromArray($array)
+    public static function fromArray($array): Table
     {
         static::fromArrayValidation($array);
         if ($array[self::JSON_DIRECTION] !== self::DIRECTION_TABLE) {

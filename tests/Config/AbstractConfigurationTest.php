@@ -7,8 +7,6 @@ use phpsap\exceptions\InvalidArgumentException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use phpsap\classes\Util\JsonSerializable;
-use PHPUnit_Framework_AssertionFailedError;
-use PHPUnit_Framework_Exception;
 use stdClass;
 use phpsap\interfaces\Config\IConfiguration;
 use phpsap\classes\Config\AbstractConfiguration;

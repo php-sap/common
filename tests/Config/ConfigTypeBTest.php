@@ -14,7 +14,6 @@ use phpsap\interfaces\exceptions\IInvalidArgumentException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_Exception;
 
 /**
  * Class tests\phpsap\classes\Config\ConfigTypeBTest

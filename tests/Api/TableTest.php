@@ -8,7 +8,6 @@ use phpsap\interfaces\Api\ITable;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_Exception;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Api\IArray;

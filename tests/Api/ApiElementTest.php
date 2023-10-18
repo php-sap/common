@@ -8,7 +8,6 @@ use phpsap\interfaces\Api\IStruct;
 use phpsap\interfaces\Api\ITable;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_Exception;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Api\IElement;
@@ -171,9 +170,9 @@ class ApiElementTest extends TestCase
 
     /**
      * Test typecasting some data.
-     * @param string               $type
-     * @param string|int           $value
-     * @param bool|int|float|strin $expected
+     * @param string                $type
+     * @param string|int            $value
+     * @param bool|int|float|string $expected
      * @dataProvider provideTypecastData
      * @throws InvalidArgumentException
      * @throws Exception

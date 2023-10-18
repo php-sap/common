@@ -14,7 +14,6 @@ use phpsap\interfaces\Config\IConfiguration;
 use phpsap\classes\Config\AbstractConfiguration;
 use phpsap\classes\Config\ConfigCommon;
 use phpsap\classes\Config\ConfigTypeA;
-use PHPUnit_Framework_Exception;
 
 /**
  * Class tests\phpsap\classes\Config\ConfigTypeATest

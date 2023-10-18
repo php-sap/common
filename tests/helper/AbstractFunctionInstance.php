@@ -4,6 +4,8 @@ namespace tests\phpsap\classes\helper;
 
 use phpsap\classes\AbstractFunction;
 use phpsap\classes\Api\RemoteApi;
+use phpsap\exceptions\InvalidArgumentException;
+use phpsap\interfaces\Api\IApi;
 
 /**
  * Class AbstractFunctionInstance
@@ -28,9 +30,9 @@ class AbstractFunctionInstance extends AbstractFunction
 
     /**
      * @inheritDoc
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function extractApi(): \phpsap\interfaces\Api\IApi
+    public function extractApi(): IApi
     {
         return new RemoteApi(self::$fakeApi);
     }

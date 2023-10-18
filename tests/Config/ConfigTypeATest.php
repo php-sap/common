@@ -2,6 +2,7 @@
 
 namespace tests\phpsap\classes\Config;
 
+use phpsap\exceptions\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Config\IConfigTypeA;
@@ -9,6 +10,7 @@ use phpsap\interfaces\Config\IConfiguration;
 use phpsap\classes\Config\AbstractConfiguration;
 use phpsap\classes\Config\ConfigCommon;
 use phpsap\classes\Config\ConfigTypeA;
+use PHPUnit_Framework_Exception;
 
 /**
  * Class tests\phpsap\classes\Config\ConfigTypeATest
@@ -23,8 +25,8 @@ class ConfigTypeATest extends TestCase
 {
     /**
      * Test ConfigTypeA inheritance.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testInheritance()
     {

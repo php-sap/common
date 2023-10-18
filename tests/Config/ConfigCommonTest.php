@@ -2,7 +2,9 @@
 
 namespace tests\phpsap\classes\Config;
 
+use phpsap\exceptions\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_Exception;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Config\IConfigCommon;
@@ -25,8 +27,8 @@ class ConfigCommonTest extends TestCase
 {
     /**
      * Test ConfigCommon inheritance.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testInheritance()
     {
@@ -39,7 +41,7 @@ class ConfigCommonTest extends TestCase
 
     /**
      * Test set*() and get*() methods.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function testSetAndGet()
     {
@@ -88,7 +90,7 @@ class ConfigCommonTest extends TestCase
      */
     public function testInvalidSaprouterValues($value)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected SAPROUTER to be in following format:');
         (new ConfigCommonInstance())->setSaprouter($value);
     }
@@ -119,7 +121,7 @@ class ConfigCommonTest extends TestCase
      */
     public function testInvalidTraceValues($value)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The trace level can only be 0-3!');
         (new ConfigCommonInstance())->setTrace($value);
     }
@@ -149,7 +151,7 @@ class ConfigCommonTest extends TestCase
      */
     public function testInvalidLangValues($value)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected two letter country code as language!');
         (new ConfigCommonInstance())->setLang($value);
     }

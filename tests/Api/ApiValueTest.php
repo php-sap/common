@@ -3,7 +3,10 @@
 namespace tests\phpsap\classes\Api;
 
 use phpsap\classes\Api\Table;
+use phpsap\exceptions\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_AssertionFailedError;
+use PHPUnit_Framework_Exception;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Api\IElement;
@@ -21,9 +24,9 @@ class ApiValueTest extends TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testConstructorAndInheritedClasses()
     {
@@ -46,7 +49,7 @@ class ApiValueTest extends TestCase
      */
     public function testNonStringDirections($direction)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected API value direction to be string!');
         new Value(Value::TYPE_STRING, 'X6Gg7meM', $direction, false);
     }
@@ -75,7 +78,7 @@ class ApiValueTest extends TestCase
      */
     public function testInvalidValueDirections($direction)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected API value direction to be in:');
         new Value(Value::TYPE_STRING, 'X6Gg7meM', $direction, false);
     }
@@ -108,16 +111,16 @@ class ApiValueTest extends TestCase
      */
     public function testNonBooleanIsOptionalFlags($isOptional)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected API value isOptional flag to be boolean!');
         new Value(Value::TYPE_STRING, 'C1HZDtVZ', Value::DIRECTION_INPUT, $isOptional);
     }
 
     /**
      * Test JSON decode.
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testJsonDecode()
     {
@@ -136,7 +139,7 @@ class ApiValueTest extends TestCase
      */
     public function testInvalidJson($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON! Expected JSON encoded phpsap\classes\Api\Value string!');
         Value::jsonDecode($json);
     }
@@ -148,7 +151,7 @@ class ApiValueTest extends TestCase
      */
     public function testInvalidJsonString($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON! Expected JSON encoded phpsap\classes\Api\Value string!');
         Value::jsonDecode($json);
     }
@@ -176,7 +179,7 @@ class ApiValueTest extends TestCase
      */
     public function testIncompleteJson($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Value is missing');
         Value::jsonDecode($json);
     }
@@ -188,7 +191,7 @@ class ApiValueTest extends TestCase
      */
     public function testNonArrayFromArray($input)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected array, but got');
         Value::fromArray($input);
     }

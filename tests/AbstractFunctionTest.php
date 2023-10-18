@@ -11,8 +11,13 @@ use phpsap\classes\Api\Value;
 use phpsap\classes\Config\ConfigTypeA;
 use phpsap\classes\Config\ConfigTypeB;
 use phpsap\classes\Util\JsonSerializable;
+use phpsap\exceptions\IncompleteConfigException;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\IFunction;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_AssertionFailedError;
+use PHPUnit_Framework_Exception;
+use stdClass;
 use tests\phpsap\classes\helper\AbstractFunctionInstance;
 
 /**
@@ -28,8 +33,8 @@ class AbstractFunctionTest extends TestCase
 {
     /**
      * Test class inheritance.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testInheritance()
     {
@@ -54,7 +59,7 @@ class AbstractFunctionTest extends TestCase
             [false],
             [null],
             [['yqWNyvJm']],
-            [new \stdClass()]
+            [new stdClass()]
         ];
     }
 
@@ -65,15 +70,15 @@ class AbstractFunctionTest extends TestCase
      */
     public function testInvalidNames($name)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing or malformed SAP remote function name');
         new AbstractFunctionInstance($name);
     }
 
     /**
      * Test setting and getting the SAP remote function name.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testSettingAndGettingName()
     {
@@ -84,8 +89,8 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test setting and getting different SAP connection configurations.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testSettingAndGettingConfiguration()
     {
@@ -98,9 +103,9 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test extracting and getting the SAP remote function API.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\IncompleteConfigException
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws IncompleteConfigException
+     * @throws InvalidArgumentException
      */
     public function testExtractGetAndSetApi()
     {
@@ -187,10 +192,10 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test setting the API of a remote function via constructor.
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\IncompleteConfigException
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws IncompleteConfigException
+     * @throws InvalidArgumentException
      */
     public function testSetApiConstructor()
     {
@@ -231,8 +236,8 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test set and get parameters.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testSetAndGetParameters()
     {
@@ -350,8 +355,8 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test JSON serialization.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testJsonSerialization()
     {
@@ -375,9 +380,9 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test JSON deserialization.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
-     * @throws \phpsap\exceptions\IncompleteConfigException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
+     * @throws IncompleteConfigException
      */
     public function testJsonDeserialization()
     {
@@ -449,7 +454,7 @@ class AbstractFunctionTest extends TestCase
      */
     public function testInvalidJson($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON!');
         AbstractFunctionInstance::$fakeApi = [
             [

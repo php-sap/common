@@ -3,6 +3,7 @@
 namespace tests\phpsap\classes\helper;
 
 use phpsap\classes\Util\JsonSerializable;
+use phpsap\interfaces\Util\IJsonSerializable;
 
 /**
  * Class PublicJsonSerializable
@@ -85,7 +86,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @return $this
      */
-    public static function jsonDecode($json): \phpsap\interfaces\Util\IJsonSerializable
+    public static function jsonDecode($json): IJsonSerializable
     {
         return parent::jsonDecode($json);
     }

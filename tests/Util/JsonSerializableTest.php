@@ -2,7 +2,10 @@
 
 namespace tests\phpsap\classes\Util;
 
+use phpsap\exceptions\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_AssertionFailedError;
+use PHPUnit_Framework_Exception;
 use stdClass;
 use phpsap\interfaces\Util\IJsonSerializable;
 use phpsap\classes\Util\JsonSerializable;
@@ -21,8 +24,8 @@ class JsonSerializableTest extends TestCase
 {
     /**
      * Test the class inheritance chain.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testInheritance()
     {
@@ -34,8 +37,8 @@ class JsonSerializableTest extends TestCase
 
     /**
      * Test the successful storage of data.
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws InvalidArgumentException
      */
     public function testSuccessfulDataStorage()
     {
@@ -106,9 +109,9 @@ class JsonSerializableTest extends TestCase
 
     /**
      * Test valid JSON objects to array conversion.
-     * @param \stdClass|array|string $obj
+     * @param stdClass|array|string $obj
      * @dataProvider provideValidJsonObjects
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function testValidJsonObjects($obj)
     {
@@ -147,7 +150,7 @@ class JsonSerializableTest extends TestCase
     public function testInvalidKeys($key)
     {
         $store = new PublicJsonSerializable();
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid key!');
         $store->has($key);
     }
@@ -159,7 +162,7 @@ class JsonSerializableTest extends TestCase
     {
         PublicJsonSerializable::$allowedKeys = [];
         $store = new PublicJsonSerializable();
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown key \'OdUoAAih\'!');
         $store->set('OdUoAAih', 4.867);
     }
@@ -171,7 +174,7 @@ class JsonSerializableTest extends TestCase
     {
         PublicJsonSerializable::$allowedKeys = ['AxiBKNAu'];
         $store = new PublicJsonSerializable();
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid value!');
         $store->set('AxiBKNAu', new stdClass());
     }
@@ -201,15 +204,15 @@ class JsonSerializableTest extends TestCase
     public function testSetInvalidArrays($data)
     {
         $store = new PublicJsonSerializable();
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid array!');
         $store->setMultiple($data);
     }
 
     /**
      * Test decoding a JSON encoded object.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testDecodingObjectFromJson()
     {
@@ -258,7 +261,7 @@ class JsonSerializableTest extends TestCase
      */
     public function testInvalidJsonToArray($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Invalid JSON! Expected JSON encoded tests\\phpsap\\classes\\helper\\PublicJsonSerializable string!'
         );
@@ -287,7 +290,7 @@ class JsonSerializableTest extends TestCase
      */
     public function testInvalidJsonObjectToArray($obj)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Invalid JSON object! Expected tests\\phpsap\\classes\\helper\\PublicJsonSerializable JSON object or array!'
         );

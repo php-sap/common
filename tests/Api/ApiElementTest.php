@@ -2,9 +2,12 @@
 
 namespace tests\phpsap\classes\Api;
 
+use Exception;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IStruct;
 use phpsap\interfaces\Api\ITable;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_Exception;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Api\IElement;
@@ -20,8 +23,8 @@ class ApiElementTest extends TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testConstructorAndInheritedClasses()
     {
@@ -58,7 +61,7 @@ class ApiElementTest extends TestCase
      */
     public function testNonStringTypes($type)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected API element type to be string!');
         new Element($type, 'FRWU81mQ');
     }
@@ -91,7 +94,7 @@ class ApiElementTest extends TestCase
      */
     public function testInvalidElementTypes($type)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected API element type to be in:');
         new Element($type, '9dnjz4WD');
     }
@@ -114,7 +117,7 @@ class ApiElementTest extends TestCase
      * Test valid element types.
      * @param string $type
      * @dataProvider provideValidElementTypes
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function testValidElementTypes($type)
     {
@@ -140,7 +143,7 @@ class ApiElementTest extends TestCase
      */
     public function testInvalidElementNames($name)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected API element name to be string!');
         new Element(Element::TYPE_STRING, $name);
     }
@@ -167,8 +170,8 @@ class ApiElementTest extends TestCase
      * @param string|int           $value
      * @param bool|int|float|strin $expected
      * @dataProvider provideTypecastData
-     * @throws \phpsap\exceptions\InvalidArgumentException
-     * @throws \Exception
+     * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function testTypecast($type, $value, $expected)
     {
@@ -179,7 +182,7 @@ class ApiElementTest extends TestCase
 
     /**
      * Test DateTime typed elements.
-     * @throws \Exception
+     * @throws Exception
      */
     public function testDateTimeElements()
     {
@@ -217,8 +220,8 @@ class ApiElementTest extends TestCase
 
     /**
      * Test JSON decode.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testJsonDecode()
     {
@@ -257,7 +260,7 @@ class ApiElementTest extends TestCase
      */
     public function testInvalidJson($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON! Expected JSON encoded phpsap\classes\Api\Element string!');
         Element::jsonDecode($json);
     }
@@ -286,7 +289,7 @@ class ApiElementTest extends TestCase
      */
     public function testInvalidJsonString($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON! Expected JSON encoded phpsap\classes\Api\Element string!');
         Element::jsonDecode($json);
     }
@@ -314,7 +317,7 @@ class ApiElementTest extends TestCase
      */
     public function testIncompleteJsonObjects($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Element is missing');
         Element::jsonDecode($json);
     }
@@ -344,7 +347,7 @@ class ApiElementTest extends TestCase
      */
     public function testNonArrayFromArray($input)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected array, but got');
         Element::fromArray($input);
     }

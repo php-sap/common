@@ -8,8 +8,12 @@ use phpsap\classes\Api\Struct;
 use phpsap\classes\Api\Table;
 use phpsap\classes\Api\Value;
 use phpsap\classes\Api\RemoteApi;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IApi;
+use phpsap\interfaces\Api\IValue;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_AssertionFailedError;
+use PHPUnit_Framework_Exception;
 use stdClass;
 
 /**
@@ -23,8 +27,8 @@ class RemoteApiTest extends TestCase
 {
     /**
      * Test for the inherited classes and interfaces.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testInheritance()
     {
@@ -39,7 +43,7 @@ class RemoteApiTest extends TestCase
     /**
      * Data provider for API values to add.
      * @return array
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function provideApiValue()
     {
@@ -69,10 +73,10 @@ class RemoteApiTest extends TestCase
 
     /**
      * Test adding API values and compare the JSON encoded output of the remote API.
-     * @param \phpsap\interfaces\Api\IValue $value    The value to add.
+     * @param IValue $value    The value to add.
      * @param string                        $expected The expected JSON output.
      * @dataProvider provideApiValue
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function testAddingAndEncodingApiValue($value, $expected)
     {
@@ -108,7 +112,7 @@ class RemoteApiTest extends TestCase
      */
     public function testInvalidConstructorParams($input)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected array of API values.');
         new RemoteApi($input);
     }
@@ -219,9 +223,9 @@ class RemoteApiTest extends TestCase
     /**
      * Test creating API class from an array.
      * @param array|string $config
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      * @dataProvider provideEncodedRemoteApi
      */
     public function testEncodedRemoteApi($config)
@@ -240,7 +244,7 @@ class RemoteApiTest extends TestCase
         static::assertFalse($value->isOptional());
         /**
          * Assert output value.
-         * @var \phpsap\classes\Api\Struct $struct
+         * @var Struct $struct
          */
         $outputValues = $api->getOutputValues();
         $struct = array_pop($outputValues);
@@ -251,8 +255,8 @@ class RemoteApiTest extends TestCase
         static::assertCount(2, $struct->getMembers());
         /**
          * Assert output struct members.
-         * @var \phpsap\classes\Api\Element $member1
-         * @var \phpsap\classes\Api\Element $member2
+         * @var Element $member1
+         * @var Element $member2
          * Explanation: array_pop() takes the last element out first (LIFO).
          */
         $members = $struct->getMembers();
@@ -274,8 +278,8 @@ class RemoteApiTest extends TestCase
         static::assertCount(2, $table->getMembers());
         /**
          * Assert table members.
-         * @var \phpsap\classes\Api\Element $member1
-         * @var \phpsap\classes\Api\Element $member2
+         * @var Element $member1
+         * @var Element $member2
          * Explanation: array_pop() takes the last element out first (LIFO).
          */
         $members = $table->getMembers();
@@ -319,7 +323,7 @@ class RemoteApiTest extends TestCase
      */
     public function testInvalidJson($value)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON!');
         RemoteApi::jsonDecode($value);
     }
@@ -336,7 +340,7 @@ class RemoteApiTest extends TestCase
                 'optional' => false
             ]
         ];
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('API Value is missing type.');
         new RemoteApi($def);
     }
@@ -354,7 +358,7 @@ class RemoteApiTest extends TestCase
                 'members' => []
             ]
         ];
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Struct is missing direction!');
         new RemoteApi($def);
     }

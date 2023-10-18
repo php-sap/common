@@ -2,8 +2,11 @@
 
 namespace tests\phpsap\classes\Api;
 
+use phpsap\exceptions\ArrayElementMissingException;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\ITable;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_Exception;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Api\IArray;
@@ -23,8 +26,8 @@ class TableTest extends TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testConstructorAndInheritance()
     {
@@ -66,7 +69,7 @@ class TableTest extends TestCase
      */
     public function testNonArrayMembers($members)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected API table members to be in an array!');
         new Table('ObFY2MbO', Table::DIRECTION_TABLE, true, $members);
     }
@@ -76,15 +79,15 @@ class TableTest extends TestCase
      */
     public function testNonIElementMembers()
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected API table members to be instances of IElement!');
         new Table('XPn2Pf2n', Table::DIRECTION_TABLE, true, [new stdClass()]);
     }
 
     /**
      * Test typecasting of table input.
-     * @throws \phpsap\exceptions\ArrayElementMissingException
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws ArrayElementMissingException
+     * @throws InvalidArgumentException
      */
     public function testTableCast()
     {
@@ -148,15 +151,15 @@ class TableTest extends TestCase
                 '4Bxn9DJV' => '311'
             ]
         ];
-        $this->expectException(\phpsap\exceptions\ArrayElementMissingException::class);
+        $this->expectException(ArrayElementMissingException::class);
         $this->expectExceptionMessage('Element IlRdvEQp in table MLOWwQXa is missing!');
         $table->cast($raw);
     }
 
     /**
      * Test JSON decode.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testJsonDecode()
     {
@@ -172,7 +175,7 @@ class TableTest extends TestCase
         $members = $element->getMembers();
         foreach ($members as $member) {
             /**
-             * @var \phpsap\interfaces\Api\IElement $member
+             * @var IElement $member
              */
             static::assertSame(Table::TYPE_BOOLEAN, $member->getType());
             static::assertSame('MievIEPs', $member->getName());
@@ -186,7 +189,7 @@ class TableTest extends TestCase
      */
     public function testInvalidJson($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON! Expected JSON encoded phpsap\classes\Api\Table string!');
         Table::jsonDecode($json);
     }
@@ -198,7 +201,7 @@ class TableTest extends TestCase
      */
     public function testIncompleteJson($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Table is missing');
         Table::jsonDecode($json);
     }
@@ -224,7 +227,7 @@ class TableTest extends TestCase
      */
     public function testJsonDecodeInvalidDirection($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: API Table direction is not table!');
         Table::jsonDecode($json);
     }
@@ -254,7 +257,7 @@ class TableTest extends TestCase
      */
     public function testJsonDecodeInvalidType($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: API Table type is not an array!');
         Table::jsonDecode($json);
     }
@@ -286,7 +289,7 @@ class TableTest extends TestCase
      */
     public function testJsonDecodeInvalidMembers($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: API Table members are not an array!');
         Table::jsonDecode($json);
     }
@@ -298,7 +301,7 @@ class TableTest extends TestCase
      */
     public function testNonArrayFromArray($input)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected array, but got');
         Table::fromArray($input);
     }

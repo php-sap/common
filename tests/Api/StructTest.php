@@ -2,8 +2,12 @@
 
 namespace tests\phpsap\classes\Api;
 
+use phpsap\exceptions\ArrayElementMissingException;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IStruct;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_AssertionFailedError;
+use PHPUnit_Framework_Exception;
 use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Api\IArray;
@@ -23,9 +27,9 @@ class StructTest extends TestCase
 {
     /**
      * Test the constructor and the inherited classes and interfaces.
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testConstructorAndInheritance()
     {
@@ -86,15 +90,15 @@ class StructTest extends TestCase
      */
     public function testNonArrayMembers($members)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected API struct members to be in an array!');
         new Struct('9rlCO8It', Struct::DIRECTION_INPUT, false, $members);
     }
 
     /**
      * Test typecasting of struct input
-     * @throws \phpsap\exceptions\InvalidArgumentException
-     * @throws \phpsap\exceptions\ArrayElementMissingException
+     * @throws InvalidArgumentException
+     * @throws ArrayElementMissingException
      */
     public function testStructCast()
     {
@@ -124,7 +128,7 @@ class StructTest extends TestCase
 
     /**
      * Test casting raw data with an element missing.
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function testStructCastMissingElement()
     {
@@ -136,7 +140,7 @@ class StructTest extends TestCase
             'z7bq9TYE' => '6.84',
             'aPxweADp' => 'X34kVegj'
         ];
-        $this->expectException(\phpsap\exceptions\ArrayElementMissingException::class);
+        $this->expectException(ArrayElementMissingException::class);
         $this->expectExceptionMessage('Element pUDY31My in struct 1M9enD5H is missing!');
         $struct->cast($raw);
     }
@@ -146,15 +150,15 @@ class StructTest extends TestCase
      */
     public function testNonIElementMembers()
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected API struct members to be instances of IElement!');
         new Struct('1M9enD5H', Struct::DIRECTION_OUTPUT, true, [new stdClass()]);
     }
 
     /**
      * Test JSON decode.
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \phpsap\exceptions\InvalidArgumentException
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidArgumentException
      */
     public function testJsonDecode()
     {
@@ -170,7 +174,7 @@ class StructTest extends TestCase
         $members = $element->getMembers();
         foreach ($members as $member) {
             /**
-             * @var \phpsap\interfaces\Api\IElement $member
+             * @var IElement $member
              */
             static::assertSame(Struct::TYPE_INTEGER, $member->getType());
             static::assertSame('lnrxpRjh', $member->getName());
@@ -184,7 +188,7 @@ class StructTest extends TestCase
      */
     public function testInvalidJson($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON!');
         Struct::jsonDecode($json);
     }
@@ -207,7 +211,7 @@ class StructTest extends TestCase
      */
     public function testIncompleteJson($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Struct is missing');
         Struct::jsonDecode($json);
     }
@@ -237,7 +241,7 @@ class StructTest extends TestCase
      */
     public function testJsonDecodeInvalidStruct($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: API Struct type is not an array!');
         Struct::jsonDecode($json);
     }
@@ -269,7 +273,7 @@ class StructTest extends TestCase
      */
     public function testJsonDecodeInvalidMembers($json)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: API Struct members are not an array!');
         Struct::jsonDecode($json);
     }
@@ -281,7 +285,7 @@ class StructTest extends TestCase
      */
     public function testNonArrayFromArray($input)
     {
-        $this->expectException(\phpsap\exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected array, but got');
         Struct::fromArray($input);
     }

@@ -63,7 +63,7 @@ class JsonSerializable implements IJsonSerializable
      * @param array|null $data Associative array of keys and values to set.
      * @throws InvalidArgumentException
      */
-    public function __construct($data = null)
+    public function __construct(array $data = null)
     {
         $this->reset();
         if ($data !== null) {
@@ -85,7 +85,7 @@ class JsonSerializable implements IJsonSerializable
      * @return bool
      * @throws InvalidArgumentException
      */
-    protected function has($key): bool
+    protected function has(string $key): bool
     {
         return property_exists($this->data, $this->validateKey($key));
     }
@@ -96,7 +96,7 @@ class JsonSerializable implements IJsonSerializable
      * @return null|bool|int|float|string|array The value of the key, or null in case the key didn't exist.
      * @throws InvalidArgumentException
      */
-    protected function get($key)
+    protected function get(string $key)
     {
         if ($this->has($key)) {
             return $this->data->{$key};
@@ -106,11 +106,11 @@ class JsonSerializable implements IJsonSerializable
 
     /**
      * Set the given key to the given value in the data.
-     * @param string                      $key    The key to set the value for.
+     * @param string $key    The key to set the value for.
      * @param bool|int|float|string|array $value  The value to set.
      * @throws InvalidArgumentException
      */
-    protected function set($key, $value)
+    protected function set(string $key, $value)
     {
         if ($value === null) {
             $this->remove($key);
@@ -129,14 +129,8 @@ class JsonSerializable implements IJsonSerializable
      * @param array $data Associative array of keys and values to set.
      * @throws InvalidArgumentException
      */
-    protected function setMultiple($data)
+    protected function setMultiple(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid array! Expected data to be an array, but got %s!',
-                gettype($data)
-            ));
-        }
         foreach ($this->getAllowedKeys() as $key) {
             if (array_key_exists($key, $data)) {
                 $this->setValue($key, $data[$key]);
@@ -151,7 +145,7 @@ class JsonSerializable implements IJsonSerializable
      * @param mixed $value The value to set.
      * @throws InvalidArgumentException
      */
-    private function setValue($key, $value)
+    private function setValue(string $key, $value)
     {
         if (!in_array(gettype($value), $this->getAllowedDataTypes(), true)) {
             throw new InvalidArgumentException(sprintf(
@@ -168,7 +162,7 @@ class JsonSerializable implements IJsonSerializable
      * @param string $key The key to remove.
      * @throws InvalidArgumentException
      */
-    protected function remove($key)
+    protected function remove(string $key)
     {
         if ($this->has($key)) {
             unset($this->data->{$key});
@@ -195,18 +189,12 @@ class JsonSerializable implements IJsonSerializable
     /**
      * Validate key names.
      * Only strings containing alphanumeric characters are allowed as keys.
-     * @param mixed $key
+     * @param string $key
      * @return string
      * @throws InvalidArgumentException
      */
-    private function validateKey($key): string
+    private function validateKey(string $key): string
     {
-        if (!is_string($key)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid key! Expected key to be string, but got %s!',
-                gettype($key)
-            ));
-        }
         if (!preg_match('~^[a-z\d_\-]+$~i', $key, $matches)) {
             throw new InvalidArgumentException(
                 'Invalid key! Key must contain only alphanumeric characters!'
@@ -221,7 +209,7 @@ class JsonSerializable implements IJsonSerializable
      * @return $this
      * @throws InvalidArgumentException
      */
-    public static function jsonDecode($json): IJsonSerializable
+    public static function jsonDecode(string $json): IJsonSerializable
     {
         $array = self::jsonToArray($json);
         return new static($array);
@@ -234,13 +222,11 @@ class JsonSerializable implements IJsonSerializable
      *                    was an error.
      * @throws InvalidArgumentException
      */
-    protected static function jsonToArray($json): ?array
+    protected static function jsonToArray(string $json): ?array
     {
-        if (is_string($json)) {
-            $array = json_decode($json, true);
-            if (is_array($array)) {
-                return $array;
-            }
+        $array = json_decode($json, true);
+        if (is_array($array)) {
+            return $array;
         }
         throw new InvalidArgumentException(sprintf(
             'Invalid JSON! Expected JSON encoded %s string!',

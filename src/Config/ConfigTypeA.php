@@ -62,7 +62,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setAshost($ashost): IConfigTypeA
+    public function setAshost(string $ashost): IConfigTypeA
     {
         $this->set(self::JSON_ASHOST, $ashost);
         return $this;
@@ -94,7 +94,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setSysnr($sysnr): IConfigTypeA
+    public function setSysnr(string $sysnr): IConfigTypeA
     {
         $this->set(self::JSON_SYSNR, $sysnr);
         return $this;
@@ -119,7 +119,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setGwhost($gwhost): IConfigTypeA
+    public function setGwhost(string $gwhost): IConfigTypeA
     {
         $this->set(self::JSON_GWHOST, $gwhost);
         return $this;
@@ -144,7 +144,7 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setGwserv($gwserv): IConfigTypeA
+    public function setGwserv(string $gwserv): IConfigTypeA
     {
         $this->set(self::JSON_GWSERV, $gwserv);
         return $this;

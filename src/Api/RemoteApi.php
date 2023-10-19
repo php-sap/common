@@ -70,7 +70,7 @@ class RemoteApi implements IApi
      * @return array
      * @throws InvalidArgumentException
      */
-    protected function getValues($direction): array
+    protected function getValues(string $direction): array
     {
         $result = [];
         foreach ($this->data as $value) {
@@ -89,14 +89,8 @@ class RemoteApi implements IApi
      * @param array|null $values Array of remote API elements. Default: null
      * @throws InvalidArgumentException
      */
-    public function __construct($values = null)
+    public function __construct(array $values = [])
     {
-        if ($values === null) {
-            $values = [];
-        }
-        if (!is_array($values)) {
-            throw new InvalidArgumentException('Expected array of API values.');
-        }
         foreach ($values as $value) {
             /**
              * Call type-specific constructors from the array.
@@ -111,7 +105,7 @@ class RemoteApi implements IApi
      * @return IValue
      * @throws InvalidArgumentException
      */
-    private function constructValue($value): IValue
+    private function constructValue(array $value): IValue
     {
         if (!array_key_exists(Value::JSON_TYPE, $value)) {
             throw new InvalidArgumentException('API Value is missing type.');
@@ -131,19 +125,17 @@ class RemoteApi implements IApi
      * @return RemoteApi
      * @throws InvalidArgumentException
      */
-    public static function jsonDecode($json): IJsonSerializable
+    public static function jsonDecode(string $json): IJsonSerializable
     {
-        if (is_string($json)) {
-            $array = json_decode($json, true);
-            if (is_array($array)) {
-                try {
-                    return new self($array);
-                } catch (InvalidArgumentException $exception) {
-                    throw new InvalidArgumentException(sprintf(
-                        'Invalid JSON! %s',
-                        $exception->getMessage()
-                    ));
-                }
+        $array = json_decode($json, true);
+        if (is_array($array)) {
+            try {
+                return new self($array);
+            } catch (InvalidArgumentException $exception) {
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid JSON! %s',
+                    $exception->getMessage()
+                ));
             }
         }
         throw new InvalidArgumentException(sprintf(

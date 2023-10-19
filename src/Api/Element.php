@@ -50,7 +50,7 @@ class Element extends JsonSerializable implements IElement
      * @param string $name API element name.
      * @throws InvalidArgumentException
      */
-    public function __construct($type, $name)
+    public function __construct(string $type, string $name)
     {
         parent::__construct();
         $this->setType($type);
@@ -88,13 +88,8 @@ class Element extends JsonSerializable implements IElement
      * @param string $type
      * @throws InvalidArgumentException
      */
-    protected function setType($type)
+    protected function setType(string $type)
     {
-        if (!is_string($type)) {
-            throw new InvalidArgumentException(
-                'Expected API element type to be string!'
-            );
-        }
         if (!in_array($type, static::$allowedTypes, true)) {
             throw new InvalidArgumentException(sprintf(
                 'Expected API element type to be in: %s!',
@@ -109,14 +104,14 @@ class Element extends JsonSerializable implements IElement
      * @param string $name
      * @throws InvalidArgumentException
      */
-    protected function setName($name)
+    protected function setName(string $name)
     {
-        if (!is_string($name) || $name === '') {
+        if (trim($name) === '') {
             throw new InvalidArgumentException(
                 'Expected API element name to be string!'
             );
         }
-        $this->set(self::JSON_NAME, $name);
+        $this->set(self::JSON_NAME, trim($name));
     }
 
     /**
@@ -169,7 +164,7 @@ class Element extends JsonSerializable implements IElement
      * @return Element
      * @throws InvalidArgumentException
      */
-    public static function fromArray($array): Element
+    public static function fromArray(array $array): Element
     {
         static::fromArrayValidation($array);
         return new self($array[self::JSON_TYPE], $array[self::JSON_NAME]);
@@ -177,17 +172,11 @@ class Element extends JsonSerializable implements IElement
 
     /**
      * Validate the array for fromArray().
-     * @param mixed $array
+     * @param array $array
      * @throws InvalidArgumentException
      */
-    protected static function fromArrayValidation($array)
+    protected static function fromArrayValidation(array $array)
     {
-        if (!is_array($array)) {
-            throw new InvalidArgumentException(sprintf(
-                'Expected array, but got \'%s\'!',
-                gettype($array)
-            ));
-        }
         foreach (static::$allowedKeys as $key) {
             if (!array_key_exists($key, $array)) {
                 throw new InvalidArgumentException(sprintf(
@@ -205,7 +194,7 @@ class Element extends JsonSerializable implements IElement
      * @return Element
      * @throws InvalidArgumentException
      */
-    public static function jsonDecode($json): IJsonSerializable
+    public static function jsonDecode(string $json): IJsonSerializable
     {
         $array = static::jsonToArray($json);
         return static::fromArray($array);

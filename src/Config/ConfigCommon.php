@@ -57,7 +57,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setUser($user): IConfigCommon
+    public function setUser(string $user): IConfigCommon
     {
         $this->set(self::JSON_USER, $user);
         return $this;
@@ -89,7 +89,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setPasswd($passwd): IConfigCommon
+    public function setPasswd(string $passwd): IConfigCommon
     {
         $this->set(self::JSON_PASSWD, $passwd);
         return $this;
@@ -121,7 +121,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setClient($client): IConfigCommon
+    public function setClient(string $client): IConfigCommon
     {
         $this->set(self::JSON_CLIENT, $client);
         return $this;
@@ -150,13 +150,9 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setSaprouter($saprouter): IConfigCommon
+    public function setSaprouter(string $saprouter): IConfigCommon
     {
-        if (
-            $saprouter !== null
-            && (!is_string($saprouter)
-            || !preg_match('~^/H/[a-z\d.\-]+/S/[\d]+/H/$~i', $saprouter))
-        ) {
+        if (!preg_match('~^/H/[a-z\d.\-]+/S/[\d]+/H/$~i', $saprouter)) {
             throw new InvalidArgumentException(
                 'Expected SAPROUTER to be in following format: '
                 . '/H/<hostname>/S/<portnumber>/H/'
@@ -185,12 +181,9 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setTrace($trace): IConfigCommon
+    public function setTrace(int $trace): IConfigCommon
     {
-        if (
-            $trace !== null
-            && (!is_int($trace) || $trace > self::TRACE_FULL || $trace < self::TRACE_OFF)
-        ) {
+        if ($trace > self::TRACE_FULL || $trace < self::TRACE_OFF) {
             throw new InvalidArgumentException(
                 'The trace level can only be 0-3!'
             );
@@ -224,7 +217,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setCodepage($codepage): IConfigCommon
+    public function setCodepage(int $codepage): IConfigCommon
     {
         $this->set(self::JSON_CODEPAGE, $codepage);
         return $this;
@@ -249,12 +242,9 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setLang($lang): IConfigCommon
+    public function setLang(string $lang): IConfigCommon
     {
-        if (
-            $lang !== null
-            && (!is_string($lang) || !preg_match('~^[A-Z]{2}$~', $lang))
-        ) {
+        if (!preg_match('~^[A-Z]{2}$~', $lang)) {
             throw new InvalidArgumentException(
                 'Expected two letter country code as language!'
             );
@@ -282,7 +272,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setDest($dest): IConfigCommon
+    public function setDest(string $dest): IConfigCommon
     {
         $this->set(self::JSON_DEST, $dest);
         return $this;

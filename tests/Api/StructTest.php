@@ -66,37 +66,6 @@ class StructTest extends TestCase
     }
 
     /**
-     * Data provider for non-arrays.
-     * @return array
-     */
-    public static function provideNonArrays(): array
-    {
-        return [
-            ['array'],
-            [1],
-            [0],
-            [448],
-            [67.2],
-            [true],
-            [false],
-            [null],
-            [new stdClass()]
-        ];
-    }
-
-    /**
-     * Test non-array members.
-     * @param mixed $members
-     * @dataProvider provideNonArrays
-     */
-    public function testNonArrayMembers($members)
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected API struct members to be in an array!');
-        new Struct('9rlCO8It', Struct::DIRECTION_INPUT, false, $members);
-    }
-
-    /**
      * Test typecasting of struct input
      * @throws ArrayElementMissingException
      * @throws ExpectationFailedException
@@ -281,17 +250,5 @@ class StructTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: API Struct members are not an array!');
         Struct::jsonDecode($json);
-    }
-
-    /**
-     * Test fromArray() using non-array input.
-     * @param mixed $input
-     * @dataProvider \tests\phpsap\classes\Api\ApiElementTest::provideNonArray
-     */
-    public function testNonArrayFromArray($input)
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected array, but got');
-        Struct::fromArray($input);
     }
 }

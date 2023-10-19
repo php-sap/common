@@ -86,8 +86,6 @@ class ConfigCommonTest extends TestCase
             [7725],
             [85.07],
             [true],
-            [false],
-            [new stdClass()]
         ];
     }
 
@@ -110,24 +108,17 @@ class ConfigCommonTest extends TestCase
     public static function provideInvalidTraceValues(): array
     {
         return [
-            [''],
-            ['5TLzxcsUZr'],
             [4811],
             [-1],
-            [1.126],
-            [true],
-            [false],
-            [new stdClass()],
-            [[ConfigCommon::TRACE_BRIEF]]
         ];
     }
 
     /**
      * Test invalid trace values.
-     * @param mixed $value
+     * @param int $value
      * @dataProvider provideInvalidTraceValues
      */
-    public function testInvalidTraceValues($value)
+    public function testInvalidTraceValues(int $value)
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The trace level can only be 0-3!');
@@ -147,8 +138,6 @@ class ConfigCommonTest extends TestCase
             [99.02],
             [true],
             [false],
-            [new stdClass()],
-            [['EN']]
         ];
     }
 

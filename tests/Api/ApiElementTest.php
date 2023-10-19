@@ -39,36 +39,6 @@ class ApiElementTest extends TestCase
     }
 
     /**
-     * Data provider for non-string parameters.
-     * @return array
-     */
-    public static function provideNonStrings(): array
-    {
-        return [
-            [0],
-            [1],
-            [1.5],
-            [true],
-            [false],
-            [null],
-            [[Element::TYPE_STRING]],
-            [new stdClass()]
-        ];
-    }
-
-    /**
-     * Test non-string parameters for element types.
-     * @param mixed $type
-     * @dataProvider provideNonStrings
-     */
-    public function testNonStringTypes($type)
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected API element type to be string!');
-        new Element($type, 'FRWU81mQ');
-    }
-
-    /**
      * Data provider for invalid element types.
      * @return array
      */
@@ -135,9 +105,10 @@ class ApiElementTest extends TestCase
      */
     public static function provideInvalidElementNames(): array
     {
-        $return = static::provideNonStrings();
-        $return[] = [''];
-        return $return;
+        return [
+            [''],
+            ["\t"],
+        ];
     }
 
     /**
@@ -246,18 +217,11 @@ class ApiElementTest extends TestCase
      */
     public static function provideInvalidJson(): array
     {
-        $cfg = new stdClass();
-        $cfg->name = 'MqUyFBxx';
-        $cfg->type = 'string';
         return [
             [735],
             [5.9],
             [true],
             [false],
-            [null],
-            [['name' => 'skyhCVIE', 'type' => 'string']],
-            [new stdClass()],
-            [$cfg]
         ];
     }
 
@@ -328,35 +292,5 @@ class ApiElementTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Element is missing');
         Element::jsonDecode($json);
-    }
-
-    /**
-     * Data provider for non-array type values.
-     * @return array
-     */
-    public static function provideNonArray(): array
-    {
-        return [
-            ['dNtKMbKSJ8'],
-            [''],
-            [89492],
-            [83.5],
-            [true],
-            [false],
-            ['[]'],
-            [new stdClass()]
-        ];
-    }
-
-    /**
-     * Test fromArray() using non-array input.
-     * @param mixed $input
-     * @dataProvider provideNonArray
-     */
-    public function testNonArrayFromArray($input)
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected array, but got');
-        Element::fromArray($input);
     }
 }

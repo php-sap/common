@@ -54,7 +54,7 @@ class Struct extends Value implements IStruct
      * @param array  $members    Array of Elements as the members of the struct.
      * @throws InvalidArgumentException
      */
-    public function __construct($name, $direction, $isOptional, $members)
+    public function __construct(string $name, string $direction, bool $isOptional, array $members)
     {
         parent::__construct(self::TYPE_STRUCT, $name, $direction, $isOptional);
         $this->setMembers($members);
@@ -104,13 +104,8 @@ class Struct extends Value implements IStruct
      * @param array $members
      * @throws InvalidArgumentException
      */
-    protected function setMembers($members)
+    protected function setMembers(array $members)
     {
-        if (!is_array($members)) {
-            throw new InvalidArgumentException(
-                'Expected API struct members to be in an array!'
-            );
-        }
         foreach ($members as $member) {
             if (!$member instanceof IElement) {
                 throw new InvalidArgumentException(
@@ -128,7 +123,7 @@ class Struct extends Value implements IStruct
      * @return Struct
      * @throws InvalidArgumentException
      */
-    public static function fromArray($array): Struct
+    public static function fromArray(array $array): Struct
     {
         static::fromArrayValidation($array);
         if ($array[self::JSON_TYPE] !== self::TYPE_STRUCT) {

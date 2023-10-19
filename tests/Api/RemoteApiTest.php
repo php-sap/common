@@ -89,37 +89,6 @@ class RemoteApiTest extends TestCase
     }
 
     /**
-     * Data provider for invalid constructor parameters.
-     * @return array
-     */
-    public static function provideInvalidConstructorParams(): array
-    {
-        return [
-            [''],
-            ['[]'],
-            ['{}'],
-            ['dJwVRbnAsy'],
-            [83111],
-            [1.99],
-            [true],
-            [false],
-            [new stdClass()]
-        ];
-    }
-
-    /**
-     * Test invalid constructor parameters.
-     * @param mixed $input
-     * @dataProvider provideInvalidConstructorParams
-     */
-    public function testInvalidConstructorParams($input)
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected array of API values.');
-        new RemoteApi($input);
-    }
-
-    /**
      * Data provider for encoded remote APIs.
      * @return array
      */
@@ -300,8 +269,6 @@ class RemoteApiTest extends TestCase
      */
     public static function provideInvalidJson(): array
     {
-        $table = new stdClass();
-        $table->type = Table::TYPE_TABLE;
         return [
             [''],
             [' '],
@@ -313,8 +280,6 @@ class RemoteApiTest extends TestCase
             [2.3],
             [true],
             [false],
-            [new stdClass()],
-            [$table],
             ['[{"type":"string","name":"70PSpu7dcO","optional":true}]']
         ];
     }

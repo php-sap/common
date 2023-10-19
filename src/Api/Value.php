@@ -40,10 +40,10 @@ class Value extends Element implements IValue
      * @param string $type       Either string, int, float, bool or array
      * @param string $name       API value name.
      * @param string $direction  Either input, output or table.
-     * @param bool   $isOptional Is the API value optional?
+     * @param bool $isOptional Is the API value optional?
      * @throws InvalidArgumentException
      */
-    public function __construct($type, $name, $direction, $isOptional)
+    public function __construct(string $type, string $name, string $direction, bool $isOptional)
     {
         parent::__construct($type, $name);
         $this->setDirection($direction);
@@ -81,13 +81,8 @@ class Value extends Element implements IValue
      * @param string $direction
      * @throws InvalidArgumentException
      */
-    protected function setDirection($direction)
+    protected function setDirection(string $direction)
     {
-        if (!is_string($direction)) {
-            throw new InvalidArgumentException(
-                'Expected API value direction to be string!'
-            );
-        }
         if (!in_array($direction, static::$allowedDirections, true)) {
             throw new InvalidArgumentException(sprintf(
                 'Expected API value direction to be in: %s!',
@@ -102,13 +97,8 @@ class Value extends Element implements IValue
      * @param bool $isOptional
      * @throws InvalidArgumentException
      */
-    protected function setOptional($isOptional)
+    protected function setOptional(bool $isOptional)
     {
-        if (!is_bool($isOptional)) {
-            throw new InvalidArgumentException(
-                'Expected API value isOptional flag to be boolean!'
-            );
-        }
         $this->set(self::JSON_OPTIONAL, $isOptional);
     }
 
@@ -118,7 +108,7 @@ class Value extends Element implements IValue
      * @return Value
      * @throws InvalidArgumentException
      */
-    public static function fromArray($array): Value
+    public static function fromArray(array $array): Value
     {
         static::fromArrayValidation($array);
         return new self(

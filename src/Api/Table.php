@@ -53,7 +53,7 @@ class Table extends Value implements ITable
      * @param array  $members    Array of Elements as the columns of the table.
      * @throws InvalidArgumentException
      */
-    public function __construct($name, $direction, $isOptional, $members)
+    public function __construct(string $name, string $direction, bool $isOptional, array $members)
     {
         parent::__construct(self::TYPE_TABLE, $name, $direction, $isOptional);
         $this->setMembers($members);
@@ -68,6 +68,14 @@ class Table extends Value implements ITable
      */
     public function cast($value): array
     {
+        if (!is_array($value)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Expected table cast to be array, %s given!',
+                    gettype($value)
+                )
+            );
+        }
         foreach ($value as &$row) {
             foreach ($this->getMembers() as $member) {
                 /**
@@ -106,13 +114,8 @@ class Table extends Value implements ITable
      * @param array $members
      * @throws InvalidArgumentException
      */
-    protected function setMembers($members)
+    protected function setMembers(array $members)
     {
-        if (!is_array($members)) {
-            throw new InvalidArgumentException(
-                'Expected API table members to be in an array!'
-            );
-        }
         foreach ($members as $member) {
             if (!$member instanceof IElement) {
                 throw new InvalidArgumentException(
@@ -130,7 +133,7 @@ class Table extends Value implements ITable
      * @return Table
      * @throws InvalidArgumentException
      */
-    public static function fromArray($array): Table
+    public static function fromArray(array $array): Table
     {
         static::fromArrayValidation($array);
         if ($array[self::JSON_DIRECTION] !== self::DIRECTION_TABLE) {

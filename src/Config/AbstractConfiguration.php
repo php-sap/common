@@ -55,7 +55,7 @@ abstract class AbstractConfiguration extends JsonSerializable implements IConfig
      * @return ConfigTypeA|ConfigTypeB
      * @throws InvalidArgumentException
      */
-    public static function jsonDecode($json): IJsonSerializable
+    public static function jsonDecode(string $json): IJsonSerializable
     {
         $config = static::jsonToArray($json);
         if (

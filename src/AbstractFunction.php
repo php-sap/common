@@ -103,14 +103,14 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @param string $name
      * @throws InvalidArgumentException
      */
-    private function setName($name)
+    private function setName(string $name)
     {
-        if (!is_string($name) || empty(trim($name))) {
+        if (trim($name) === '') {
             throw new InvalidArgumentException(
                 'Missing or malformed SAP remote function name'
             );
         }
-        $this->name = $name;
+        $this->name = trim($name);
     }
 
     /**
@@ -193,7 +193,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @return array|bool|float|int|string
      * @throws InvalidArgumentException
      */
-    public function getParam($key)
+    public function getParam(string $key)
     {
         return $this->get($key);
     }
@@ -209,12 +209,12 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
 
     /**
      * Set a single SAP remote function call parameter.
-     * @param string                      $key   Name of the parameter to set.
+     * @param string $key   Name of the parameter to set.
      * @param bool|int|float|string|array $value Value of the parameter.
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setParam($key, $value): AbstractFunction
+    public function setParam(string $key, $value): AbstractFunction
     {
         $this->set($key, $value);
         return $this;
@@ -282,7 +282,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @throws IUnknownFunctionException
      * @throws InvalidArgumentException
      */
-    public static function jsonDecode($json): IJsonSerializable
+    public static function jsonDecode(string $json): IJsonSerializable
     {
         $array = static::jsonToArray($json);
         if (

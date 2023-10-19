@@ -138,11 +138,7 @@ class JsonSerializableTest extends TestCase
             [' '],
             ['dY1 Us-xO_L5H'],
             ['phoj.hbd.tcf'],
-            [true],
             [false],
-            [null],
-            [new stdClass()],
-            [['k6aomsm9vb']]
         ];
     }
 
@@ -181,36 +177,6 @@ class JsonSerializableTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid value!');
         $store->set('AxiBKNAu', new stdClass());
-    }
-
-    /**
-     * Data provider for invalid arrays.
-     * @return array
-     */
-    public static function provideInvalidArrays(): array
-    {
-        return [
-            ['nB47gijE'],
-            [7],
-            [5.2],
-            [true],
-            [false],
-            [null],
-            [new stdClass()]
-        ];
-    }
-
-    /**
-     * Test to set an invalid value.
-     * @param mixed $data
-     * @dataProvider provideInvalidArrays
-     */
-    public function testSetInvalidArrays($data)
-    {
-        $store = new PublicJsonSerializable();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid array!');
-        $store->setMultiple($data);
     }
 
     /**
@@ -254,9 +220,6 @@ class JsonSerializableTest extends TestCase
             [8.041],
             [true],
             [false],
-            [null],
-            [new stdClass()],
-            [['kSFjubPU' => 14.6]]
         ];
     }
 

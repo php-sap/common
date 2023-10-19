@@ -61,7 +61,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setMshost($mshost): IConfigTypeB
+    public function setMshost(string $mshost): IConfigTypeB
     {
         $this->set(self::JSON_MSHOST, $mshost);
         return $this;
@@ -86,7 +86,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setR3name($r3name): IConfigTypeB
+    public function setR3name(string $r3name): IConfigTypeB
     {
         $this->set(self::JSON_R3NAME, $r3name);
         return $this;
@@ -111,7 +111,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setGroup($group): IConfigTypeB
+    public function setGroup(string $group): IConfigTypeB
     {
         $this->set(self::JSON_GROUP, $group);
         return $this;

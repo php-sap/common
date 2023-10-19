@@ -60,13 +60,7 @@ class AbstractFunctionTest extends TestCase
         return [
             [''],
             [' '],
-            [198],
-            [7.5],
-            [true],
             [false],
-            [null],
-            [['yqWNyvJm']],
-            [new stdClass()]
         ];
     }
 
@@ -485,11 +479,6 @@ class AbstractFunctionTest extends TestCase
                 '"api":[{"type":"string","name":"rgVjZtqB","direction":"input","optional":false}],'
                 . '"params":{"dvPoAdYG":"CLsVlAje"}}'
             ],
-            [
-                '{"name":"rgVjZtqB",'
-                . '"api":"RckvpiOa",'
-                . '"params":{"dvPoAdYG":"CLsVlAje"}}'
-            ],
         ];
     }
 
@@ -505,8 +494,6 @@ class AbstractFunctionTest extends TestCase
      */
     public function testInvalidJson($json)
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON!');
         AbstractFunctionInstance::$fakeApi = [
             [
                 Value::JSON_NAME => 'JBBIPySA',
@@ -515,6 +502,8 @@ class AbstractFunctionTest extends TestCase
                 Value::JSON_OPTIONAL => false
             ]
         ];
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid JSON!');
         AbstractFunctionInstance::jsonDecode($json);
     }
 }

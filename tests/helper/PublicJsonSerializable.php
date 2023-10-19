@@ -31,7 +31,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function has($key): bool
+    public function has(string $key): bool
     {
         return parent::has($key);
     }
@@ -40,7 +40,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function get($key)
+    public function get(string $key)
     {
         return parent::get($key);
     }
@@ -49,7 +49,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function set($key, $value)
+    public function set(string $key, $value)
     {
         parent::set($key, $value);
     }
@@ -58,7 +58,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function setMultiple($data)
+    public function setMultiple(array $data)
     {
         parent::setMultiple($data);
     }
@@ -67,7 +67,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function remove($key)
+    public function remove(string $key)
     {
         parent::remove($key);
     }
@@ -76,7 +76,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public static function jsonToArray($json): ?array
+    public static function jsonToArray(string $json): ?array
     {
         return parent::jsonToArray($json);
     }
@@ -94,7 +94,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @return $this
      */
-    public static function jsonDecode($json): IJsonSerializable
+    public static function jsonDecode(string $json): IJsonSerializable
     {
         return parent::jsonDecode($json);
     }

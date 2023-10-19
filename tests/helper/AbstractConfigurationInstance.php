@@ -29,19 +29,19 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * @throws InvalidArgumentException
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function get($key)
+    public function get(string $key)
     {
         return parent::get($key);
     }
 
     /**
      * Sets a configuration value for a given key.
-     * @param string     $key
+     * @param string $key
      * @param string|int $value
      * @throws InvalidArgumentException In case of an invalid configuration key or value.
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function set($key, $value)
+    public function set(string $key, $value)
     {
         parent::set($key, $value);
     }
@@ -52,7 +52,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * @throws InvalidArgumentException
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function remove($key)
+    public function remove(string $key)
     {
         parent::remove($key);
     }
@@ -64,7 +64,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * @throws InvalidArgumentException
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function has($key): bool
+    public function has(string $key): bool
     {
         return parent::has($key);
     }

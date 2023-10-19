@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpsap\classes;
 
 use phpsap\classes\Api\RemoteApi;

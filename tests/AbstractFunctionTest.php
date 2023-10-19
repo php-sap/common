@@ -60,7 +60,7 @@ class AbstractFunctionTest extends TestCase
         return [
             [''],
             [' '],
-            [false],
+            ["\t"],
         ];
     }
 

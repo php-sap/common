@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpsap\classes\Api;
 
 use phpsap\classes\Util\JsonSerializable;

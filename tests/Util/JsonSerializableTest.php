@@ -176,6 +176,7 @@ class JsonSerializableTest extends TestCase
         $store = new PublicJsonSerializable();
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid value!');
+        /** @noinspection PhpParamsInspection */
         $store->set('AxiBKNAu', new stdClass());
     }
 

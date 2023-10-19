@@ -123,6 +123,7 @@ class ApiValueTest extends TestCase
         $return[] = ['{"type":"int","name":"TRD2cpKy"}'];
         $return[] = ['{"type":true,"name":"H5vNFNkl","optional":true}'];
         $return[] = ['{"type":"int","name":711,"direction":"output"}'];
+        /** @noinspection PhpObjectFieldsAreOnlyWrittenInspection */
         $obj = new stdClass();
         $obj->type = Value::TYPE_BOOLEAN;
         $obj->name = '9vQWkdZF';

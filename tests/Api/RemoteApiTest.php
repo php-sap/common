@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\phpsap\classes;
+namespace tests\phpsap\classes\Api;
 
 use JsonSerializable;
 use phpsap\classes\Api\Element;

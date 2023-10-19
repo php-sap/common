@@ -3,6 +3,7 @@
 namespace phpsap\exceptions;
 
 use phpsap\interfaces\exceptions\ISapException;
+use RuntimeException;
 
 /**
  * Class phpsap\exceptions\SapRuntimeException
@@ -14,6 +15,6 @@ use phpsap\interfaces\exceptions\ISapException;
  * @author  Gregor J.
  * @license MIT
  */
-class SapRuntimeException extends \RuntimeException implements ISapException
+class SapRuntimeException extends RuntimeException implements ISapException
 {
 }

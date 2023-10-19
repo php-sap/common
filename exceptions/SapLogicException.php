@@ -2,6 +2,7 @@
 
 namespace phpsap\exceptions;
 
+use LogicException;
 use phpsap\interfaces\exceptions\ISapException;
 
 /**
@@ -15,6 +16,6 @@ use phpsap\interfaces\exceptions\ISapException;
  * @author  Gregor J.
  * @license MIT
  */
-class SapLogicException extends \LogicException implements ISapException
+class SapLogicException extends LogicException implements ISapException
 {
 }

@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "php-sap/datetime",
-            "version": "v1.4.1",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/datetime.git",
-                "reference": "0c74e58889e53e793fb0f4955274f57b3a45637c"
+                "reference": "6f6d21e90af497d0342eb30204dcc5f31d801a4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/datetime/zipball/0c74e58889e53e793fb0f4955274f57b3a45637c",
-                "reference": "0c74e58889e53e793fb0f4955274f57b3a45637c",
+                "url": "https://api.github.com/repos/php-sap/datetime/zipball/6f6d21e90af497d0342eb30204dcc5f31d801a4d",
+                "reference": "6f6d21e90af497d0342eb30204dcc5f31d801a4d",
                 "shasum": ""
             },
             "require": {
@@ -57,9 +57,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-sap/datetime/issues",
-                "source": "https://github.com/php-sap/datetime/tree/v1.4.1"
+                "source": "https://github.com/php-sap/datetime/tree/v1.4.2"
             },
-            "time": "2023-10-17T14:29:05+00:00"
+            "time": "2023-10-18T15:32:07+00:00"
         },
         {
             "name": "php-sap/interfaces",

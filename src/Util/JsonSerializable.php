@@ -76,7 +76,7 @@ class JsonSerializable implements IJsonSerializable
     /**
      * Remove all keys and values from the data.
      */
-    protected function reset()
+    protected function reset(): void
     {
         $this->data = new stdClass();
     }
@@ -98,7 +98,7 @@ class JsonSerializable implements IJsonSerializable
      * @return null|bool|int|float|string|array The value of the key, or null in case the key didn't exist.
      * @throws InvalidArgumentException
      */
-    protected function get(string $key)
+    protected function get(string $key): float|int|bool|array|string|null
     {
         if ($this->has($key)) {
             return $this->data->{$key};
@@ -109,10 +109,10 @@ class JsonSerializable implements IJsonSerializable
     /**
      * Set the given key to the given value in the data.
      * @param string $key    The key to set the value for.
-     * @param bool|int|float|string|array $value  The value to set.
+     * @param float|int|bool|array|string|null $value  The value to set.
      * @throws InvalidArgumentException
      */
-    protected function set(string $key, $value)
+    protected function set(string $key, float|int|bool|array|string|null $value): void
     {
         if ($value === null) {
             $this->remove($key);
@@ -131,7 +131,7 @@ class JsonSerializable implements IJsonSerializable
      * @param array $data Associative array of keys and values to set.
      * @throws InvalidArgumentException
      */
-    protected function setMultiple(array $data)
+    protected function setMultiple(array $data): void
     {
         foreach ($this->getAllowedKeys() as $key) {
             if (array_key_exists($key, $data)) {
@@ -147,7 +147,7 @@ class JsonSerializable implements IJsonSerializable
      * @param mixed $value The value to set.
      * @throws InvalidArgumentException
      */
-    private function setValue(string $key, $value)
+    private function setValue(string $key, mixed $value): void
     {
         if (!in_array(gettype($value), $this->getAllowedDataTypes(), true)) {
             throw new InvalidArgumentException(sprintf(
@@ -164,7 +164,7 @@ class JsonSerializable implements IJsonSerializable
      * @param string $key The key to remove.
      * @throws InvalidArgumentException
      */
-    protected function remove(string $key)
+    protected function remove(string $key): void
     {
         if ($this->has($key)) {
             unset($this->data->{$key});
@@ -174,7 +174,7 @@ class JsonSerializable implements IJsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->data;
     }

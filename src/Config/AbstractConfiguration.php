@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpClassNamingConventionInspection */
 
 declare(strict_types=1);
 
@@ -7,7 +7,6 @@ namespace phpsap\classes\Config;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfiguration;
-use phpsap\interfaces\Util\IJsonSerializable;
 use stdClass;
 
 /**
@@ -56,8 +55,9 @@ abstract class AbstractConfiguration extends JsonSerializable implements IConfig
      * @param string $json JSON encoded configuration.
      * @return ConfigTypeA|ConfigTypeB
      * @throws InvalidArgumentException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
-    public static function jsonDecode(string $json): IJsonSerializable
+    public static function jsonDecode(string $json): ConfigTypeA|ConfigTypeB
     {
         $config = static::jsonToArray($json);
         if (

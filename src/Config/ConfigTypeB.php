@@ -96,7 +96,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
 
     /**
      * Get the group name of the application servers, optional; default: PUBLIC.
-     * @return string group name of the application servers
+     * @return string|null group name of the application servers
      * @throws InvalidArgumentException
      */
     public function getGroup(): ?string

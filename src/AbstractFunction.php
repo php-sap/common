@@ -53,6 +53,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @throws IncompleteConfigException
      * @throws InvalidArgumentException
      * @throws UnknownFunctionException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function getAllowedKeys(): array
     {
@@ -105,7 +106,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @param string $name
      * @throws InvalidArgumentException
      */
-    private function setName(string $name)
+    private function setName(string $name): void
     {
         if (trim($name) === '') {
             throw new InvalidArgumentException(
@@ -195,7 +196,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @return array|bool|float|int|string
      * @throws InvalidArgumentException
      */
-    public function getParam(string $key)
+    public function getParam(string $key): float|array|bool|int|string
     {
         return $this->get($key);
     }
@@ -212,11 +213,11 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Set a single SAP remote function call parameter.
      * @param string $key   Name of the parameter to set.
-     * @param bool|int|float|string|array $value Value of the parameter.
+     * @param float|int|bool|array|string $value Value of the parameter.
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setParam(string $key, $value): AbstractFunction
+    public function setParam(string $key, float|int|bool|array|string $value): AbstractFunction
     {
         $this->set($key, $value);
         return $this;
@@ -264,6 +265,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @throws ConnectionFailedException
      * @throws IncompleteConfigException
      * @throws UnknownFunctionException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public function jsonSerialize(): array
     {
@@ -283,6 +285,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @throws IInvalidArgumentException
      * @throws IUnknownFunctionException
      * @throws InvalidArgumentException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public static function jsonDecode(string $json): IJsonSerializable
     {

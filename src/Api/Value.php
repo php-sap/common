@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpsap\classes\Api;
 
+use phpsap\DateTime\SapDateInterval;
+use phpsap\DateTime\SapDateTime;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IValue;
 
@@ -20,88 +22,62 @@ use phpsap\interfaces\Api\IValue;
 class Value extends Element implements IValue
 {
     /**
-     * @var array Allowed JsonSerializable keys to set values for.
+     * @var array List of allowed API value types.
      */
-    protected static array $allowedKeys = [
-        self::JSON_TYPE,
-        self::JSON_NAME,
-        self::JSON_DIRECTION,
-        self::JSON_OPTIONAL
+    protected static array $allowedTypes = [
+        self::TYPE_BOOLEAN,
+        self::TYPE_INTEGER,
+        self::TYPE_FLOAT,
+        self::TYPE_STRING,
+        self::TYPE_HEXBIN,
+        self::TYPE_DATE,
+        self::TYPE_TIME,
+        self::TYPE_TIMESTAMP,
+        self::TYPE_WEEK
     ];
 
     /**
-     * @var array List of allowed API value directions.
-     */
-    protected static array $allowedDirections = [
-        self::DIRECTION_INPUT,
-        self::DIRECTION_OUTPUT
-    ];
-
-    /**
-     * API value constructor.
-     * @param string $type       Either string, int, float, bool or array
-     * @param string $name       API value name.
-     * @param string $direction  Either input, output or table.
-     * @param bool $isOptional Is the API value optional?
+     * Cast a given output value to the type defined in this class.
+     * @param bool|int|float|string $value The output to typecast.
+     * @return bool|int|float|string|SapDateTime|SapDateInterval
      * @throws InvalidArgumentException
      */
-    public function __construct(string $type, string $name, string $direction, bool $isOptional)
+    public function cast(bool|int|float|string $value): bool|int|float|string|SapDateTime|SapDateInterval
     {
-        parent::__construct($type, $name);
-        $this->setDirection($direction);
-        $this->setOptional($isOptional);
-    }
-
-    /**
-     * Get the direction of the API value.
-     * @return string
-     * @throws InvalidArgumentException
-     */
-    public function getDirection(): string
-    {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        return $this->get(self::JSON_DIRECTION);
-    }
-
-    /**
-     * Is the value optional?
-     * @return bool
-     * @throws InvalidArgumentException
-     */
-    public function isOptional(): bool
-    {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        return $this->get(self::JSON_OPTIONAL);
-    }
-
-    /**
-     * Set the API value direction: input, output or table.
-     * @param string $direction
-     * @throws InvalidArgumentException
-     */
-    protected function setDirection(string $direction)
-    {
-        if (!in_array($direction, static::$allowedDirections, true)) {
-            throw new InvalidArgumentException(sprintf(
-                'Expected API value direction to be in: %s!',
-                implode(', ', static::$allowedDirections)
-            ));
+        static $methods;
+        if ($methods === null) {
+            $methods = [
+                self::TYPE_DATE      => static function ($value) {
+                    /**
+                     * In case the date value consists only of zeros, this
+                     * is most likely a mistake of the SAP remote function.
+                     */
+                    if (preg_match('~^0+$~', $value)) {
+                        return null;
+                    }
+                    return SapDateTime::createFromFormat(SapDateTime::SAP_DATE, $value);
+                },
+                self::TYPE_TIME      => static function ($value) {
+                    return SapDateInterval::createFromDateString($value);
+                },
+                self::TYPE_TIMESTAMP => static function ($value) {
+                    return SapDateTime::createFromFormat(SapDateTime::SAP_TIMESTAMP, $value);
+                },
+                self::TYPE_WEEK      => static function ($value) {
+                    return SapDateTime::createFromFormat(SapDateTime::SAP_WEEK, $value);
+                },
+                self::TYPE_HEXBIN    => static function ($value) {
+                    return hex2bin(trim($value));
+                }
+            ];
         }
-        $this->set(self::JSON_DIRECTION, $direction);
-    }
-
-    /**
-     * Set the API value optional flag.
-     * @param bool $isOptional
-     * @throws InvalidArgumentException
-     */
-    protected function setOptional(bool $isOptional)
-    {
-        $this->set(self::JSON_OPTIONAL, $isOptional);
+        $type = $this->getType();
+        if (array_key_exists($type, $methods)) {
+            $method = $methods[$type];
+            return $method($value);
+        }
+        settype($value, $type);
+        return $value;
     }
 
     /**
@@ -109,6 +85,7 @@ class Value extends Element implements IValue
      * @param array $array Array containing the properties of this class.
      * @return Value
      * @throws InvalidArgumentException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public static function fromArray(array $array): Value
     {

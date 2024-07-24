@@ -19,17 +19,12 @@ use phpsap\interfaces\Api\IElement;
  * @author  Gregor J.
  * @license MIT
  */
-class Table extends Value implements ITable
+class Table extends Element implements ITable
 {
     /**
      * @var array Allowed JsonSerializable keys to set values for.
      */
     protected static array $allowedKeys = [
-        self::JSON_TYPE,
-        self::JSON_NAME,
-        self::JSON_DIRECTION,
-        self::JSON_OPTIONAL,
-        self::JSON_OPTIONAL,
         self::JSON_MEMBERS
     ];
 
@@ -68,21 +63,10 @@ class Table extends Value implements ITable
      * @throws ArrayElementMissingException
      * @throws InvalidArgumentException
      */
-    public function cast($value): array
+    public function cast(array $value): array
     {
-        if (!is_array($value)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Expected table cast to be array, %s given!',
-                    gettype($value)
-                )
-            );
-        }
         foreach ($value as &$row) {
             foreach ($this->getMembers() as $member) {
-                /**
-                 * @var Element $member
-                 */
                 $name = $member->getName();
                 if (!array_key_exists($name, $row)) {
                     throw new ArrayElementMissingException(sprintf(
@@ -116,7 +100,7 @@ class Table extends Value implements ITable
      * @param array $members
      * @throws InvalidArgumentException
      */
-    protected function setMembers(array $members)
+    protected function setMembers(array $members): void
     {
         foreach ($members as $member) {
             if (!$member instanceof IElement) {
@@ -134,6 +118,7 @@ class Table extends Value implements ITable
      * @param array $array Array containing the properties of this class.
      * @return Table
      * @throws InvalidArgumentException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public static function fromArray(array $array): Table
     {
@@ -142,14 +127,17 @@ class Table extends Value implements ITable
             throw new InvalidArgumentException('Invalid JSON: API Table direction is not table!');
         }
         if ($array[self::JSON_TYPE] !== self::TYPE_TABLE) {
-            throw new InvalidArgumentException('Invalid JSON: API Table type is not an array!');
+            throw new InvalidArgumentException('Invalid JSON: API type is not a table!');
         }
         if (!is_array($array[self::JSON_MEMBERS])) {
             throw new InvalidArgumentException('Invalid JSON: API Table members are not an array!');
         }
         $members = [];
         foreach ($array[self::JSON_MEMBERS] as $member) {
-            $members[] = Element::fromArray($member);
+            /**
+             * table members are values
+             */
+            $members[] = Value::fromArray($member);
         }
         return new self(
             $array[self::JSON_NAME],

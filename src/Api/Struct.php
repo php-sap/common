@@ -18,16 +18,12 @@ use phpsap\interfaces\Api\IElement;
  * @author  Gregor J.
  * @license MIT
  */
-class Struct extends Value implements IStruct
+class Struct extends Element implements IStruct
 {
     /**
      * @var array Allowed JsonSerializable keys to set values for.
      */
     protected static array $allowedKeys = [
-        self::JSON_TYPE,
-        self::JSON_NAME,
-        self::JSON_DIRECTION,
-        self::JSON_OPTIONAL,
         self::JSON_MEMBERS
     ];
 
@@ -69,12 +65,9 @@ class Struct extends Value implements IStruct
      * @throws ArrayElementMissingException
      * @throws InvalidArgumentException
      */
-    public function cast($value): array
+    public function cast(array $value): array
     {
         foreach ($this->getMembers() as $member) {
-            /**
-             * @var Element $member
-             */
             $name = $member->getName();
             if (!array_key_exists($name, $value)) {
                 throw new ArrayElementMissingException(sprintf(
@@ -102,11 +95,11 @@ class Struct extends Value implements IStruct
     }
 
     /**
-     * Set the member elements of the table.
+     * Set the member elements of the struct.
      * @param array $members
      * @throws InvalidArgumentException
      */
-    protected function setMembers(array $members)
+    protected function setMembers(array $members): void
     {
         foreach ($members as $member) {
             if (!$member instanceof IElement) {
@@ -124,19 +117,23 @@ class Struct extends Value implements IStruct
      * @param array $array Array containing the properties of this class.
      * @return Struct
      * @throws InvalidArgumentException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public static function fromArray(array $array): Struct
     {
         static::fromArrayValidation($array);
         if ($array[self::JSON_TYPE] !== self::TYPE_STRUCT) {
-            throw new InvalidArgumentException('Invalid JSON: API Struct type is not an array!');
+            throw new InvalidArgumentException('Invalid JSON: API type is not a struct!');
         }
         if (!is_array($array[self::JSON_MEMBERS])) {
             throw new InvalidArgumentException('Invalid JSON: API Struct members are not an array!');
         }
         $members = [];
         foreach ($array[self::JSON_MEMBERS] as $member) {
-            $members[] = Element::fromArray($member);
+            /**
+             * struct members are values
+             */
+            $members[] = Value::fromArray($member);
         }
         return new self(
             $array[self::JSON_NAME],

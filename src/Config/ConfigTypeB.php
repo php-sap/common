@@ -45,16 +45,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      */
     public function getMshost(): string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        if (($result = $this->get(self::JSON_MSHOST)) === null) {
-            throw new IncompleteConfigException(sprintf(
-                'Configuration is missing mandatory key %s!',
-                self::JSON_MSHOST
-            ));
-        }
-        return $result;
+        return $this->get(self::JSON_MSHOST);
     }
 
     /**

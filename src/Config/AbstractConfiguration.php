@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpClassNamingConventionInspection */
+<?php
 
 declare(strict_types=1);
 
@@ -6,6 +6,8 @@ namespace phpsap\classes\Config;
 
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\exceptions\InvalidArgumentException;
+use phpsap\interfaces\Config\IConfigTypeA;
+use phpsap\interfaces\Config\IConfigTypeB;
 use phpsap\interfaces\Config\IConfiguration;
 use stdClass;
 
@@ -20,14 +22,6 @@ use stdClass;
  */
 abstract class AbstractConfiguration extends JsonSerializable implements IConfiguration
 {
-    /**
-     * @var array Allowed data types for values.
-     */
-    protected static array $allowedDataTypes = [
-        'integer',
-        'string'
-    ];
-
     /**
      * Load the configuration either from a JSON encoded string or from an array.
      * @param array|string|stdClass $config the configuration
@@ -61,17 +55,17 @@ abstract class AbstractConfiguration extends JsonSerializable implements IConfig
     {
         $config = static::jsonToArray($json);
         if (
-            array_key_exists(ConfigTypeA::JSON_ASHOST, $config)
-            || array_key_exists(ConfigTypeA::JSON_SYSNR, $config)
-            || array_key_exists(ConfigTypeA::JSON_GWHOST, $config)
-            || array_key_exists(ConfigTypeA::JSON_GWSERV, $config)
+            array_key_exists(IConfigTypeA::JSON_ASHOST, $config)
+            || array_key_exists(IConfigTypeA::JSON_SYSNR, $config)
+            || array_key_exists(IConfigTypeA::JSON_GWHOST, $config)
+            || array_key_exists(IConfigTypeA::JSON_GWSERV, $config)
         ) {
             return new ConfigTypeA($config);
         }
         if (
-            array_key_exists(ConfigTypeB::JSON_MSHOST, $config)
-            || array_key_exists(ConfigTypeB::JSON_R3NAME, $config)
-            || array_key_exists(ConfigTypeB::JSON_GROUP, $config)
+            array_key_exists(IConfigTypeB::JSON_MSHOST, $config)
+            || array_key_exists(IConfigTypeB::JSON_R3NAME, $config)
+            || array_key_exists(IConfigTypeB::JSON_GROUP, $config)
         ) {
             return new ConfigTypeB($config);
         }

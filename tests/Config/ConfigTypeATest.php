@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace tests\phpsap\classes\Config;
 
 use phpsap\exceptions\IncompleteConfigException;
@@ -32,7 +34,7 @@ class ConfigTypeATest extends TestCase
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testInheritance()
+    public function testInheritance(): void
     {
         $config = new ConfigTypeA();
         static::assertInstanceOf(JsonSerializable::class, $config);
@@ -50,7 +52,7 @@ class ConfigTypeATest extends TestCase
      * @throws IncompleteConfigException
      * @throws IInvalidArgumentException
      */
-    public function testSetAndGet()
+    public function testSetAndGet(): void
     {
         $config = new ConfigTypeA();
         $config

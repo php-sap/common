@@ -1,12 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace tests\phpsap\classes;
 
 use phpsap\classes\AbstractFunction;
-use phpsap\classes\Api\Element;
 use phpsap\classes\Api\RemoteApi;
-use phpsap\classes\Api\Struct;
-use phpsap\classes\Api\Table;
 use phpsap\classes\Api\Value;
 use phpsap\classes\Config\ConfigTypeA;
 use phpsap\classes\Config\ConfigTypeB;
@@ -15,6 +14,11 @@ use phpsap\exceptions\ConnectionFailedException;
 use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\exceptions\UnknownFunctionException;
+use phpsap\interfaces\Api\IApiElement;
+use phpsap\interfaces\Api\IMember;
+use phpsap\interfaces\Api\IStruct;
+use phpsap\interfaces\Api\ITable;
+use phpsap\interfaces\Api\IValue;
 use phpsap\interfaces\exceptions\IConnectionFailedException;
 use phpsap\interfaces\exceptions\IIncompleteConfigException;
 use phpsap\interfaces\exceptions\IInvalidArgumentException;
@@ -23,7 +27,6 @@ use phpsap\interfaces\IFunction;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 use tests\phpsap\classes\helper\AbstractFunctionInstance;
 
 /**
@@ -43,7 +46,7 @@ class AbstractFunctionTest extends TestCase
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testInheritance()
+    public function testInheritance(): void
     {
         $fnc = new AbstractFunctionInstance('QifKTqzu');
         static::assertInstanceOf(IFunction::class, $fnc);
@@ -53,7 +56,7 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Data provider for invalid function names.
-     * @return array
+     * @return array<int, array<int, string>>
      */
     public static function provideInvalidNames(): array
     {
@@ -66,7 +69,7 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test invalid function names.
-     * @param mixed $name
+     * @param string $name
      * @throws IConnectionFailedException
      * @throws IIncompleteConfigException
      * @throws IInvalidArgumentException
@@ -74,7 +77,7 @@ class AbstractFunctionTest extends TestCase
      * @throws InvalidArgumentException
      * @dataProvider provideInvalidNames
      */
-    public function testInvalidNames($name)
+    public function testInvalidNames(string $name): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing or malformed SAP remote function name');
@@ -87,7 +90,7 @@ class AbstractFunctionTest extends TestCase
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testSettingAndGettingName()
+    public function testSettingAndGettingName(): void
     {
         $fnc = new AbstractFunctionInstance('BbkjmImI');
         static::assertInstanceOf(AbstractFunction::class, $fnc);
@@ -105,7 +108,7 @@ class AbstractFunctionTest extends TestCase
      * @throws InvalidArgumentException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testSettingAndGettingConfiguration()
+    public function testSettingAndGettingConfiguration(): void
     {
         $fnc = new AbstractFunctionInstance('tjmecgsl', null, new ConfigTypeA());
         static::assertInstanceOf(AbstractFunction::class, $fnc);
@@ -124,14 +127,16 @@ class AbstractFunctionTest extends TestCase
      * @throws UnknownFunctionException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testExtractGetAndSetApi()
+    public function testExtractGetAndSetApi(): void
     {
-        AbstractFunctionInstance::$fakeApi = [[
-            Value::JSON_NAME => 'vtQSToDd',
-            Value::JSON_TYPE => Value::TYPE_INTEGER,
-            Value::JSON_DIRECTION => Value::DIRECTION_OUTPUT,
-            Value::JSON_OPTIONAL => false
-        ]];
+        AbstractFunctionInstance::$fakeApi = [
+            [
+                IApiElement::JSON_NAME => 'vtQSToDd',
+                IApiElement::JSON_TYPE => IValue::TYPE_INTEGER,
+                IApiElement::JSON_DIRECTION => IApiElement::DIRECTION_OUTPUT,
+                IApiElement::JSON_OPTIONAL => false
+            ]
+        ];
         $fnc1 = new AbstractFunctionInstance('AcqwjdLj');
         static::assertInstanceOf(AbstractFunction::class, $fnc1);
         $api1 = $fnc1->getApi();
@@ -142,19 +147,21 @@ class AbstractFunctionTest extends TestCase
         $value1 = array_pop($out1);
         static::assertInstanceOf(Value::class, $value1);
         static::assertSame('vtQSToDd', $value1->getName());
-        static::assertSame(Value::TYPE_INTEGER, $value1->getType());
-        static::assertSame(Value::DIRECTION_OUTPUT, $value1->getDirection());
+        static::assertSame(IValue::TYPE_INTEGER, $value1->getType());
+        static::assertSame(IApiElement::DIRECTION_OUTPUT, $value1->getDirection());
         static::assertFalse($value1->isOptional());
         /**
          * Now change the response of the fake API and query the same function name
          * again.
          */
-        AbstractFunctionInstance::$fakeApi = [[
-            Value::JSON_NAME => 'jugcqvMX',
-            Value::JSON_TYPE => Value::TYPE_STRING,
-            Value::JSON_DIRECTION => Value::DIRECTION_OUTPUT,
-            Value::JSON_OPTIONAL => true
-        ]];
+        AbstractFunctionInstance::$fakeApi = [
+            [
+                IApiElement::JSON_NAME => 'jugcqvMX',
+                IApiElement::JSON_TYPE => IValue::TYPE_STRING,
+                IApiElement::JSON_DIRECTION => IApiElement::DIRECTION_OUTPUT,
+                IApiElement::JSON_OPTIONAL => true
+            ]
+        ];
         $fnc2 = new AbstractFunctionInstance('AcqwjdLj');
         static::assertInstanceOf(AbstractFunction::class, $fnc2);
         $api2 = $fnc2->getApi();
@@ -165,8 +172,8 @@ class AbstractFunctionTest extends TestCase
         $value2 = array_pop($out2);
         static::assertInstanceOf(Value::class, $value2);
         static::assertSame('vtQSToDd', $value2->getName());
-        static::assertSame(Value::TYPE_INTEGER, $value2->getType());
-        static::assertSame(Value::DIRECTION_OUTPUT, $value2->getDirection());
+        static::assertSame(IValue::TYPE_INTEGER, $value2->getType());
+        static::assertSame(IApiElement::DIRECTION_OUTPUT, $value2->getDirection());
         static::assertFalse($value2->isOptional());
         /**
          * ... but, when extracting the actual API, we circumvent the cached API of
@@ -180,20 +187,22 @@ class AbstractFunctionTest extends TestCase
         $value3 = array_pop($out3);
         static::assertInstanceOf(Value::class, $value3);
         static::assertSame('jugcqvMX', $value3->getName());
-        static::assertSame(Value::TYPE_STRING, $value3->getType());
-        static::assertSame(Value::DIRECTION_OUTPUT, $value3->getDirection());
+        static::assertSame(IValue::TYPE_STRING, $value3->getType());
+        static::assertSame(IApiElement::DIRECTION_OUTPUT, $value3->getDirection());
         static::assertTrue($value3->isOptional());
         /**
          * Now we set a very different API.
          */
-        $fnc2->setApi(new RemoteApi([
+        $fnc2->setApi(new RemoteApi(
             [
-                Value::JSON_NAME => 'HTufsZQx',
-                Value::JSON_TYPE => Value::TYPE_STRING,
-                Value::JSON_DIRECTION => Value::DIRECTION_INPUT,
-                Value::JSON_OPTIONAL => false
+                [
+                    IApiElement::JSON_NAME => 'HTufsZQx',
+                    IApiElement::JSON_TYPE => IValue::TYPE_STRING,
+                    IApiElement::JSON_DIRECTION => IApiElement::DIRECTION_INPUT,
+                    IApiElement::JSON_OPTIONAL => false
+                ]
             ]
-        ]));
+        ));
         $api4 = $fnc2->getApi();
         static::assertInstanceOf(RemoteApi::class, $api4);
         $input = $api4->getInputValues();
@@ -202,8 +211,8 @@ class AbstractFunctionTest extends TestCase
         $value4 = array_pop($input);
         static::assertInstanceOf(Value::class, $value4);
         static::assertSame('HTufsZQx', $value4->getName());
-        static::assertSame(Value::TYPE_STRING, $value4->getType());
-        static::assertSame(Value::DIRECTION_INPUT, $value4->getDirection());
+        static::assertSame(IValue::TYPE_STRING, $value4->getType());
+        static::assertSame(IApiElement::DIRECTION_INPUT, $value4->getDirection());
         static::assertFalse($value4->isOptional());
     }
 
@@ -221,23 +230,23 @@ class AbstractFunctionTest extends TestCase
      * @throws UnknownFunctionException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testSetApiConstructor()
+    public function testSetApiConstructor(): void
     {
         /**
          * Let the fake API differ from the one defined in the constructor.
          */
         AbstractFunctionInstance::$fakeApi = [[
-            Value::JSON_NAME => 'DYqDLpJJ',
-            Value::JSON_TYPE => Value::TYPE_INTEGER,
-            Value::JSON_DIRECTION => Value::DIRECTION_INPUT,
-            Value::JSON_OPTIONAL => true
+            IApiElement::JSON_NAME => 'DYqDLpJJ',
+            IApiElement::JSON_TYPE => IValue::TYPE_INTEGER,
+            IApiElement::JSON_DIRECTION => IApiElement::DIRECTION_INPUT,
+            IApiElement::JSON_OPTIONAL => true
         ]];
         $fnc = new AbstractFunctionInstance('QYNlDnyf', null, null, new RemoteApi([
             [
-                Value::JSON_NAME => 'IdmGEBfI',
-                Value::JSON_TYPE => Value::TYPE_STRING,
-                Value::JSON_DIRECTION => Value::DIRECTION_INPUT,
-                Value::JSON_OPTIONAL => false
+                IApiElement::JSON_NAME => 'IdmGEBfI',
+                IApiElement::JSON_TYPE => IValue::TYPE_STRING,
+                IApiElement::JSON_DIRECTION => IApiElement::DIRECTION_INPUT,
+                IApiElement::JSON_OPTIONAL => false
             ]
         ]));
         /**
@@ -247,15 +256,15 @@ class AbstractFunctionTest extends TestCase
         static::assertInstanceOf(AbstractFunction::class, $fnc);
         $api = $fnc->getApi();
         static::assertInstanceOf(RemoteApi::class, $api);
-        $apiInputs = $api->getInputValues();
-        static::assertIsArray($apiInputs);
-        static::assertCount(1, $apiInputs);
-        $apiInput0 = array_pop($apiInputs);
-        static::assertInstanceOf(Value::class, $apiInput0);
-        static::assertSame('IdmGEBfI', $apiInput0->getName());
-        static::assertSame(Value::TYPE_STRING, $apiInput0->getType());
-        static::assertSame(Value::DIRECTION_INPUT, $apiInput0->getDirection());
-        static::assertFalse($apiInput0->isOptional());
+        $api_inputs = $api->getInputValues();
+        static::assertIsArray($api_inputs);
+        static::assertCount(1, $api_inputs);
+        $api_input0 = array_pop($api_inputs);
+        static::assertInstanceOf(Value::class, $api_input0);
+        static::assertSame('IdmGEBfI', $api_input0->getName());
+        static::assertSame(IValue::TYPE_STRING, $api_input0->getType());
+        static::assertSame(IApiElement::DIRECTION_INPUT, $api_input0->getDirection());
+        static::assertFalse($api_input0->isOptional());
     }
 
     /**
@@ -269,44 +278,44 @@ class AbstractFunctionTest extends TestCase
      * @throws InvalidArgumentException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testSetAndGetParameters()
+    public function testSetAndGetParameters(): void
     {
         AbstractFunctionInstance::$fakeApi = [
             [
-                Value::JSON_NAME => 'OkUxzPbS',
-                Value::JSON_TYPE => Value::TYPE_STRING,
-                Value::JSON_DIRECTION => Value::DIRECTION_INPUT,
-                Value::JSON_OPTIONAL => false
+                IApiElement::JSON_NAME => 'OkUxzPbS',
+                IApiElement::JSON_TYPE => IValue::TYPE_STRING,
+                IApiElement::JSON_DIRECTION => IApiElement::DIRECTION_INPUT,
+                IApiElement::JSON_OPTIONAL => false
             ],
             [
-                Struct::JSON_NAME => 'ePmpwEHW',
-                Struct::JSON_TYPE => Struct::TYPE_STRUCT,
-                Struct::JSON_DIRECTION => Struct::DIRECTION_INPUT,
-                Struct::JSON_OPTIONAL => false,
-                Struct::JSON_MEMBERS => [
+                IApiElement::JSON_NAME => 'ePmpwEHW',
+                IApiElement::JSON_TYPE => IStruct::TYPE_STRUCT,
+                IApiElement::JSON_DIRECTION => IApiElement::DIRECTION_INPUT,
+                IApiElement::JSON_OPTIONAL => false,
+                IStruct::JSON_MEMBERS => [
                     [
-                        Element::JSON_NAME => 'llnwSfRS',
-                        Element::JSON_TYPE => Element::TYPE_STRING
+                        IMember::JSON_NAME => 'llnwSfRS',
+                        IMember::JSON_TYPE => IMember::TYPE_STRING
                     ],
                     [
-                        Element::JSON_NAME => 'aqCcYeax',
-                        Element::JSON_TYPE => Element::TYPE_INTEGER
+                        IMember::JSON_NAME => 'aqCcYeax',
+                        IMember::JSON_TYPE => IMember::TYPE_INTEGER
                     ]
                 ]
             ],
             [
-                Table::JSON_NAME => 'gksKixRv',
-                Table::JSON_TYPE => Table::TYPE_TABLE,
-                Table::JSON_DIRECTION => Table::DIRECTION_TABLE,
-                Table::JSON_OPTIONAL => false,
-                Table::JSON_MEMBERS => [
+                IApiElement::JSON_NAME => 'gksKixRv',
+                IApiElement::JSON_TYPE => ITable::TYPE_TABLE,
+                IApiElement::JSON_DIRECTION => ITable::DIRECTION_TABLE,
+                IApiElement::JSON_OPTIONAL => false,
+                ITable::JSON_MEMBERS => [
                     [
-                        Element::JSON_NAME => 'pLDXUMoT',
-                        Element::JSON_TYPE => Element::TYPE_STRING
+                        IMember::JSON_NAME => 'pLDXUMoT',
+                        IMember::JSON_TYPE => IMember::TYPE_STRING
                     ],
                     [
-                        Element::JSON_NAME => 'rpJNsIjC',
-                        Element::JSON_TYPE => Element::TYPE_INTEGER
+                        IMember::JSON_NAME => 'rpJNsIjC',
+                        IMember::JSON_TYPE => IMember::TYPE_INTEGER
                     ]
                 ]
             ]
@@ -394,14 +403,14 @@ class AbstractFunctionTest extends TestCase
      * @throws IInvalidArgumentException
      * @throws IUnknownFunctionException
      */
-    public function testJsonSerialization()
+    public function testJsonSerialization(): void
     {
         AbstractFunctionInstance::$fakeApi = [
             [
-                Value::JSON_NAME => 'UOvOMBva',
-                Value::JSON_TYPE => Value::TYPE_STRING,
-                Value::JSON_DIRECTION => Value::DIRECTION_INPUT,
-                Value::JSON_OPTIONAL => false
+                IApiElement::JSON_NAME => 'UOvOMBva',
+                IApiElement::JSON_TYPE => IValue::TYPE_STRING,
+                IApiElement::JSON_DIRECTION => IApiElement::DIRECTION_INPUT,
+                IApiElement::JSON_OPTIONAL => false
             ]
         ];
         $fnc = new AbstractFunctionInstance('GUGtjHBL', ['UOvOMBva' => 'IGxIqMvU']);
@@ -424,14 +433,14 @@ class AbstractFunctionTest extends TestCase
      * @throws ConnectionFailedException
      * @throws UnknownFunctionException
      */
-    public function testJsonDeserialization()
+    public function testJsonDeserialization(): void
     {
         AbstractFunctionInstance::$fakeApi = [
             [
-                Value::JSON_NAME => 'dvPoAdYG',
-                Value::JSON_TYPE => Value::TYPE_STRING,
-                Value::JSON_DIRECTION => Value::DIRECTION_INPUT,
-                Value::JSON_OPTIONAL => false
+                IApiElement::JSON_NAME => 'dvPoAdYG',
+                IApiElement::JSON_TYPE => IValue::TYPE_STRING,
+                IApiElement::JSON_DIRECTION => IApiElement::DIRECTION_INPUT,
+                IApiElement::JSON_OPTIONAL => false
             ]
         ];
         $json = '{"name":"MLPmcnyT",'
@@ -448,21 +457,21 @@ class AbstractFunctionTest extends TestCase
         $api = $fnc->getApi();
         static::assertInstanceOf(RemoteApi::class, $api);
 
-        $inputValues = $api->getInputValues();
-        static::assertIsArray($inputValues);
-        static::assertCount(1, $inputValues);
+        $input_values = $api->getInputValues();
+        static::assertIsArray($input_values);
+        static::assertCount(1, $input_values);
 
-        $inputValue0 = array_pop($inputValues);
-        static::assertInstanceOf(Value::class, $inputValue0);
-        static::assertSame('dvPoAdYG', $inputValue0->getName());
-        static::assertSame(Value::DIRECTION_INPUT, $inputValue0->getDirection());
-        static::assertSame(Value::TYPE_STRING, $inputValue0->getType());
-        static::assertFalse($inputValue0->isOptional());
+        $input_value0 = array_pop($input_values);
+        static::assertInstanceOf(Value::class, $input_value0);
+        static::assertSame('dvPoAdYG', $input_value0->getName());
+        static::assertSame(IApiElement::DIRECTION_INPUT, $input_value0->getDirection());
+        static::assertSame(IValue::TYPE_STRING, $input_value0->getType());
+        static::assertFalse($input_value0->isOptional());
     }
 
     /**
      * Data provider for invalid JSON.
-     * @return array
+     * @return array<int, array<int, string>>
      */
     public static function provideInvalidJson(): array
     {
@@ -484,7 +493,7 @@ class AbstractFunctionTest extends TestCase
 
     /**
      * Test invalid JSON
-     * @param mixed $json
+     * @param string $json
      * @throws IConnectionFailedException
      * @throws IIncompleteConfigException
      * @throws IInvalidArgumentException
@@ -492,14 +501,14 @@ class AbstractFunctionTest extends TestCase
      * @throws InvalidArgumentException
      * @dataProvider provideInvalidJson
      */
-    public function testInvalidJson($json)
+    public function testInvalidJson(string $json): void
     {
         AbstractFunctionInstance::$fakeApi = [
             [
-                Value::JSON_NAME => 'JBBIPySA',
-                Value::JSON_TYPE => Value::TYPE_STRING,
-                Value::JSON_DIRECTION => Value::DIRECTION_INPUT,
-                Value::JSON_OPTIONAL => false
+                IApiElement::JSON_NAME => 'JBBIPySA',
+                IApiElement::JSON_TYPE => IValue::TYPE_STRING,
+                IApiElement::JSON_DIRECTION => IApiElement::DIRECTION_INPUT,
+                IApiElement::JSON_OPTIONAL => false
             ]
         ];
         $this->expectException(InvalidArgumentException::class);

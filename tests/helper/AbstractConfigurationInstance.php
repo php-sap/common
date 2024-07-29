@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace tests\phpsap\classes\helper;
 
 use phpsap\exceptions\InvalidArgumentException;
@@ -25,11 +27,10 @@ class AbstractConfigurationInstance extends AbstractConfiguration
     /**
      * Retrieves a configuration value for a given key.
      * @param string $key
-     * @return string|int
+     * @return float|array|bool|int|string|null
      * @throws InvalidArgumentException
-     * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function get(string $key)
+    public function get(string $key): float|array|bool|int|string|null
     {
         return parent::get($key);
     }
@@ -41,7 +42,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * @throws InvalidArgumentException In case of an invalid configuration key or value.
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function set(string $key, $value)
+    public function set(string $key, $value): void
     {
         parent::set($key, $value);
     }
@@ -52,7 +53,7 @@ class AbstractConfigurationInstance extends AbstractConfiguration
      * @throws InvalidArgumentException
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function remove(string $key)
+    public function remove(string $key): void
     {
         parent::remove($key);
     }

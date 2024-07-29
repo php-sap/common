@@ -41,21 +41,11 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
     /**
      * Get the host name of a specific SAP application server.
      * @return string The hostname of a specific SAP application server.
-     * @throws IncompleteConfigException
      * @throws InvalidArgumentException
      */
     public function getAshost(): string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        if (($result = $this->get(self::JSON_ASHOST)) === null) {
-            throw new IncompleteConfigException(sprintf(
-                'Configuration is missing mandatory key %s!',
-                self::JSON_ASHOST
-            ));
-        }
-        return $result;
+        return $this->get(self::JSON_ASHOST);
     }
 
     /**
@@ -73,21 +63,11 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
     /**
      * Get the SAP system number.
      * @return string The SAP system number.
-     * @throws IncompleteConfigException
      * @throws InvalidArgumentException
      */
     public function getSysnr(): string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        if (($result = $this->get(self::JSON_SYSNR)) === null) {
-            throw new IncompleteConfigException(sprintf(
-                'Configuration is missing mandatory key %s!',
-                self::JSON_SYSNR
-            ));
-        }
-        return $result;
+        return $this->get(self::JSON_SYSNR);
     }
 
     /**

@@ -279,7 +279,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Decode a formerly JSON encoded SAP remote function object.
      * @param string $json
-     * @return AbstractFunction
+     * @return IFunction
      * @throws IConnectionFailedException
      * @throws IIncompleteConfigException
      * @throws IInvalidArgumentException
@@ -287,7 +287,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @throws InvalidArgumentException
      * @noinspection PhpMissingParentCallCommonInspection
      */
-    public static function jsonDecode(string $json): IJsonSerializable
+    public static function jsonDecode(string $json): IFunction
     {
         $array = static::jsonToArray($json);
         if (

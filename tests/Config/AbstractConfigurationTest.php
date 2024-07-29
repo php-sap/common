@@ -1,16 +1,22 @@
 <?php
 
+/** @noinspection PhpMethodNamingConventionInspection */
+
+declare(strict_types=1);
+
 namespace tests\phpsap\classes\Config;
 
-use Exception;
 use phpsap\exceptions\InvalidArgumentException;
+use phpsap\interfaces\Config\IConfigCommon;
+use phpsap\interfaces\Config\IConfigTypeA;
+use phpsap\interfaces\Config\IConfigTypeB;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use phpsap\classes\Util\JsonSerializable;
 use stdClass;
 use phpsap\interfaces\Config\IConfiguration;
 use phpsap\classes\Config\AbstractConfiguration;
-use phpsap\classes\Config\ConfigCommon;
 use phpsap\classes\Config\ConfigTypeA;
 use phpsap\classes\Config\ConfigTypeB;
 use tests\phpsap\classes\helper\AbstractConfigurationInstance;
@@ -30,10 +36,10 @@ class AbstractConfigurationTest extends TestCase
     /**
      * Test the inheritance of the AbstractConfiguration class.
      * @throws ExpectationFailedException
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testInheritance()
+    public function testInheritance(): void
     {
         AbstractConfigurationInstance::$allowedKeys = [];
         $config = new AbstractConfigurationInstance();
@@ -48,7 +54,7 @@ class AbstractConfigurationTest extends TestCase
      * @throws InvalidArgumentException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testSuccessfulSetGetHasAndRemove()
+    public function testSuccessfulSetGetHasRemove(): void
     {
         AbstractConfigurationInstance::$allowedKeys = [
             'vQVWBaPY', 'PpTzacjc'
@@ -77,7 +83,7 @@ class AbstractConfigurationTest extends TestCase
     /**
      * Test unknown configuration key for set().
      */
-    public function testUnknownConfigurationKeyForSet()
+    public function testUnknownConfigurationKeyForSet(): void
     {
         AbstractConfigurationInstance::$allowedKeys = ['asemoqTU'];
         $this->expectException(InvalidArgumentException::class);
@@ -91,43 +97,15 @@ class AbstractConfigurationTest extends TestCase
      * @throws InvalidArgumentException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testGettingUnsetConfigurationKey()
+    public function testGettingUnsetConfigurationKey(): void
     {
         AbstractConfigurationInstance::$allowedKeys = ['SXOtJQme'];
         static::assertNull((new AbstractConfigurationInstance())->get('SXOtJQme'));
     }
 
     /**
-     * Data provider for invalid values for set().
-     * @return array
-     */
-    public static function provideInvalidValueForSet(): array
-    {
-        return [
-            [1.38],
-            [true],
-            [false],
-            [['FsgNGucN' => 7133]],
-            [new stdClass()]
-        ];
-    }
-
-    /**
-     * Test invalid value for set().
-     * @param mixed $value
-     * @dataProvider provideInvalidValueForSet
-     */
-    public function testInvalidValueForSet($value)
-    {
-        AbstractConfigurationInstance::$allowedKeys = ['FsgNGucN'];
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value! Expected a simple value (\'integer\', \'string\'), but got');
-        (new AbstractConfigurationInstance())->set('FsgNGucN', $value);
-    }
-
-    /**
      * Data provider of valid configuration parameters for the constructor.
-     * @return array
+     * @return array<int, array<int, string|array|stdClass>>
      */
     public static function provideValidConfigurationForConstructor(): array
     {
@@ -142,13 +120,13 @@ class AbstractConfigurationTest extends TestCase
 
     /**
      * Test valid configuration parameters for the constructor.
-     * @param string|array|stdClass $config
+     * @param array|string|stdClass $config
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @dataProvider provideValidConfigurationForConstructor
      */
-    public function testValidConfigurationForConstructor($config)
+    public function testValidConfigurationForConstructor(array|string|stdClass $config): void
     {
         AbstractConfigurationInstance::$allowedKeys = ['zadgcjmt'];
         $conf = new AbstractConfigurationInstance($config);
@@ -161,46 +139,16 @@ class AbstractConfigurationTest extends TestCase
     }
 
     /**
-     * Data provider of valid configuration parameters for the constructor.
-     * @return array
-     * @throws Exception
-     */
-    public static function provideInvalidConfigurationForConstructor(): array
-    {
-        return [
-            [5126],
-            [97.65],
-            [true],
-            [false]
-        ];
-    }
-
-    /**
-     * Test valid configuration parameters for the constructor.
-     * @param mixed $config
-     * @dataProvider provideInvalidConfigurationForConstructor
-     */
-    public function testInvalidConfigurationForConstructor($config)
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'Invalid JSON object! '
-            . 'Expected tests\\phpsap\\classes\\helper\\AbstractConfigurationInstance JSON object or array!'
-        );
-        new AbstractConfigurationInstance($config);
-    }
-
-    /**
      * Data provider of ConfigTypeA configuration for jsonDecode().
-     * @return array
+     * @return array<int, array<int, array|string>>
      */
     public static function provideJsonDecodeConfigTypeA(): array
     {
         return [
-            [[ConfigTypeA::JSON_ASHOST => 'ItulITyML1'], '{"' . ConfigTypeA::JSON_ASHOST . '":"ItulITyML1"}'],
-            [[ConfigTypeA::JSON_SYSNR => '5345'], '{"' . ConfigTypeA::JSON_SYSNR . '":"5345"}'],
-            [[ConfigTypeA::JSON_GWHOST => '6sqPJLVVgS'], '{"' . ConfigTypeA::JSON_GWHOST . '":"6sqPJLVVgS"}'],
-            [[ConfigTypeA::JSON_GWSERV => 'pzkPI1ZV7f'], '{"' . ConfigTypeA::JSON_GWSERV . '":"pzkPI1ZV7f"}']
+            [[IConfigTypeA::JSON_ASHOST => 'ItulITyML1'], '{"' . IConfigTypeA::JSON_ASHOST . '":"ItulITyML1"}'],
+            [[IConfigTypeA::JSON_SYSNR => '5345'], '{"' . IConfigTypeA::JSON_SYSNR . '":"5345"}'],
+            [[IConfigTypeA::JSON_GWHOST => '6sqPJLVVgS'], '{"' . IConfigTypeA::JSON_GWHOST . '":"6sqPJLVVgS"}'],
+            [[IConfigTypeA::JSON_GWSERV => 'pzkPI1ZV7f'], '{"' . IConfigTypeA::JSON_GWSERV . '":"pzkPI1ZV7f"}']
         ];
     }
 
@@ -210,11 +158,11 @@ class AbstractConfigurationTest extends TestCase
      * @param string $json
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @dataProvider provideJsonDecodeConfigTypeA
      */
-    public function testJsonDecodeConfigTypeA($array, $json)
+    public function testJsonDecodeConfigTypeA(array $array, string $json): void
     {
         $config = AbstractConfiguration::jsonDecode($json);
         static::assertInstanceOf(ConfigTypeA::class, $config);
@@ -223,14 +171,14 @@ class AbstractConfigurationTest extends TestCase
 
     /**
      * Data provider of ConfigTypeB configuration for jsonDecode().
-     * @return array
+     * @return array<int, array<int, array|string>>
      */
     public static function provideJsonDecodeConfigTypeB(): array
     {
         return [
-            [[ConfigTypeB::JSON_MSHOST => '4htV2O3BMH'], '{"' . ConfigTypeB::JSON_MSHOST . '":"4htV2O3BMH"}'],
-            [[ConfigTypeB::JSON_R3NAME => 'XmJsmqU3ua'], '{"' . ConfigTypeB::JSON_R3NAME . '":"XmJsmqU3ua"}'],
-            [[ConfigTypeB::JSON_GROUP => 'Tczw3KTagh'], '{"' . ConfigTypeB::JSON_GROUP . '":"Tczw3KTagh"}']
+            [[IConfigTypeB::JSON_MSHOST => '4htV2O3BMH'], '{"' . IConfigTypeB::JSON_MSHOST . '":"4htV2O3BMH"}'],
+            [[IConfigTypeB::JSON_R3NAME => 'XmJsmqU3ua'], '{"' . IConfigTypeB::JSON_R3NAME . '":"XmJsmqU3ua"}'],
+            [[IConfigTypeB::JSON_GROUP => 'Tczw3KTagh'], '{"' . IConfigTypeB::JSON_GROUP . '":"Tczw3KTagh"}']
         ];
     }
 
@@ -239,12 +187,12 @@ class AbstractConfigurationTest extends TestCase
      * @param array $array
      * @param string $json
      * @throws InvalidArgumentException
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @dataProvider provideJsonDecodeConfigTypeB
      */
-    public function testJsonDecodeConfigTypeB($array, $json)
+    public function testJsonDecodeConfigTypeB(array $array, string $json): void
     {
         $config = AbstractConfiguration::jsonDecode($json);
         static::assertInstanceOf(ConfigTypeB::class, $config);
@@ -253,25 +201,25 @@ class AbstractConfigurationTest extends TestCase
 
     /**
      * Data provider of non-specific configuration JSON strings.
-     * @return array[]
+     * @return array<int, array<int, string>>
      */
     public static function provideNonSpecificJson(): array
     {
         return [
             ['{}'],
-            ['{"' . ConfigCommon::JSON_CLIENT . '":"001"}'],
-            ['{"' . ConfigCommon::JSON_USER . '":"username"}'],
-            ['{"' . ConfigCommon::JSON_PASSWD . '":"password"}']
+            ['{"' . IConfigCommon::JSON_CLIENT . '":"001"}'],
+            ['{"' . IConfigCommon::JSON_USER . '":"username"}'],
+            ['{"' . IConfigCommon::JSON_PASSWD . '":"password"}']
         ];
     }
 
     /**
      * Test decoding a JSON that is not type specific.
      * @param string $json
-     * @dataProvider             provideNonSpecificJson
+     * @dataProvider provideNonSpecificJson
      * @throws InvalidArgumentException
      */
-    public function testNonSpecificJson($json)
+    public function testNonSpecificJson(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot automatically determine the configuration type');

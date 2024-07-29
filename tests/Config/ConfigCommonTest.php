@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace tests\phpsap\classes\Config;
 
 use phpsap\exceptions\IncompleteConfigException;
@@ -8,7 +10,6 @@ use phpsap\interfaces\exceptions\IInvalidArgumentException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Config\IConfigCommon;
 use phpsap\interfaces\Config\IConfiguration;
@@ -34,7 +35,7 @@ class ConfigCommonTest extends TestCase
      * @throws Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testInheritance()
+    public function testInheritance(): void
     {
         $config = new ConfigCommonInstance();
         static::assertInstanceOf(JsonSerializable::class, $config);
@@ -51,7 +52,7 @@ class ConfigCommonTest extends TestCase
      * @throws IncompleteConfigException
      * @throws IInvalidArgumentException
      */
-    public function testSetAndGet()
+    public function testSetAndGet(): void
     {
         $config = new ConfigCommonInstance();
         $config
@@ -75,17 +76,14 @@ class ConfigCommonTest extends TestCase
 
     /**
      * Data provider for invalid saprouter values.
-     * @return array
+     * @return array<int, array<int, mixed>>
      */
     public static function provideInvalidSaprouterValues(): array
     {
         return [
             [''],
             ['NLo9NXkgZ3'],
-            ['dKC3zUbd08:8009'],
-            [7725],
-            [85.07],
-            [true],
+            ['dKC3zUbd08:8009']
         ];
     }
 
@@ -94,7 +92,7 @@ class ConfigCommonTest extends TestCase
      * @param mixed $value
      * @dataProvider             provideInvalidSaprouterValues
      */
-    public function testInvalidSaprouterValues($value)
+    public function testInvalidSaprouterValues(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected SAPROUTER to be in following format:');
@@ -118,7 +116,7 @@ class ConfigCommonTest extends TestCase
      * @param int $value
      * @dataProvider provideInvalidTraceValues
      */
-    public function testInvalidTraceValues(int $value)
+    public function testInvalidTraceValues(int $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The trace level can only be 0-3!');
@@ -127,17 +125,13 @@ class ConfigCommonTest extends TestCase
 
     /**
      * Data provider for invalid lang values.
-     * @return array
+     * @return array<int, array<int, mixed>>
      */
     public static function provideInvalidLangValues(): array
     {
         return [
             [''],
-            ['e9FB5msjyS'],
-            [3349],
-            [99.02],
-            [true],
-            [false],
+            ['e9FB5msjyS']
         ];
     }
 
@@ -146,7 +140,7 @@ class ConfigCommonTest extends TestCase
      * @param mixed $value
      * @dataProvider provideInvalidLangValues
      */
-    public function testInvalidLangValues($value)
+    public function testInvalidLangValues(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected two letter country code as language!');

@@ -26,18 +26,6 @@ class JsonSerializable implements IJsonSerializable
     private stdClass $data;
 
     /**
-     * @var array Allowed data types for values.
-     */
-    protected static array $allowedDataTypes = [
-        'integer',
-        'string',
-        'boolean',
-        'double',
-        'float',
-        'array'
-    ];
-
-    /**
      * @var array Allowed keys to set values for.
      */
     protected static array $allowedKeys = [];
@@ -49,15 +37,6 @@ class JsonSerializable implements IJsonSerializable
     protected function getAllowedKeys(): array
     {
         return static::$allowedKeys;
-    }
-
-    /**
-     * Get an array of all valid PHP data types allowed for the stored values.
-     * @return array
-     */
-    protected function getAllowedDataTypes(): array
-    {
-        return static::$allowedDataTypes;
     }
 
     /**
@@ -125,9 +104,7 @@ class JsonSerializable implements IJsonSerializable
     }
 
     /**
-     * This method extracts only allowed keys from the given array. This way it
-     * behaves differently than the set() method. This method will never throw an
-     * exception because of an invalid key.
+     * This method extracts only allowed keys from the given array.
      * @param array $data Associative array of keys and values to set.
      * @throws InvalidArgumentException
      */
@@ -149,18 +126,10 @@ class JsonSerializable implements IJsonSerializable
      * Set the value for a valid and allowed key. This method will not check the key
      * anymore, only the value!
      * @param string $key The key to set the value for.
-     * @param mixed $value The value to set.
-     * @throws InvalidArgumentException
+     * @param float|int|bool|array|string $value The value to set.
      */
-    private function setValue(string $key, mixed $value): void
+    private function setValue(string $key, float|int|bool|array|string $value): void
     {
-        if (!in_array(gettype($value), $this->getAllowedDataTypes(), true)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid value! Expected a simple value (\'%s\'), but got \'%s\'!',
-                implode('\', \'', $this->getAllowedDataTypes()),
-                gettype($value)
-            ));
-        }
         $this->data->{$key} = $value;
     }
 
@@ -212,8 +181,8 @@ class JsonSerializable implements IJsonSerializable
 
     /**
      * Decode a formerly JSON encoded object.
-     * @param string $json JSON encoded object.
-     * @return $this
+     * @param string $json
+     * @return IJsonSerializable
      * @throws InvalidArgumentException
      */
     public static function jsonDecode(string $json): IJsonSerializable

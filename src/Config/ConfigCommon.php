@@ -36,21 +36,11 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Get the username to use for authentication.
      * @return string
-     * @throws IncompleteConfigException
      * @throws InvalidArgumentException
      */
     public function getUser(): string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        if (($result = $this->get(self::JSON_USER)) === null) {
-            throw new IncompleteConfigException(sprintf(
-                'Configuration is missing mandatory key %s!',
-                self::JSON_USER
-            ));
-        }
-        return $result;
+        return $this->get(self::JSON_USER);
     }
 
     /**
@@ -68,21 +58,11 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Get the password to use for authentication.
      * @return string
-     * @throws IncompleteConfigException
      * @throws InvalidArgumentException
      */
     public function getPasswd(): string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        if (($result = $this->get(self::JSON_PASSWD)) === null) {
-            throw new IncompleteConfigException(sprintf(
-                'Configuration is missing mandatory key %s!',
-                self::JSON_PASSWD
-            ));
-        }
-        return $result;
+        return $this->get(self::JSON_PASSWD);
     }
 
     /**
@@ -105,16 +85,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function getClient(): string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        if (($result = $this->get(self::JSON_CLIENT)) === null) {
-            throw new IncompleteConfigException(sprintf(
-                'Configuration is missing mandatory key %s!',
-                self::JSON_CLIENT
-            ));
-        }
-        return $result;
+        return $this->get(self::JSON_CLIENT);
     }
 
     /**

@@ -53,11 +53,11 @@ abstract class AbstractConfiguration extends JsonSerializable implements IConfig
      * Decode a JSON encoded configuration and return the correct configuration
      * class (A or B) depending on the values set in the configuration.
      * @param string $json JSON encoded configuration.
-     * @return ConfigTypeA|ConfigTypeB
+     * @return IConfiguration
      * @throws InvalidArgumentException
      * @noinspection PhpMissingParentCallCommonInspection
      */
-    public static function jsonDecode(string $json): ConfigTypeA|ConfigTypeB
+    public static function jsonDecode(string $json): IConfiguration
     {
         $config = static::jsonToArray($json);
         if (

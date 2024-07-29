@@ -154,7 +154,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      */
     public function setSaprouter(string $saprouter): IConfigCommon
     {
-        if (!preg_match('~^/H/[a-z\d.\-]+/S/[\d]+/H/$~i', $saprouter)) {
+        if (!preg_match('~^/H/[a-z\d.\-]+/S/\d+/H/$~i', $saprouter)) {
             throw new InvalidArgumentException(
                 'Expected SAPROUTER to be in following format: '
                 . '/H/<hostname>/S/<portnumber>/H/'

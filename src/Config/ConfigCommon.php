@@ -196,7 +196,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
 
     /**
      * Only needed it if you want to connect to a non-Unicode backend using a
-     * non-ISO-Latin-1 user name or password. The RFC library will then use that
+     * non-ISO-Latin-1 username or password. The RFC library will then use that
      * codepage for the initial handshake, thus preserving the characters in
      * username/password.
      * @return int|null The codepage or NULL in case the codepage hasn't been set.
@@ -212,7 +212,7 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
 
     /**
      * Only needed it if you want to connect to a non-Unicode backend using a
-     * non-ISO-Latin-1 user name or password. The RFC library will then use that
+     * non-ISO-Latin-1 username or password. The RFC library will then use that
      * codepage for the initial handshake, thus preserving the characters in
      * username/password.
      * @param int $codepage The codepage.

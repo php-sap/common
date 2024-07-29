@@ -1,15 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace tests\phpsap\classes\Api;
 
 use JsonSerializable;
-use phpsap\classes\Api\Element;
+use phpsap\classes\Api\Member;
 use phpsap\classes\Api\Struct;
 use phpsap\classes\Api\Table;
 use phpsap\classes\Api\Value;
 use phpsap\classes\Api\RemoteApi;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IApi;
+use phpsap\interfaces\Api\IApiElement;
+use phpsap\interfaces\Api\IMember;
+use phpsap\interfaces\Api\IStruct;
+use phpsap\interfaces\Api\ITable;
 use phpsap\interfaces\Api\IValue;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -31,7 +37,7 @@ class RemoteApiTest extends TestCase
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testInheritance()
+    public function testInheritance(): void
     {
         $api = new RemoteApi();
         static::assertInstanceOf(RemoteApi::class, $api);
@@ -50,21 +56,21 @@ class RemoteApiTest extends TestCase
     {
         return [
             [
-                new Value(Value::TYPE_STRING, 'cX9WgWXL', Value::DIRECTION_INPUT, true),
+                Value::create(IValue::TYPE_STRING, 'cX9WgWXL', IApiElement::DIRECTION_INPUT, true),
                 '[{"type":"string","name":"cX9WgWXL","direction":"input","optional":true}]'
             ],
             [
-                new Struct('yLF9w1ss', Struct::DIRECTION_OUTPUT, false, [
-                    new Element(Element::TYPE_STRING, 'QhTuNM8d'),
-                    new Element(Element::TYPE_INTEGER, '6VpEpxCX')
+                Struct::create('yLF9w1ss', IApiElement::DIRECTION_OUTPUT, false, [
+                    Member::create(IMember::TYPE_STRING, 'QhTuNM8d'),
+                    Member::create(IMember::TYPE_INTEGER, '6VpEpxCX')
                 ]),
                 '[{"type":"struct","name":"yLF9w1ss","direction":"output",'
                 . '"optional":false,"members":[{"type":"string","name":"QhTuNM8d"},'
                 . '{"type":"int","name":"6VpEpxCX"}]}]'
             ],
             [
-                new Table('506E31r6', Table::DIRECTION_TABLE, true, [
-                    new Element(Element::TYPE_FLOAT, 'zrctEv52')
+                Table::create('506E31r6', ITable::DIRECTION_TABLE, true, [
+                    Member::create(IMember::TYPE_FLOAT, 'zrctEv52')
                 ]),
                 '[{"type":"table","name":"506E31r6","direction":"table",'
                 . '"optional":true,"members":[{"type":"float","name":"zrctEv52"}]}]'
@@ -74,13 +80,13 @@ class RemoteApiTest extends TestCase
 
     /**
      * Test adding API values and compare the JSON encoded output of the remote API.
-     * @param IValue $value The value to add.
+     * @param Value|Struct|Table $value The value to add.
      * @param string $expected The expected JSON output.
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @dataProvider provideApiValue
      */
-    public function testAddingAndEncodingApiValue($value, $expected)
+    public function testAddingAndEncodingApiValue(Value|Struct|Table $value, string $expected): void
     {
         $api = new RemoteApi();
         $api->add($value);
@@ -100,40 +106,40 @@ class RemoteApiTest extends TestCase
         $api1 = [];
         //input value
         $value = new stdClass();
-        $value->type = Value::TYPE_INTEGER;
+        $value->type = IValue::TYPE_INTEGER;
         $value->name = '1KywmFoU';
-        $value->direction = Value::DIRECTION_INPUT;
+        $value->direction = IApiElement::DIRECTION_INPUT;
         $value->optional = false;
         $api1[] = $value;
         //output struct
         $struct = new stdClass();
-        $struct->type = Struct::TYPE_STRUCT;
+        $struct->type = IStruct::TYPE_STRUCT;
         $struct->name = 'pS5Irn27';
-        $struct->direction = Struct::DIRECTION_OUTPUT;
+        $struct->direction = IApiElement::DIRECTION_OUTPUT;
         $struct->optional = false;
         $struct->members = [];
         $member1 = new stdClass();
-        $member1->type = Element::TYPE_FLOAT;
+        $member1->type = IMember::TYPE_FLOAT;
         $member1->name = 't6RVlTkn';
         $struct->members[] = $member1;
         $member2 = new stdClass();
-        $member2->type = Element::TYPE_BOOLEAN;
+        $member2->type = IMember::TYPE_BOOLEAN;
         $member2->name = 'qjLWHw7O';
         $struct->members[] = $member2;
         $api1[] = $struct;
         //output table
         $table = new stdClass();
-        $table->type = Table::TYPE_TABLE;
+        $table->type = ITable::TYPE_TABLE;
         $table->name = 'ZZ4wgCWW';
-        $table->direction = Table::DIRECTION_TABLE;
+        $table->direction = ITable::DIRECTION_TABLE;
         $table->optional = false;
         $table->members = [];
         $member1 = new stdClass();
-        $member1->type = Element::TYPE_INTEGER;
+        $member1->type = IMember::TYPE_INTEGER;
         $member1->name = 'GLTKiH2c';
         $table->members[] = $member1;
         $member2 = new stdClass();
-        $member2->type = Element::TYPE_STRING;
+        $member2->type = IMember::TYPE_STRING;
         $member2->name = 'Qyjiu3E7';
         $table->members[] = $member2;
         $api1[] = $table;
@@ -143,39 +149,39 @@ class RemoteApiTest extends TestCase
          */
         $api2 = [
             [
-                'type' => Value::TYPE_INTEGER,
+                'type' => IValue::TYPE_INTEGER,
                 'name' => '1KywmFoU',
-                'direction' => Value::DIRECTION_INPUT,
+                'direction' => IApiElement::DIRECTION_INPUT,
                 'optional' => false
             ],
             [
-                'type' => Struct::TYPE_STRUCT,
+                'type' => IStruct::TYPE_STRUCT,
                 'name' => 'pS5Irn27',
-                'direction' => Struct::DIRECTION_OUTPUT,
+                'direction' => IApiElement::DIRECTION_OUTPUT,
                 'optional' => false,
                 'members' => [
                     [
-                        'type' => Element::TYPE_FLOAT,
+                        'type' => IMember::TYPE_FLOAT,
                         'name' => 't6RVlTkn'
                     ],
                     [
-                        'type' => Element::TYPE_BOOLEAN,
+                        'type' => IMember::TYPE_BOOLEAN,
                         'name' => 'qjLWHw7O'
                     ]
                 ]
             ],
             [
-                'type' => Table::TYPE_TABLE,
+                'type' => ITable::TYPE_TABLE,
                 'name' => 'ZZ4wgCWW',
-                'direction' => Table::DIRECTION_TABLE,
+                'direction' => ITable::DIRECTION_TABLE,
                 'optional' => false,
                 'members' => [
                     [
-                        'type' => Element::TYPE_INTEGER,
+                        'type' => IMember::TYPE_INTEGER,
                         'name' => 'GLTKiH2c'
                     ],
                     [
-                        'type' => Element::TYPE_STRING,
+                        'type' => IMember::TYPE_STRING,
                         'name' => 'Qyjiu3E7'
                     ]
                 ]
@@ -200,7 +206,7 @@ class RemoteApiTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @dataProvider provideEncodedRemoteApi
      */
-    public function testEncodedRemoteApi($config)
+    public function testEncodedRemoteApi(array|string $config): void
     {
         $api = RemoteApi::jsonDecode($config);
         static::assertInstanceOf(IApi::class, $api);
@@ -208,58 +214,50 @@ class RemoteApiTest extends TestCase
         /**
          * Assert input value.
          */
-        $inputValues = $api->getInputValues();
-        $value = array_pop($inputValues);
-        static::assertSame(Value::TYPE_INTEGER, $value->getType());
+        $input_values = $api->getInputValues();
+        $value = array_pop($input_values);
+        static::assertSame(IValue::TYPE_INTEGER, $value->getType());
         static::assertSame('1KywmFoU', $value->getName());
-        static::assertSame(Value::DIRECTION_INPUT, $value->getDirection());
+        static::assertSame(IApiElement::DIRECTION_INPUT, $value->getDirection());
         static::assertFalse($value->isOptional());
+        $output_values = $api->getOutputValues();
         /**
          * Assert output value.
          * @var Struct $struct
          */
-        $outputValues = $api->getOutputValues();
-        $struct = array_pop($outputValues);
-        static::assertSame(Struct::TYPE_STRUCT, $struct->getType());
+        $struct = array_pop($output_values);
+        static::assertSame(IStruct::TYPE_STRUCT, $struct->getType());
         static::assertSame('pS5Irn27', $struct->getName());
-        static::assertSame(Struct::DIRECTION_OUTPUT, $struct->getDirection());
+        static::assertSame(IApiElement::DIRECTION_OUTPUT, $struct->getDirection());
         static::assertIsArray($struct->getMembers());
         static::assertCount(2, $struct->getMembers());
-        /**
-         * Assert output struct members.
-         * @var Element $member1
-         * @var Element $member2
-         * Explanation: array_pop() takes the last element out first (LIFO).
-         */
         $members = $struct->getMembers();
+        /** @var Member $member2 */
         $member2 = array_pop($members);
+        /** @var Member $member1 */
         $member1 = array_pop($members);
-        static::assertSame(Element::TYPE_FLOAT, $member1->getType());
+        static::assertSame(IMember::TYPE_FLOAT, $member1->getType());
         static::assertSame('t6RVlTkn', $member1->getName());
-        static::assertSame(Element::TYPE_BOOLEAN, $member2->getType());
+        static::assertSame(IMember::TYPE_BOOLEAN, $member2->getType());
         static::assertSame('qjLWHw7O', $member2->getName());
         /**
          * Assert table value.
          */
         $tables = $api->getTables();
         $table = array_pop($tables);
-        static::assertSame(Table::TYPE_TABLE, $table->getType());
+        static::assertSame(ITable::TYPE_TABLE, $table->getType());
         static::assertSame('ZZ4wgCWW', $table->getName());
-        static::assertSame(Table::DIRECTION_TABLE, $table->getDirection());
+        static::assertSame(ITable::DIRECTION_TABLE, $table->getDirection());
         static::assertIsArray($table->getMembers());
         static::assertCount(2, $table->getMembers());
-        /**
-         * Assert table members.
-         * @var Element $member1
-         * @var Element $member2
-         * Explanation: array_pop() takes the last element out first (LIFO).
-         */
         $members = $table->getMembers();
+        /** @var Member $member2 */
         $member2 = array_pop($members);
+        /** @var Member $member1 */
         $member1 = array_pop($members);
-        static::assertSame(Element::TYPE_INTEGER, $member1->getType());
+        static::assertSame(IMember::TYPE_INTEGER, $member1->getType());
         static::assertSame('GLTKiH2c', $member1->getName());
-        static::assertSame(Element::TYPE_STRING, $member2->getType());
+        static::assertSame(IMember::TYPE_STRING, $member2->getType());
         static::assertSame('Qyjiu3E7', $member2->getName());
     }
 
@@ -276,20 +274,16 @@ class RemoteApiTest extends TestCase
             ['}'],
             ['{"w1sBz6nE":3501'],
             ['DhVsUXYN'],
-            [339],
-            [2.3],
-            [true],
-            [false],
             ['[{"type":"string","name":"70PSpu7dcO","optional":true}]']
         ];
     }
 
     /**
      * Test invalid JSON exceptions.
-     * @param mixed $value The value, that will cause an invalid JSON exception.
+     * @param string $value The value, that will cause an invalid JSON exception.
      * @dataProvider provideInvalidJson
      */
-    public function testInvalidJson($value)
+    public function testInvalidJson(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid JSON!');
@@ -299,28 +293,28 @@ class RemoteApiTest extends TestCase
     /**
      * Test API value with missing type definition.
      */
-    public function testApiArrayMissingType()
+    public function testApiArrayMissingType(): void
     {
         $def = [
             [
                 'name' => 'bvOScFeIOL',
-                'direction' => Value::DIRECTION_INPUT,
+                'direction' => IApiElement::DIRECTION_INPUT,
                 'optional' => false
             ]
         ];
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('API Value is missing type.');
+        $this->expectExceptionMessage('API element is missing type.');
         new RemoteApi($def);
     }
 
     /**
      * Test API value with missing direction definition.
      */
-    public function testApiArrayMissingDirection()
+    public function testApiArrayMissingDirection(): void
     {
         $def = [
             [
-                'type' => Struct::TYPE_STRUCT,
+                'type' => IStruct::TYPE_STRUCT,
                 'name' => 'qUvgdjIiMY',
                 'optional' => false,
                 'members' => []

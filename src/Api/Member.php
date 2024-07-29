@@ -5,29 +5,18 @@ declare(strict_types=1);
 namespace phpsap\classes\Api;
 
 use phpsap\classes\Api\Traits\CastPrimitivesTrait;
-use phpsap\classes\Api\Traits\DirectionTrait;
 use phpsap\classes\Api\Traits\NameTrait;
-use phpsap\classes\Api\Traits\OptionalTrait;
 use phpsap\classes\Api\Traits\TypeTrait;
 use phpsap\classes\Util\JsonSerializable;
-use phpsap\interfaces\Api\IValue;
+use phpsap\interfaces\Api\IMember;
 
 /**
- * Class Value
- *
- * API values extend the logic of an element but have a direction (input or output)
- * and an optional flag, unlike elements.
- *
- * @package phpsap\classes\Api
- * @author  Gregor J.
- * @license MIT
+ * Class Member
  */
-final class Value extends JsonSerializable implements IValue
+final class Member extends JsonSerializable implements IMember
 {
     use TypeTrait;
     use NameTrait;
-    use DirectionTrait;
-    use OptionalTrait;
     use CastPrimitivesTrait;
 
     /**
@@ -35,9 +24,7 @@ final class Value extends JsonSerializable implements IValue
      */
     protected static array $allowedKeys = [
         self::JSON_TYPE,
-        self::JSON_NAME,
-        self::JSON_DIRECTION,
-        self::JSON_OPTIONAL
+        self::JSON_NAME
     ];
 
     /**
@@ -48,21 +35,17 @@ final class Value extends JsonSerializable implements IValue
         parent::__construct($array);
         $this->setType($array[self::JSON_TYPE]);
         $this->setName($array[self::JSON_NAME]);
-        $this->setDirection($array[self::JSON_DIRECTION]);
-        $this->setOptional($array[self::JSON_OPTIONAL]);
     }
 
     /**
      * @inheritDoc
      */
-    public static function create(string $type, string $name, string $direction, bool $isOptional): IValue
+    public static function create(string $type, string $name): Member
     {
-        return new Value(
+        return new Member(
             [
                 self::JSON_TYPE => $type,
-                self::JSON_NAME => $name,
-                self::JSON_DIRECTION => $direction,
-                self::JSON_OPTIONAL => $isOptional
+                self::JSON_NAME => $name
             ]
         );
     }
@@ -82,17 +65,6 @@ final class Value extends JsonSerializable implements IValue
             self::TYPE_TIME,
             self::TYPE_TIMESTAMP,
             self::TYPE_WEEK
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    private function getAllowedDirections(): array
-    {
-        return [
-            self::DIRECTION_INPUT,
-            self::DIRECTION_OUTPUT
         ];
     }
 }

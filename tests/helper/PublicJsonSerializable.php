@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace tests\phpsap\classes\helper;
 
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Util\IJsonSerializable;
+use stdClass;
 
 /**
  * Class PublicJsonSerializable
@@ -22,7 +25,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function reset()
+    public function reset(): void
     {
         parent::reset();
     }
@@ -40,7 +43,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function get(string $key)
+    public function get(string $key): float|int|bool|array|string|null
     {
         return parent::get($key);
     }
@@ -49,7 +52,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function set(string $key, $value)
+    public function set(string $key, float|int|bool|array|string|null $value): void
     {
         parent::set($key, $value);
     }
@@ -58,7 +61,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function setMultiple(array $data)
+    public function setMultiple(array $data): void
     {
         parent::setMultiple($data);
     }
@@ -67,7 +70,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function remove(string $key)
+    public function remove(string $key): void
     {
         parent::remove($key);
     }
@@ -76,7 +79,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public static function jsonToArray(string $json): ?array
+    public static function jsonToArray(string $json): array
     {
         return parent::jsonToArray($json);
     }
@@ -85,7 +88,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public static function objToArray($obj): ?array
+    public static function objToArray(array|string|stdClass $obj): ?array
     {
         return parent::objToArray($obj);
     }

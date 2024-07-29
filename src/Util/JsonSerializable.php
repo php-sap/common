@@ -134,9 +134,14 @@ class JsonSerializable implements IJsonSerializable
     protected function setMultiple(array $data): void
     {
         foreach ($this->getAllowedKeys() as $key) {
-            if (array_key_exists($key, $data)) {
-                $this->setValue($key, $data[$key]);
+            if (!array_key_exists($key, $data)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid JSON: %s is missing %s!',
+                    static::class,
+                    $key
+                ));
             }
+            $this->setValue($key, $data[$key]);
         }
     }
 
@@ -213,18 +218,16 @@ class JsonSerializable implements IJsonSerializable
      */
     public static function jsonDecode(string $json): IJsonSerializable
     {
-        $array = self::jsonToArray($json);
-        return new static($array);
+        return new static(self::jsonToArray($json));
     }
 
     /**
      * Decode a JSON encoded object to an array.
      * @param string $json JSON encoded object.
-     * @return array|null Array of the JSON encoded object or null, in case there
-     *                    was an error.
+     * @return array Array of the JSON encoded object.
      * @throws InvalidArgumentException
      */
-    protected static function jsonToArray(string $json): ?array
+    protected static function jsonToArray(string $json): array
     {
         $array = json_decode($json, true);
         if (is_array($array)) {
@@ -238,12 +241,12 @@ class JsonSerializable implements IJsonSerializable
 
     /**
      * Convert any given representation of a JSON object to an array.
-     * @param stdClass|array|string $obj  JSON encoded object (string), or a JSON
+     * @param array|string|stdClass $obj  JSON encoded object (string), or a JSON
      *                                     decoded object (stdClass or array).
      * @return array|null
      * @throws InvalidArgumentException
      */
-    protected static function objToArray($obj): ?array
+    protected static function objToArray(array|string|stdClass $obj): ?array
     {
         if (is_object($obj)) {
             $obj = json_encode($obj);

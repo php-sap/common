@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace tests\phpsap\classes\Util;
 
 use phpsap\exceptions\InvalidArgumentException;
@@ -28,7 +30,7 @@ class JsonSerializableTest extends TestCase
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testInheritance()
+    public function testInheritance(): void
     {
         $obj = new PublicJsonSerializable();
         static::assertInstanceOf(\JsonSerializable::class, $obj);
@@ -42,7 +44,7 @@ class JsonSerializableTest extends TestCase
      * @throws InvalidArgumentException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testSuccessfulDataStorage()
+    public function testSuccessfulDataStorage(): void
     {
         PublicJsonSerializable::$allowedKeys = [
             'bhtWTHMh',
@@ -52,13 +54,16 @@ class JsonSerializableTest extends TestCase
             'ktOFBe9N',
             'fVWlA9ea'
         ];
-        $store = new PublicJsonSerializable([
-            'bhtWTHMh' => 54247,
-            'GcnIscoB' => 95.31,
-            'FsU1looN' => true,
-            'jlxFb5gL' => false,
-            'ktOFBe9N' => ['KTEfbUvj' => 294]
-        ]);
+        $store = new PublicJsonSerializable(
+            [
+                'bhtWTHMh' => 54247,
+                'GcnIscoB' => 95.31,
+                'FsU1looN' => true,
+                'jlxFb5gL' => false,
+                'ktOFBe9N' => ['KTEfbUvj' => 294],
+                'fVWlA9ea' => ''
+            ]
+        );
         $store->set('fVWlA9ea', 'bfbp8A0VIo');
         static::assertTrue($store->has('fVWlA9ea'));
         static::assertTrue($store->has('bhtWTHMh'));
@@ -78,26 +83,26 @@ class JsonSerializableTest extends TestCase
         static::assertFalse($store->has('bhtWTHMh'));
         static::assertNull($store->get('fVWlA9ea'));
         static::assertNull($store->get('bhtWTHMh'));
-        $actualJson = json_encode($store);
-        $expectedJson = '{"GcnIscoB":95.31,"FsU1looN":true,"jlxFb5gL":false,"ktOFBe9N":{"KTEfbUvj":294}}';
-        static::assertSame($expectedJson, $actualJson);
-        $actualArray = PublicJsonSerializable::jsonToArray($actualJson);
-        $expectedArray = [
+        $actual_json = json_encode($store);
+        $expected_json = '{"GcnIscoB":95.31,"FsU1looN":true,"jlxFb5gL":false,"ktOFBe9N":{"KTEfbUvj":294}}';
+        static::assertSame($expected_json, $actual_json);
+        $actual_array = PublicJsonSerializable::jsonToArray($actual_json);
+        $expected_array = [
             'GcnIscoB' => 95.31,
             'FsU1looN' => true,
             'jlxFb5gL' => false,
             'ktOFBe9N' => ['KTEfbUvj' => 294]
         ];
-        static::assertSame($expectedArray, $actualArray);
-        $actualArray2 = PublicJsonSerializable::objToArray(json_decode($actualJson, false));
-        static::assertSame($expectedArray, $actualArray2);
+        static::assertSame($expected_array, $actual_array);
+        $actual_array2 = PublicJsonSerializable::objToArray(json_decode($actual_json, false));
+        static::assertSame($expected_array, $actual_array2);
         $store->reset();
         static::assertSame([], $store->toArray());
     }
 
     /**
      * Data provider for valid JSON objects.
-     * @return array
+     * @return array<int, array<int, string|array|stdClass>>
      */
     public static function provideValidJsonObjects(): array
     {
@@ -117,19 +122,19 @@ class JsonSerializableTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @dataProvider provideValidJsonObjects
      */
-    public function testValidJsonObjects($obj)
+    public function testValidJsonObjects(array|string|stdClass $obj): void
     {
-        $actualArray = PublicJsonSerializable::objToArray($obj);
-        $expectedArray = [
+        $actual_array = PublicJsonSerializable::objToArray($obj);
+        $expected_array = [
             '2at0q6hz' => '3g8Z57oK',
             'GNhrr5BB' => 9800
         ];
-        static::assertSame($expectedArray, $actualArray);
+        static::assertSame($expected_array, $actual_array);
     }
 
     /**
      * Data provider for invalid keys.
-     * @return array
+     * @return array<int, array<int, string>>
      */
     public static function provideInvalidKeys(): array
     {
@@ -138,16 +143,15 @@ class JsonSerializableTest extends TestCase
             [' '],
             ['dY1 Us-xO_L5H'],
             ['phoj.hbd.tcf'],
-            [false],
         ];
     }
 
     /**
      * Test invalid keys.
-     * @param mixed $key
+     * @param string $key
      * @dataProvider provideInvalidKeys
      */
-    public function testInvalidKeys($key)
+    public function testInvalidKeys(string $key): void
     {
         $store = new PublicJsonSerializable();
         $this->expectException(InvalidArgumentException::class);
@@ -158,7 +162,7 @@ class JsonSerializableTest extends TestCase
     /**
      * Test setting an unknown key.
      */
-    public function testSettingUnknownKey()
+    public function testSettingUnknownKey(): void
     {
         PublicJsonSerializable::$allowedKeys = [];
         $store = new PublicJsonSerializable();
@@ -168,26 +172,13 @@ class JsonSerializableTest extends TestCase
     }
 
     /**
-     * Test to set an invalid value.
-     */
-    public function testSetInvalidData()
-    {
-        PublicJsonSerializable::$allowedKeys = ['AxiBKNAu'];
-        $store = new PublicJsonSerializable();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value!');
-        /** @noinspection PhpParamsInspection */
-        $store->set('AxiBKNAu', new stdClass());
-    }
-
-    /**
      * Test decoding a JSON encoded object.
      * @throws InvalidArgumentException
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testDecodingObjectFromJson()
+    public function testDecodingObjectFromJson(): void
     {
         PublicJsonSerializable::$allowedKeys = [
             'L0AJfput',
@@ -206,7 +197,7 @@ class JsonSerializableTest extends TestCase
 
     /**
      * Data provider for invalid JSON.
-     * @return array
+     * @return array<int, array<int, string>
      */
     public static function provideInvalidJson(): array
     {
@@ -217,19 +208,15 @@ class JsonSerializableTest extends TestCase
             ['}'],
             ['{"w1sBz6nE":3501'],
             ['aBtxi4bR'],
-            [6598],
-            [8.041],
-            [true],
-            [false],
         ];
     }
 
     /**
      * Test decoding invalid JSON.
-     * @param mixed $json
+     * @param string $json
      * @dataProvider provideInvalidJson
      */
-    public function testInvalidJsonToArray($json)
+    public function testInvalidJsonToArray(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
@@ -239,31 +226,16 @@ class JsonSerializableTest extends TestCase
     }
 
     /**
-     * Data provider of invalid JSON objects.
-     * @return array
-     */
-    public static function provideInvalidJsonObjects(): array
-    {
-        return [
-            [66],
-            [753.1],
-            [true],
-            [false],
-            [null]
-        ];
-    }
-
-    /**
      * Test decoding invalid JSON objects.
-     * @param mixed $obj
-     * @dataProvider provideInvalidJsonObjects
+     * @param string $string
+     * @dataProvider provideInvalidJson
      */
-    public function testInvalidJsonObjectToArray($obj)
+    public function testInvalidJsonObjectToArray(string $string): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Invalid JSON object! Expected tests\\phpsap\\classes\\helper\\PublicJsonSerializable JSON object or array!'
         );
-        PublicJsonSerializable::objToArray($obj);
+        PublicJsonSerializable::objToArray($string);
     }
 }

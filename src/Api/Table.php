@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace phpsap\classes\Api;
 
+use phpsap\classes\Api\Traits\DirectionTrait;
+use phpsap\classes\Api\Traits\MembersTrait;
+use phpsap\classes\Api\Traits\NameTrait;
+use phpsap\classes\Api\Traits\OptionalTrait;
+use phpsap\classes\Api\Traits\TypeTrait;
+use phpsap\classes\Util\JsonSerializable;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\exceptions\ArrayElementMissingException;
 use phpsap\interfaces\Api\ITable;
-use phpsap\interfaces\Api\IElement;
 
 /**
  * Class phpsap\classes\Api\Table
@@ -19,41 +24,87 @@ use phpsap\interfaces\Api\IElement;
  * @author  Gregor J.
  * @license MIT
  */
-class Table extends Element implements ITable
+final class Table extends JsonSerializable implements ITable
 {
+    use TypeTrait;
+    use NameTrait;
+    use DirectionTrait;
+    use OptionalTrait;
+    use MembersTrait;
+
     /**
      * @var array Allowed JsonSerializable keys to set values for.
      */
     protected static array $allowedKeys = [
+        self::JSON_TYPE,
+        self::JSON_NAME,
+        self::JSON_DIRECTION,
+        self::JSON_OPTIONAL,
         self::JSON_MEMBERS
     ];
 
     /**
-     * @var array List of allowed API element types.
+     * @inheritDoc
      */
-    protected static array $allowedTypes = [self::TYPE_TABLE];
-
-    /**
-     * @var array List of allowed API value directions.
-     */
-    protected static array $allowedDirections = [
-        self::DIRECTION_INPUT,
-        self::DIRECTION_OUTPUT,
-        self::DIRECTION_TABLE
-    ];
-
-    /**
-     * Table constructor.
-     * @param string $name       API struct name.
-     * @param string $direction  Either input, output, or table
-     * @param bool   $isOptional Is the API table optional?
-     * @param array  $members    Array of Elements as the columns of the table.
-     * @throws InvalidArgumentException
-     */
-    public function __construct(string $name, string $direction, bool $isOptional, array $members)
+    private function getAllowedTypes(): array
     {
-        parent::__construct(self::TYPE_TABLE, $name, $direction, $isOptional);
+        return [self::TYPE_TABLE];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    private function getAllowedDirections(): array
+    {
+        return [
+            self::DIRECTION_INPUT,
+            self::DIRECTION_OUTPUT,
+            self::DIRECTION_TABLE
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(array $array)
+    {
+        /** @noinspection DuplicatedCode */
+        parent::__construct($array);
+        $this->setType($array[self::JSON_TYPE]);
+        $this->setName($array[self::JSON_NAME]);
+        $this->setDirection($array[self::JSON_DIRECTION]);
+        $this->setOptional($array[self::JSON_OPTIONAL]);
+        $members = [];
+        foreach ($array[self::JSON_MEMBERS] as $member) {
+            if (!is_array($member)) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Invalid JSON: API %s members are not an array!',
+                        Table::class
+                    )
+                );
+            }
+            $members[] = new Member($member);
+        }
         $this->setMembers($members);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function create(string $name, string $direction, bool $isOptional, array $members): Table
+    {
+        $table = new Table(
+            [
+                self::JSON_TYPE => self::TYPE_TABLE, //it's always 'table'
+                self::JSON_NAME => $name,
+                self::JSON_DIRECTION => $direction,
+                self::JSON_OPTIONAL => $isOptional,
+                self::JSON_MEMBERS => []
+            ]
+        );
+        $table->setMembers($members);
+        return $table;
     }
 
     /**
@@ -80,70 +131,5 @@ class Table extends Element implements ITable
         }
         unset($row);
         return $value;
-    }
-
-    /**
-     * Return an array of member elements.
-     * @return array
-     * @throws InvalidArgumentException
-     */
-    public function getMembers(): array
-    {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        return $this->get(self::JSON_MEMBERS);
-    }
-
-    /**
-     * Set the member elements of the table.
-     * @param array $members
-     * @throws InvalidArgumentException
-     */
-    protected function setMembers(array $members): void
-    {
-        foreach ($members as $member) {
-            if (!$member instanceof IElement) {
-                throw new InvalidArgumentException(
-                    'Expected API table members to be instances of IElement!'
-                );
-            }
-        }
-        $this->remove(self::JSON_MEMBERS);
-        $this->set(self::JSON_MEMBERS, $members);
-    }
-
-    /**
-     * Create an instance of this class from an array.
-     * @param array $array Array containing the properties of this class.
-     * @return Table
-     * @throws InvalidArgumentException
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
-    public static function fromArray(array $array): Table
-    {
-        static::fromArrayValidation($array);
-        if ($array[self::JSON_DIRECTION] !== self::DIRECTION_TABLE) {
-            throw new InvalidArgumentException('Invalid JSON: API Table direction is not table!');
-        }
-        if ($array[self::JSON_TYPE] !== self::TYPE_TABLE) {
-            throw new InvalidArgumentException('Invalid JSON: API type is not a table!');
-        }
-        if (!is_array($array[self::JSON_MEMBERS])) {
-            throw new InvalidArgumentException('Invalid JSON: API Table members are not an array!');
-        }
-        $members = [];
-        foreach ($array[self::JSON_MEMBERS] as $member) {
-            /**
-             * table members are values
-             */
-            $members[] = Value::fromArray($member);
-        }
-        return new self(
-            $array[self::JSON_NAME],
-            $array[self::JSON_DIRECTION],
-            $array[self::JSON_OPTIONAL],
-            $members
-        );
     }
 }

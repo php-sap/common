@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace phpsap\classes\Api;
 
 use phpsap\exceptions\InvalidArgumentException;
+use phpsap\interfaces\Api\IApiElement;
+use phpsap\interfaces\Api\IStruct;
+use phpsap\interfaces\Api\ITable;
 use phpsap\interfaces\Api\IValue;
 use phpsap\interfaces\Api\IApi;
 use phpsap\interfaces\Util\IJsonSerializable;
@@ -18,7 +21,7 @@ use phpsap\interfaces\Util\IJsonSerializable;
  * @author  Gregor J.
  * @license MIT
  */
-class RemoteApi implements IApi
+final class RemoteApi implements IApi
 {
     /**
      * @var array
@@ -27,12 +30,12 @@ class RemoteApi implements IApi
 
     /**
      * Add an input value of the remote function.
-     * @param IValue $value
-     * @return $this
+     * @param IApiElement $element
+     * @return RemoteApi
      */
-    public function add(IValue $value): IApi
+    public function add(IApiElement $element): RemoteApi
     {
-        $this->data[] = $value;
+        $this->data[] = $element;
         return $this;
     }
 
@@ -43,7 +46,7 @@ class RemoteApi implements IApi
      */
     public function getInputValues(): array
     {
-        return $this->getValues(Value::DIRECTION_INPUT);
+        return $this->getValues(IApiElement::DIRECTION_INPUT);
     }
 
     /**
@@ -53,7 +56,7 @@ class RemoteApi implements IApi
      */
     public function getOutputValues(): array
     {
-        return $this->getValues(Value::DIRECTION_OUTPUT);
+        return $this->getValues(IApiElement::DIRECTION_OUTPUT);
     }
 
     /**
@@ -63,7 +66,7 @@ class RemoteApi implements IApi
      */
     public function getTables(): array
     {
-        return $this->getValues(Table::DIRECTION_TABLE);
+        return $this->getValues(ITable::DIRECTION_TABLE);
     }
 
     /**
@@ -88,7 +91,7 @@ class RemoteApi implements IApi
 
     /**
      * Create a remote API from a given array.
-     * @param array|null $values Array of remote API elements. Default: null
+     * @param array $values Array of remote API elements. Default: null
      * @throws InvalidArgumentException
      */
     public function __construct(array $values = [])
@@ -103,22 +106,22 @@ class RemoteApi implements IApi
 
     /**
      * Construct an API value (IValue) from a given array.
-     * @param array $value
-     * @return IValue
+     * @param array $array
+     * @return Value|Struct|Table
      * @throws InvalidArgumentException
      */
-    private function constructValue(array $value): IValue
+    private function constructValue(array $array): Value|Struct|Table
     {
-        if (!array_key_exists(Value::JSON_TYPE, $value)) {
-            throw new InvalidArgumentException('API Value is missing type.');
+        if (!array_key_exists(IApiElement::JSON_TYPE, $array)) {
+            throw new InvalidArgumentException('API element is missing type.');
         }
-        if ($value[Value::JSON_TYPE] === Table::TYPE_TABLE) {
-            return Table::fromArray($value);
+        if ($array[IApiElement::JSON_TYPE] === ITable::TYPE_TABLE) {
+            return new Table($array);
         }
-        if ($value[Value::JSON_TYPE] === Struct::TYPE_STRUCT) {
-            return Struct::fromArray($value);
+        if ($array[IApiElement::JSON_TYPE] === IStruct::TYPE_STRUCT) {
+            return new Struct($array);
         }
-        return Value::fromArray($value);
+        return new Value($array);
     }
 
     /**
@@ -149,7 +152,7 @@ class RemoteApi implements IApi
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->data;
     }

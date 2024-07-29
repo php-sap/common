@@ -19,6 +19,9 @@ use stdClass;
  */
 class PublicJsonSerializable extends JsonSerializable
 {
+    /**
+     * @var array<int, string>
+     */
     public static array $allowedKeys = [];
 
     /**
@@ -88,14 +91,13 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public static function objToArray(array|string|stdClass $obj): ?array
+    public static function objToArray(array|string|stdClass $obj): array
     {
         return parent::objToArray($obj);
     }
 
     /**
      * @inheritDoc
-     * @return $this
      */
     public static function jsonDecode(string $json): IJsonSerializable
     {

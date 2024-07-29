@@ -66,7 +66,7 @@ class ConfigTypeATest extends TestCase
         static::assertSame('nw1yYwIu2O', $config->getGwserv());
         static::assertJsonStringEqualsJsonString(
             '{"ashost":"X2zDYDpwXh","sysnr":"7789","gwhost":"rwGslB5foM","gwserv":"nw1yYwIu2O"}',
-            json_encode($config)
+            json_encode($config, JSON_THROW_ON_ERROR)
         );
     }
 }

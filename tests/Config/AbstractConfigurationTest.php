@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace tests\phpsap\classes\Config;
 
+use JsonException;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigCommon;
 use phpsap\interfaces\Config\IConfigTypeA;
@@ -53,6 +54,7 @@ class AbstractConfigurationTest extends TestCase
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws JsonException
      */
     public function testSuccessfulSetGetHasRemove(): void
     {
@@ -68,7 +70,7 @@ class AbstractConfigurationTest extends TestCase
         static::assertSame(9167, $config->get('PpTzacjc'));
         static::assertJsonStringEqualsJsonString(
             '{"vQVWBaPY":"AYP2RY1vaS","PpTzacjc":9167}',
-            json_encode($config)
+            json_encode($config, JSON_THROW_ON_ERROR)
         );
         $config->remove('vQVWBaPY');
         static::assertFalse($config->has('vQVWBaPY'));
@@ -76,7 +78,7 @@ class AbstractConfigurationTest extends TestCase
         static::assertFalse($config->has('PpTzacjc'));
         static::assertJsonStringEqualsJsonString(
             '{}',
-            json_encode($config)
+            json_encode($config, JSON_THROW_ON_ERROR)
         );
     }
 
@@ -105,7 +107,7 @@ class AbstractConfigurationTest extends TestCase
 
     /**
      * Data provider of valid configuration parameters for the constructor.
-     * @return array<int, array<int, string|array|stdClass>>
+     * @return array<int, array<int, string|array<string, string>|stdClass>>
      */
     public static function provideValidConfigurationForConstructor(): array
     {
@@ -113,17 +115,18 @@ class AbstractConfigurationTest extends TestCase
         $conf->zadgcjmt = 'wntQeayy41';
         return [
             [$conf],
-            [json_encode($conf)],
-            [json_decode(json_encode($conf), true)]
+            ['{"zadgcjmt":"wntQeayy41"}'],
+            [['zadgcjmt' => 'wntQeayy41']]
         ];
     }
 
     /**
      * Test valid configuration parameters for the constructor.
-     * @param array|string|stdClass $config
+     * @param array<string, string>|string|stdClass $config
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws JsonException
      * @dataProvider provideValidConfigurationForConstructor
      */
     public function testValidConfigurationForConstructor(array|string|stdClass $config): void
@@ -134,13 +137,13 @@ class AbstractConfigurationTest extends TestCase
         static::assertSame('wntQeayy41', $conf->get('zadgcjmt'));
         static::assertJsonStringEqualsJsonString(
             '{"zadgcjmt":"wntQeayy41"}',
-            json_encode($conf)
+            json_encode($conf, JSON_THROW_ON_ERROR)
         );
     }
 
     /**
      * Data provider of ConfigTypeA configuration for jsonDecode().
-     * @return array<int, array<int, array|string>>
+     * @return array<int, array<int, array<string, string|int>|string>>
      */
     public static function provideJsonDecodeConfigTypeA(): array
     {
@@ -154,7 +157,7 @@ class AbstractConfigurationTest extends TestCase
 
     /**
      * Test jsonDecode() for configuration type A.
-     * @param array $array
+     * @param array<string, string|int> $array
      * @param string $json
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
@@ -171,7 +174,7 @@ class AbstractConfigurationTest extends TestCase
 
     /**
      * Data provider of ConfigTypeB configuration for jsonDecode().
-     * @return array<int, array<int, array|string>>
+     * @return array<int, array<int, array<string, string>|string>>
      */
     public static function provideJsonDecodeConfigTypeB(): array
     {
@@ -184,7 +187,7 @@ class AbstractConfigurationTest extends TestCase
 
     /**
      * Test jsonDecode() for configuration type B.
-     * @param array $array
+     * @param array<string, string> $array
      * @param string $json
      * @throws InvalidArgumentException
      * @throws Exception

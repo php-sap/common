@@ -20,17 +20,18 @@ use phpsap\classes\Config\AbstractConfiguration;
 class AbstractConfigurationInstance extends AbstractConfiguration
 {
     /**
-     * @var array Valid config keys for testing.
+     * @var array<int, string> Valid config keys for testing.
      */
     public static array $allowedKeys = ['zadgcjmt'];
 
     /**
      * Retrieves a configuration value for a given key.
      * @param string $key
-     * @return float|array|bool|int|string|null
+     * @return null|bool|int|float|string|array<int|string, mixed>
      * @throws InvalidArgumentException
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function get(string $key): float|array|bool|int|string|null
+    public function get(string $key): null|bool|int|float|string|array
     {
         return parent::get($key);
     }
@@ -38,11 +39,11 @@ class AbstractConfigurationInstance extends AbstractConfiguration
     /**
      * Sets a configuration value for a given key.
      * @param string $key
-     * @param string|int $value
+     * @param null|bool|int|float|string|array<int|string, mixed> $value
      * @throws InvalidArgumentException In case of an invalid configuration key or value.
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function set(string $key, $value): void
+    public function set(string $key, null|bool|int|float|string|array $value): void
     {
         parent::set($key, $value);
     }
@@ -72,11 +73,11 @@ class AbstractConfigurationInstance extends AbstractConfiguration
 
     /**
      * Test set() function.
-     * @param $value
+     * @param string|int $value
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setZadgcjmt($value): AbstractConfigurationInstance
+    public function setZadgcjmt(string|int $value): AbstractConfigurationInstance
     {
         $this->set('zadgcjmt', $value);
         return $this;

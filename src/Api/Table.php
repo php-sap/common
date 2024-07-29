@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpsap\classes\Api;
 
+use DateInterval;
+use DateTime;
 use phpsap\classes\Api\Traits\DirectionTrait;
 use phpsap\classes\Api\Traits\MembersTrait;
 use phpsap\classes\Api\Traits\NameTrait;
@@ -33,18 +35,7 @@ final class Table extends JsonSerializable implements ITable
     use MembersTrait;
 
     /**
-     * @var array Allowed JsonSerializable keys to set values for.
-     */
-    protected static array $allowedKeys = [
-        self::JSON_TYPE,
-        self::JSON_NAME,
-        self::JSON_DIRECTION,
-        self::JSON_OPTIONAL,
-        self::JSON_MEMBERS
-    ];
-
-    /**
-     * @inheritDoc
+     * @return array<int, string>
      */
     private function getAllowedTypes(): array
     {
@@ -52,7 +43,7 @@ final class Table extends JsonSerializable implements ITable
     }
 
     /**
-     * @inheritDoc
+     * @return array<int, string>
      */
     private function getAllowedDirections(): array
     {
@@ -61,32 +52,6 @@ final class Table extends JsonSerializable implements ITable
             self::DIRECTION_OUTPUT,
             self::DIRECTION_TABLE
         ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(array $array)
-    {
-        /** @noinspection DuplicatedCode */
-        parent::__construct($array);
-        $this->setType($array[self::JSON_TYPE]);
-        $this->setName($array[self::JSON_NAME]);
-        $this->setDirection($array[self::JSON_DIRECTION]);
-        $this->setOptional($array[self::JSON_OPTIONAL]);
-        $members = [];
-        foreach ($array[self::JSON_MEMBERS] as $member) {
-            if (!is_array($member)) {
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'Invalid JSON: API %s members are not an array!',
-                        Table::class
-                    )
-                );
-            }
-            $members[] = new Member($member);
-        }
-        $this->setMembers($members);
     }
 
     /**
@@ -109,27 +74,27 @@ final class Table extends JsonSerializable implements ITable
 
     /**
      * Cast a given value to the implemented value.
-     * @param array $value
-     * @return array
+     * @param array<int, array<string, null|bool|int|float|string>> $value
+     * @return array<int, array<string, null|bool|int|float|string|DateTime|DateInterval>>
      * @throws ArrayElementMissingException
      * @throws InvalidArgumentException
      */
     public function cast(array $value): array
     {
-        foreach ($value as &$row) {
+        foreach ($value as $index => $row) {
             foreach ($this->getMembers() as $member) {
                 $name = $member->getName();
                 if (!array_key_exists($name, $row)) {
                     throw new ArrayElementMissingException(sprintf(
-                        'Element %s in table %s is missing!',
+                        'Element %s in table %s line %u is missing!',
                         $name,
-                        $this->getName()
+                        $this->getName(),
+                        $index
                     ));
                 }
-                $row[$name] = $member->cast($row[$name]);
+                $value[$index][$name] = $member->cast($row[$name]);
             }
         }
-        unset($row);
         return $value;
     }
 }

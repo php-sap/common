@@ -21,7 +21,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 class CastPrimitivesTraitTest extends TestCase
 {
     /**
-     * @return array<int, array<int, mixed>>
+     * @return array<int, array<int, null|bool|float|int|string|DateTime|DateInterval>>
      */
     public static function provideCastPrimitives(): array
     {
@@ -42,15 +42,15 @@ class CastPrimitivesTraitTest extends TestCase
 
     /**
      * @param string $type
-     * @param mixed $input
-     * @param mixed $expected
+     * @param bool|float|int|string $input
+     * @param null|bool|float|int|string|DateTime|DateInterval $expected
      * @return void
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws IInvalidArgumentException
      * @dataProvider provideCastPrimitives
      */
-    public function testCastPrimitives(string $type, mixed $input, mixed $expected)
+    public function testCastPrimitives(string $type, bool|float|int|string $input, null|bool|float|int|string|DateTime|DateInterval $expected)
     {
         $actual = Member::create($type, 'eoVBbCVO')->cast($input);
         static::assertEquals($expected, $actual);

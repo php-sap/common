@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace tests\phpsap\classes\Api;
 
+use JsonException;
 use JsonSerializable;
 use phpsap\classes\Api\Member;
 use phpsap\classes\Api\Struct;
@@ -49,7 +50,7 @@ class RemoteApiTest extends TestCase
 
     /**
      * Data provider for API values to add.
-     * @return array
+     * @return array<int, array<int, Value|Struct|Table|string>>
      * @throws InvalidArgumentException
      */
     public static function provideApiValue(): array
@@ -96,7 +97,8 @@ class RemoteApiTest extends TestCase
 
     /**
      * Data provider for encoded remote APIs.
-     * @return array
+     * @return array<int, array<int, string>>
+     * @throws JsonException
      */
     public static function provideEncodedRemoteApi(): array
     {
@@ -192,21 +194,21 @@ class RemoteApiTest extends TestCase
          * Construct third and fourth variants as strings of the above.
          */
         return [
-            [json_encode($api1)],
-            [json_encode($api2)]
+            [json_encode($api1, JSON_THROW_ON_ERROR)],
+            [json_encode($api2, JSON_THROW_ON_ERROR)]
         ];
     }
 
     /**
      * Test creating API class from an array.
-     * @param array|string $config
+     * @param string $config
      * @throws InvalidArgumentException
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @dataProvider provideEncodedRemoteApi
      */
-    public function testEncodedRemoteApi(array|string $config): void
+    public function testEncodedRemoteApi(string $config): void
     {
         $api = RemoteApi::jsonDecode($config);
         static::assertInstanceOf(IApi::class, $api);
@@ -214,28 +216,29 @@ class RemoteApiTest extends TestCase
         /**
          * Assert input value.
          */
-        $input_values = $api->getInputValues();
+        $input_values = $api->getInputElements();
         $value = array_pop($input_values);
+        static::assertInstanceOf(Value::class, $value);
         static::assertSame(IValue::TYPE_INTEGER, $value->getType());
         static::assertSame('1KywmFoU', $value->getName());
         static::assertSame(IApiElement::DIRECTION_INPUT, $value->getDirection());
         static::assertFalse($value->isOptional());
-        $output_values = $api->getOutputValues();
+        $output_values = $api->getOutputElements();
         /**
          * Assert output value.
-         * @var Struct $struct
          */
         $struct = array_pop($output_values);
+        static::assertInstanceOf(Struct::class, $struct);
         static::assertSame(IStruct::TYPE_STRUCT, $struct->getType());
         static::assertSame('pS5Irn27', $struct->getName());
         static::assertSame(IApiElement::DIRECTION_OUTPUT, $struct->getDirection());
         static::assertIsArray($struct->getMembers());
         static::assertCount(2, $struct->getMembers());
         $members = $struct->getMembers();
-        /** @var Member $member2 */
         $member2 = array_pop($members);
-        /** @var Member $member1 */
+        static::assertInstanceOf(Member::class, $member2);
         $member1 = array_pop($members);
+        static::assertInstanceOf(Member::class, $member1);
         static::assertSame(IMember::TYPE_FLOAT, $member1->getType());
         static::assertSame('t6RVlTkn', $member1->getName());
         static::assertSame(IMember::TYPE_BOOLEAN, $member2->getType());
@@ -245,16 +248,17 @@ class RemoteApiTest extends TestCase
          */
         $tables = $api->getTables();
         $table = array_pop($tables);
+        static::assertInstanceOf(Table::class, $table);
         static::assertSame(ITable::TYPE_TABLE, $table->getType());
         static::assertSame('ZZ4wgCWW', $table->getName());
         static::assertSame(ITable::DIRECTION_TABLE, $table->getDirection());
         static::assertIsArray($table->getMembers());
         static::assertCount(2, $table->getMembers());
         $members = $table->getMembers();
-        /** @var Member $member2 */
         $member2 = array_pop($members);
-        /** @var Member $member1 */
+        static::assertInstanceOf(Member::class, $member2);
         $member1 = array_pop($members);
+        static::assertInstanceOf(Member::class, $member1);
         static::assertSame(IMember::TYPE_INTEGER, $member1->getType());
         static::assertSame('GLTKiH2c', $member1->getName());
         static::assertSame(IMember::TYPE_STRING, $member2->getType());
@@ -263,7 +267,7 @@ class RemoteApiTest extends TestCase
 
     /**
      * Data provider for invalid JSON.
-     * @return array
+     * @return array<int, array<int, string>>
      */
     public static function provideInvalidJson(): array
     {

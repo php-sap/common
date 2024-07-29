@@ -6,3 +6,10 @@ parameters:
     - tests/
   scanDirectories:
     - vendor/
+  ignoreErrors:
+    # deliberately pass invalid object in TableTest::testNonMembers()
+    - '/Parameter #4 \$members of static method phpsap\\classes\\Api\\Table::create\(\) expects array<phpsap\\interfaces\\Api\\IMember>, array<int, stdClass> given\./'
+    # deliberately pass invalid object in StructTest::testNonMembers()
+    - '/Parameter #4 \$members of static method phpsap\\classes\\Api\\Struct::create\(\) expects array<phpsap\\interfaces\\Api\\IMember>, array<int, stdClass> given\./'
+    # It doesn't matter, because the Value constructor ignores sub-arrays
+    - '/Parameter #1 \$array of class phpsap\\classes\\Api\\Value constructor expects array<string, bool\|string>, array<string, array<int, array<string, string>>\|bool\|string> given\./'

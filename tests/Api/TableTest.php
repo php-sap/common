@@ -58,10 +58,10 @@ class TableTest extends TestCase
     }
 
     /**
-     * Test API table members to be instances of IElement.
+     * Test API table members to be instances of Member.
      * @throws IInvalidArgumentException
      */
-    public function testNonIElementMembers(): void
+    public function testNonMembers(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected API phpsap\classes\Api\Table members to be instances of phpsap\classes\Api\Member!');
@@ -183,7 +183,7 @@ class TableTest extends TestCase
 
     /**
      * Data provider for JSON objects with invalid type value.
-     * @return array
+     * @return array<int, array<int, string>>
      */
     public static function provideJsonDecodeInvalidType(): array
     {

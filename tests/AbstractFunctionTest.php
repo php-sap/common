@@ -141,7 +141,7 @@ class AbstractFunctionTest extends TestCase
         static::assertInstanceOf(AbstractFunction::class, $fnc1);
         $api1 = $fnc1->getApi();
         static::assertInstanceOf(RemoteApi::class, $api1);
-        $out1 = $api1->getOutputValues();
+        $out1 = $api1->getOutputElements();
         static::assertIsArray($out1);
         static::assertCount(1, $out1);
         $value1 = array_pop($out1);
@@ -166,7 +166,7 @@ class AbstractFunctionTest extends TestCase
         static::assertInstanceOf(AbstractFunction::class, $fnc2);
         $api2 = $fnc2->getApi();
         static::assertInstanceOf(RemoteApi::class, $api2);
-        $out2 = $api2->getOutputValues();
+        $out2 = $api2->getOutputElements();
         static::assertIsArray($out2);
         static::assertCount(1, $out2);
         $value2 = array_pop($out2);
@@ -181,7 +181,7 @@ class AbstractFunctionTest extends TestCase
          */
         $api3 = $fnc2->extractApi();
         static::assertInstanceOf(RemoteApi::class, $api3);
-        $out3 = $api3->getOutputValues();
+        $out3 = $api3->getOutputElements();
         static::assertIsArray($out3);
         static::assertCount(1, $out3);
         $value3 = array_pop($out3);
@@ -205,7 +205,7 @@ class AbstractFunctionTest extends TestCase
         ));
         $api4 = $fnc2->getApi();
         static::assertInstanceOf(RemoteApi::class, $api4);
-        $input = $api4->getInputValues();
+        $input = $api4->getInputElements();
         static::assertIsArray($input);
         static::assertCount(1, $input);
         $value4 = array_pop($input);
@@ -256,7 +256,7 @@ class AbstractFunctionTest extends TestCase
         static::assertInstanceOf(AbstractFunction::class, $fnc);
         $api = $fnc->getApi();
         static::assertInstanceOf(RemoteApi::class, $api);
-        $api_inputs = $api->getInputValues();
+        $api_inputs = $api->getInputElements();
         static::assertIsArray($api_inputs);
         static::assertCount(1, $api_inputs);
         $api_input0 = array_pop($api_inputs);
@@ -457,7 +457,7 @@ class AbstractFunctionTest extends TestCase
         $api = $fnc->getApi();
         static::assertInstanceOf(RemoteApi::class, $api);
 
-        $input_values = $api->getInputValues();
+        $input_values = $api->getInputElements();
         static::assertIsArray($input_values);
         static::assertCount(1, $input_values);
 

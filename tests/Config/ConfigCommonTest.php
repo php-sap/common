@@ -76,7 +76,7 @@ class ConfigCommonTest extends TestCase
 
     /**
      * Data provider for invalid saprouter values.
-     * @return array<int, array<int, mixed>>
+     * @return array<int, array<int, string>>
      */
     public static function provideInvalidSaprouterValues(): array
     {
@@ -89,10 +89,10 @@ class ConfigCommonTest extends TestCase
 
     /**
      * Test invalid saprouter values.
-     * @param mixed $value
+     * @param string $value
      * @dataProvider             provideInvalidSaprouterValues
      */
-    public function testInvalidSaprouterValues(mixed $value): void
+    public function testInvalidSaprouterValues(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected SAPROUTER to be in following format:');
@@ -101,7 +101,7 @@ class ConfigCommonTest extends TestCase
 
     /**
      * Data provider for invalid trace values.
-     * @return array
+     * @return array<int, array<int, int>>
      */
     public static function provideInvalidTraceValues(): array
     {
@@ -125,7 +125,7 @@ class ConfigCommonTest extends TestCase
 
     /**
      * Data provider for invalid lang values.
-     * @return array<int, array<int, mixed>>
+     * @return array<int, array<int, string>>
      */
     public static function provideInvalidLangValues(): array
     {
@@ -137,10 +137,10 @@ class ConfigCommonTest extends TestCase
 
     /**
      * Test invalid lang values.
-     * @param mixed $value
+     * @param string $value
      * @dataProvider provideInvalidLangValues
      */
-    public function testInvalidLangValues(mixed $value): void
+    public function testInvalidLangValues(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected two letter country code as language!');

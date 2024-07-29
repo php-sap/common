@@ -112,10 +112,10 @@ class StructTest extends TestCase
     }
 
     /**
-     * Test adding non-IElement members.
+     * Test adding non-Member members.
      * @throws IInvalidArgumentException
      */
-    public function testNonIElementMembers(): void
+    public function testNonMembers(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(

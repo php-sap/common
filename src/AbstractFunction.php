@@ -60,7 +60,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
         $name = $this->getName();
         if (!array_key_exists($name, static::$allowedKeys)) {
             static::$allowedKeys[$name] = [];
-            foreach ($this->getApi()->getInputValues() as $input) {
+            foreach ($this->getApi()->getInputElements() as $input) {
                 static::$allowedKeys[$name][] = $input->getName();
             }
             foreach ($this->getApi()->getTables() as $table) {
@@ -226,7 +226,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Extract all expected SAP remote function call parameters from the given array
      * and set them.
-     * @param array $params An array of SAP remote function call parameters.
+     * @param array<string, null|bool|int|float|string|array<int|string, mixed>> $params An array of SAP remote function call parameters.
      * @return $this
      * @throws InvalidArgumentException
      */
@@ -250,7 +250,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Invoke the SAP remote function call with all parameters.
      * Attention: A configuration is necessary to invoke a SAP remote function call!
-     * @return array
+     * @return array<string, mixed>
      * @throws IncompleteConfigException Either a configuration class has not been set,
      *                                                      or it is missing a mandatory configuration key.
      * @throws ConnectionFailedException

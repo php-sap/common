@@ -20,7 +20,7 @@ final class Member extends JsonSerializable implements IMember
     use CastPrimitivesTrait;
 
     /**
-     * @var array Allowed JsonSerializable keys to set values for.
+     * @var array<int, string> Allowed JsonSerializable keys to set values for.
      */
     protected static array $allowedKeys = [
         self::JSON_TYPE,
@@ -51,7 +51,7 @@ final class Member extends JsonSerializable implements IMember
     }
 
     /**
-     * @inheritDoc
+     * @return array<int, string>
      */
     private function getAllowedTypes(): array
     {

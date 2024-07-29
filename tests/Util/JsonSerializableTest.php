@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace tests\phpsap\classes\Util;
 
+use JsonException;
 use phpsap\exceptions\InvalidArgumentException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -43,6 +44,8 @@ class JsonSerializableTest extends TestCase
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws JsonException
+     * @throws Exception
      */
     public function testSuccessfulDataStorage(): void
     {
@@ -94,7 +97,9 @@ class JsonSerializableTest extends TestCase
             'ktOFBe9N' => ['KTEfbUvj' => 294]
         ];
         static::assertSame($expected_array, $actual_array);
-        $actual_array2 = PublicJsonSerializable::objToArray(json_decode($actual_json, false));
+        $actual = json_decode($actual_json, false, 512, JSON_THROW_ON_ERROR);
+        static::assertInstanceOf(stdClass::class, $actual);
+        $actual_array2 = PublicJsonSerializable::objToArray($actual);
         static::assertSame($expected_array, $actual_array2);
         $store->reset();
         static::assertSame([], $store->toArray());
@@ -102,7 +107,7 @@ class JsonSerializableTest extends TestCase
 
     /**
      * Data provider for valid JSON objects.
-     * @return array<int, array<int, string|array|stdClass>>
+     * @return array<int, array<int, string|stdClass|array<string, string|int>>>
      */
     public static function provideValidJsonObjects(): array
     {
@@ -116,7 +121,7 @@ class JsonSerializableTest extends TestCase
 
     /**
      * Test valid JSON objects to array conversion.
-     * @param stdClass|array|string $obj
+     * @param stdClass|array<string, string|int>|string $obj
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -197,7 +202,7 @@ class JsonSerializableTest extends TestCase
 
     /**
      * Data provider for invalid JSON.
-     * @return array<int, array<int, string>
+     * @return array<int, array<int, string>>
      */
     public static function provideInvalidJson(): array
     {

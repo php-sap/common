@@ -52,7 +52,7 @@ class ValueTest extends TestCase
 
     /**
      * Data provider for incomplete JSON objects.
-     * @return array
+     * @return array<int, array<int, string>>
      */
     public static function provideIncompleteJsonObjects(): array
     {
@@ -60,10 +60,6 @@ class ValueTest extends TestCase
         $return[] = ['{"type":"int","name":"TRD2cpKy"}'];
         $return[] = ['{"type":true,"name":"H5vNFNkl","optional":true}'];
         $return[] = ['{"type":"int","name":711,"direction":"output"}'];
-        /** @noinspection PhpObjectFieldsAreOnlyWrittenInspection */
-        $obj = new stdClass();
-        $obj->type = IValue::TYPE_BOOLEAN;
-        $obj->name = '9vQWkdZF';
         return $return;
     }
 

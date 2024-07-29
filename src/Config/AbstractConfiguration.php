@@ -28,7 +28,7 @@ abstract class AbstractConfiguration extends JsonSerializable implements IConfig
      * @throws InvalidArgumentException In case the configuration is neither JSON
      *                                  nor an array.
      */
-    public function __construct($config = null)
+    public function __construct($config = [])
     {
         parent::__construct();
         if ($config === null) {

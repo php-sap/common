@@ -31,7 +31,7 @@ final class Value extends JsonSerializable implements IValue
     use CastPrimitivesTrait;
 
     /**
-     * @var array Allowed JsonSerializable keys to set values for.
+     * @var array<int, string> Allowed JsonSerializable keys to set values for.
      */
     protected static array $allowedKeys = [
         self::JSON_TYPE,
@@ -55,7 +55,7 @@ final class Value extends JsonSerializable implements IValue
     /**
      * @inheritDoc
      */
-    public static function create(string $type, string $name, string $direction, bool $isOptional): IValue
+    public static function create(string $type, string $name, string $direction, bool $isOptional): Value
     {
         return new Value(
             [
@@ -68,7 +68,7 @@ final class Value extends JsonSerializable implements IValue
     }
 
     /**
-     * @inheritDoc
+     * @return array<int, string>
      */
     private function getAllowedTypes(): array
     {
@@ -86,7 +86,7 @@ final class Value extends JsonSerializable implements IValue
     }
 
     /**
-     * @inheritDoc
+     * @return array<int, string>
      */
     private function getAllowedDirections(): array
     {

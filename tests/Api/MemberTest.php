@@ -67,7 +67,7 @@ class MemberTest extends TestCase
     /**
      * Data provider for values, that won't JSON decode to the expected configuration
      * array.
-     * @return array<int, array<int, string>
+     * @return array<int, array<int, string>>
      */
     public static function provideInvalidJsonString(): array
     {

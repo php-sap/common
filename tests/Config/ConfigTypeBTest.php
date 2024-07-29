@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace tests\phpsap\classes\Config;
 
+use JsonException;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
@@ -51,6 +52,7 @@ class ConfigTypeBTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws IncompleteConfigException
      * @throws IInvalidArgumentException
+     * @throws JsonException
      */
     public function testSetAndGet(): void
     {
@@ -64,7 +66,7 @@ class ConfigTypeBTest extends TestCase
         static::assertSame('AyRc4bxpQj', $config->getGroup());
         static::assertJsonStringEqualsJsonString(
             '{"mshost":"caum5mXQaN","r3name":"D3Y3HWdOMX","group":"AyRc4bxpQj"}',
-            json_encode($config)
+            json_encode($config, JSON_THROW_ON_ERROR)
         );
     }
 }

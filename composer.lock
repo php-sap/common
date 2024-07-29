@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "be6bf3a77326a48d6e177ad7b26d9bed",
+    "content-hash": "b423d981a30b7741b341b62dc1997626",
     "packages": [
         {
             "name": "php-sap/datetime",
@@ -63,22 +63,21 @@
         },
         {
             "name": "php-sap/interfaces",
-            "version": "v4.1.0",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/interfaces.git",
-                "reference": "39c266dcd5a0b38be8350aa8540f8a6e45b872f1"
+                "reference": "336c6093dfc5c4cdacd7ffc68421bdc6a14bf8d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/39c266dcd5a0b38be8350aa8540f8a6e45b872f1",
-                "reference": "39c266dcd5a0b38be8350aa8540f8a6e45b872f1",
+                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/336c6093dfc5c4cdacd7ffc68421bdc6a14bf8d6",
+                "reference": "336c6093dfc5c4cdacd7ffc68421bdc6a14bf8d6",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^8.1",
-                "php-sap/datetime": "^1.5"
+                "php": "^8.1"
             },
             "conflict": {
                 "kba-team/php-sap": "*"
@@ -86,6 +85,7 @@
             "require-dev": {
                 "squizlabs/php_codesniffer": "^3.7"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -112,9 +112,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-sap/interfaces/issues",
-                "source": "https://github.com/php-sap/interfaces/tree/v4.1.0"
+                "source": "https://github.com/php-sap/interfaces/tree/main"
             },
-            "time": "2024-07-24T10:17:58+00:00"
+            "time": "2024-07-26T12:32:35+00:00"
         }
     ],
     "packages-dev": [
@@ -1942,7 +1942,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "php-sap/interfaces": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

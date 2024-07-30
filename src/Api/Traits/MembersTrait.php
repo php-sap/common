@@ -39,7 +39,7 @@ trait MembersTrait
 
     /**
      * Set the member elements of the table.
-     * @param array<int, IMember|array<int, array<string, string>>> $members
+     * @param array<int, IMember|array<string, array<int|string, mixed>|bool|float|int|string|null>> $members
      * @throws InvalidArgumentException
      */
     protected function setMembers(array $members): void

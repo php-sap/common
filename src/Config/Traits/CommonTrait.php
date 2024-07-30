@@ -2,29 +2,22 @@
 
 declare(strict_types=1);
 
-namespace phpsap\classes\Config;
+namespace phpsap\classes\Config\Traits;
 
 use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
-use phpsap\interfaces\Config\IConfigCommon;
+use phpsap\interfaces\Config\IConfiguration;
 
 /**
- * Class phpsap\classes\Config\ConfigCommon
- *
- * Configure common connection parameters for SAP remote function calls.
- *
- * @package phpsap\classes\Config
- * @author  Gregor J.
- * @license MIT
+ * Trait CommonTrait
  */
-abstract class ConfigCommon extends AbstractConfiguration implements IConfigCommon
+trait CommonTrait
 {
     /**
      * Get an array of all valid keys this class is able to set().
      * @return array<int, string>
-     * @noinspection PhpMissingParentCallCommonInspection
      */
-    protected function getAllowedKeys(): array
+    protected function getCommonAllowedKeys(): array
     {
         return [
             self::JSON_USER,
@@ -51,10 +44,10 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Set the username to use for authentication.
      * @param string $user The username.
-     * @return $this
+     * @return IConfiguration
      * @throws InvalidArgumentException
      */
-    public function setUser(string $user): IConfigCommon
+    public function setUser(string $user): IConfiguration
     {
         $this->set(self::JSON_USER, $user);
         return $this;
@@ -73,10 +66,10 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Get the password to use for authentication.
      * @param string $passwd The password.
-     * @return $this
+     * @return IConfiguration
      * @throws InvalidArgumentException
      */
-    public function setPasswd(string $passwd): IConfigCommon
+    public function setPasswd(string $passwd): IConfiguration
     {
         $this->set(self::JSON_PASSWD, $passwd);
         return $this;
@@ -96,10 +89,10 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Set the client.
      * @param string $client The client.
-     * @return $this
+     * @return IConfiguration
      * @throws InvalidArgumentException
      */
-    public function setClient(string $client): IConfigCommon
+    public function setClient(string $client): IConfiguration
     {
         $this->set(self::JSON_CLIENT, $client);
         return $this;
@@ -125,10 +118,10 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * specify the SAPRouter parameters in the following format:
      * /H/hostname/S/portnumber/H/
      * @param string $saprouter The saprouter configuration parameter.
-     * @return $this
+     * @return IConfiguration
      * @throws InvalidArgumentException
      */
-    public function setSaprouter(string $saprouter): IConfigCommon
+    public function setSaprouter(string $saprouter): IConfiguration
     {
         if (!preg_match('~^/H/[a-z\d.\-]+/S/\d+/H/$~i', $saprouter)) {
             throw new InvalidArgumentException(
@@ -156,10 +149,10 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Set the trace level (0-3). See constants TRACE_*.
      * @param int $trace The trace level.
-     * @return $this
+     * @return IConfiguration
      * @throws InvalidArgumentException
      */
-    public function setTrace(int $trace): IConfigCommon
+    public function setTrace(int $trace): IConfiguration
     {
         if ($trace > self::TRACE_FULL || $trace < self::TRACE_OFF) {
             throw new InvalidArgumentException(
@@ -192,10 +185,10 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
      * codepage for the initial handshake, thus preserving the characters in
      * username/password.
      * @param int $codepage The codepage.
-     * @return $this
+     * @return IConfiguration
      * @throws InvalidArgumentException
      */
-    public function setCodepage(int $codepage): IConfigCommon
+    public function setCodepage(int $codepage): IConfiguration
     {
         $this->set(self::JSON_CODEPAGE, $codepage);
         return $this;
@@ -217,10 +210,10 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Set the logon language.
      * @param string $lang The logon language.
-     * @return $this
+     * @return IConfiguration
      * @throws InvalidArgumentException
      */
-    public function setLang(string $lang): IConfigCommon
+    public function setLang(string $lang): IConfiguration
     {
         if (!preg_match('~^[A-Z]{2}$~', $lang)) {
             throw new InvalidArgumentException(
@@ -247,10 +240,10 @@ abstract class ConfigCommon extends AbstractConfiguration implements IConfigComm
     /**
      * Set the destination in RfcOpenConnection.
      * @param string $dest The destination in RfcOpenConnection.
-     * @return $this
+     * @return IConfiguration
      * @throws InvalidArgumentException
      */
-    public function setDest(string $dest): IConfigCommon
+    public function setDest(string $dest): IConfiguration
     {
         $this->set(self::JSON_DEST, $dest);
         return $this;

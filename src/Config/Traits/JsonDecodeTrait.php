@@ -2,58 +2,39 @@
 
 declare(strict_types=1);
 
-namespace phpsap\classes\Config;
+namespace phpsap\classes\Config\Traits;
 
-use phpsap\classes\Util\JsonSerializable;
+use JsonException;
+use phpsap\classes\Config\ConfigTypeA;
+use phpsap\classes\Config\ConfigTypeB;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigTypeA;
 use phpsap\interfaces\Config\IConfigTypeB;
 use phpsap\interfaces\Config\IConfiguration;
-use stdClass;
 
 /**
- * Class phpsap\classes\Config\AbstractConfiguration
- *
- * This class reads, writes and removes configuration keys and their values.
- *
- * @package phpsap\classes\Config
- * @author  Gregor J.
- * @license MIT
+ * Trait JsonDecodeTrait
  */
-abstract class AbstractConfiguration extends JsonSerializable implements IConfiguration
+trait JsonDecodeTrait
 {
-    /**
-     * Load the configuration either from a JSON encoded string or from an array.
-     * @param array|string|stdClass $config the configuration
-     * @throws InvalidArgumentException In case the configuration is neither JSON
-     *                                  nor an array.
-     */
-    public function __construct($config = [])
-    {
-        parent::__construct();
-        if ($config === null) {
-            return;
-        }
-        $config = static::objToArray($config);
-        foreach ($this->getAllowedKeys() as $key) {
-            if (array_key_exists($key, $config)) {
-                $method = sprintf('set%s', ucfirst($key));
-                $this->{$method}($config[$key]);
-            }
-        }
-    }
-
     /**
      * Decode a JSON encoded configuration and return the correct configuration
      * class (A or B) depending on the values set in the configuration.
      * @param string $json JSON encoded configuration.
      * @return IConfiguration
      * @throws InvalidArgumentException
-     * @noinspection PhpMissingParentCallCommonInspection
      */
     public static function jsonDecode(string $json): IConfiguration
     {
-        $config = static::jsonToArray($json);
+        try {
+            $config = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new InvalidArgumentException(
+                sprintf('Invalid JSON object! Expected %s JSON object or array!', static::class),
+                0,
+                $exception
+            );
+        }
         if (
             array_key_exists(IConfigTypeA::JSON_ASHOST, $config)
             || array_key_exists(IConfigTypeA::JSON_SYSNR, $config)

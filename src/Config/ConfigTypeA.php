@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace phpsap\classes\Config;
 
+use phpsap\classes\Config\Traits\CommonTrait;
+use phpsap\classes\Config\Traits\JsonDecodeTrait;
+use phpsap\classes\Util\JsonSerializable;
 use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigTypeA;
@@ -18,8 +21,11 @@ use phpsap\interfaces\Config\IConfigTypeA;
  * @author  Gregor J.
  * @license MIT
  */
-class ConfigTypeA extends ConfigCommon implements IConfigTypeA
+final class ConfigTypeA extends JsonSerializable implements IConfigTypeA
 {
+    use CommonTrait;
+    use JsonDecodeTrait;
+
     /**
      * Get an array of all valid keys this class is able to set().
      * @return array<int, string>
@@ -27,20 +33,23 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
      */
     protected function getAllowedKeys(): array
     {
-        return [
-            self::JSON_ASHOST,
-            self::JSON_SYSNR,
-            self::JSON_GWHOST,
-            self::JSON_GWSERV,
-            self::JSON_USER,
-            self::JSON_PASSWD,
-            self::JSON_CLIENT,
-            self::JSON_SAPROUTER,
-            self::JSON_TRACE,
-            self::JSON_LANG,
-            self::JSON_DEST,
-            self::JSON_CODEPAGE
-        ];
+        return array_merge(
+            $this->getCommonAllowedKeys(),
+            [
+                self::JSON_ASHOST,
+                self::JSON_SYSNR,
+                self::JSON_GWHOST,
+                self::JSON_GWSERV,
+                self::JSON_USER,
+                self::JSON_PASSWD,
+                self::JSON_CLIENT,
+                self::JSON_SAPROUTER,
+                self::JSON_TRACE,
+                self::JSON_LANG,
+                self::JSON_DEST,
+                self::JSON_CODEPAGE
+            ]
+        );
     }
 
     /**

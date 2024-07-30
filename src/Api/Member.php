@@ -22,16 +22,6 @@ final class Member extends JsonSerializable implements IMember
     /**
      * @inheritDoc
      */
-    public function __construct(array $array)
-    {
-        parent::__construct($array);
-        $this->setType($array[self::JSON_TYPE]);
-        $this->setName($array[self::JSON_NAME]);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public static function create(string $type, string $name): Member
     {
         return new Member(

@@ -33,18 +33,6 @@ final class Value extends JsonSerializable implements IValue
     /**
      * @inheritDoc
      */
-    public function __construct(array $array)
-    {
-        parent::__construct($array);
-        $this->setType($array[self::JSON_TYPE]);
-        $this->setName($array[self::JSON_NAME]);
-        $this->setDirection($array[self::JSON_DIRECTION]);
-        $this->setOptional($array[self::JSON_OPTIONAL]);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public static function create(string $type, string $name, string $direction, bool $isOptional): Value
     {
         return new Value(

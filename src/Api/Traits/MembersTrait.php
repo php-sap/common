@@ -60,30 +60,4 @@ trait MembersTrait
         $this->remove(self::JSON_MEMBERS);
         $this->set(self::JSON_MEMBERS, $members);
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(array $array)
-    {
-        /** @noinspection PhpMultipleClassDeclarationsInspection */
-        parent::__construct($array);
-        $this->setType($array[self::JSON_TYPE]);
-        $this->setName($array[self::JSON_NAME]);
-        $this->setDirection($array[self::JSON_DIRECTION]);
-        $this->setOptional($array[self::JSON_OPTIONAL]);
-        $members = [];
-        foreach ($array[self::JSON_MEMBERS] as $member) {
-            if (!is_array($member)) {
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'Invalid JSON: API %s members are not an array!',
-                        self::class
-                    )
-                );
-            }
-            $members[] = new Member($member);
-        }
-        $this->setMembers($members);
-    }
 }

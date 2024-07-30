@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpsap\classes;
 
+use JsonException;
 use phpsap\classes\Api\RemoteApi;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\exceptions\ConnectionFailedException;
@@ -76,7 +77,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * queried on the fly by connecting to the SAP remote system. In order to
      * connect to the SAP remote system, you need a connection configuration.
      * @param string $name SAP remote function name.
-     * @param array|null $params SAP remote function call parameters. Default: null
+     * @param null|array<string, null|bool|int|float|string|array<int|string, mixed>> $params SAP remote function call parameters. Default: null
      * @param IConfiguration|null $config Connection configuration. Default: null
      * @param IApi|null $api SAP remote function call API. Default: null
      * @throws InvalidArgumentException
@@ -85,19 +86,20 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * @throws IInvalidArgumentException
      * @throws IUnknownFunctionException
      */
-    public function __construct($name, array $params = null, IConfiguration $config = null, IApi $api = null)
+    public static function create(string $name, ?array $params = null, ?IConfiguration $config = null, ?IApi $api = null): IFunction
     {
-        parent::__construct();
-        $this->setName($name);
+        $function = new static();
+        $function->setName($name);
         if ($config !== null) {
-            $this->config = $config;
+            $function->setConfiguration($config);
         }
         if ($api !== null) {
-            $this->setApi($api);
+            $function->setApi($api);
         }
         if ($params !== null) {
-            $this->setParams($params);
+            $function->setParams($params);
         }
+        return $function;
     }
 
     /**
@@ -107,12 +109,13 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      */
     private function setName(string $name): void
     {
-        if (trim($name) === '') {
+        $name = trim($name);
+        if ($name === '') {
             throw new InvalidArgumentException(
                 'Missing or malformed SAP remote function name'
             );
         }
-        $this->name = trim($name);
+        $this->name = $name;
     }
 
     /**
@@ -202,7 +205,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
 
     /**
      * Returns all previously set parameters.
-     * @return array<string, array<int|string, mixed>|bool|float|int|string>
+     * @return array<string, mixed>
      */
     public function getParams(): array
     {
@@ -227,11 +230,23 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * and set them.
      * @param array<string, null|bool|int|float|string|array<int|string, mixed>> $params An array of SAP remote function call parameters.
      * @return $this
+     * @throws ConnectionFailedException
+     * @throws IncompleteConfigException
      * @throws InvalidArgumentException
+     * @throws UnknownFunctionException
      */
     public function setParams(array $params): IFunction
     {
-        $this->setMultiple($params);
+        foreach ($this->getAllowedKeys() as $key) {
+            if (!array_key_exists($key, $params)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid JSON: %s is missing %s!',
+                    static::class,
+                    $key
+                ));
+            }
+            $this->set($key, $params[$key]);
+        }
         return $this;
     }
 
@@ -288,7 +303,15 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      */
     public static function jsonDecode(string $json): IFunction
     {
-        $array = static::jsonToArray($json);
+        try {
+            $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new InvalidArgumentException(
+                sprintf('Invalid JSON object! Expected %s JSON object or array!', static::class),
+                0,
+                $exception
+            );
+        }
         if (
             array_key_exists(self::JSON_NAME, $array)
             && array_key_exists(self::JSON_API, $array)

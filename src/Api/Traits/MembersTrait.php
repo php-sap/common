@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace phpsap\classes\Api\Traits;
 
 use phpsap\classes\Api\Member;
-use phpsap\classes\Api\Struct;
-use phpsap\classes\Api\Table;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IMember;
 
@@ -41,13 +39,15 @@ trait MembersTrait
 
     /**
      * Set the member elements of the table.
-     * @param array<int, IMember> $members
+     * @param array<int, IMember|array<int, array<string, string>>> $members
      * @throws InvalidArgumentException
      */
     protected function setMembers(array $members): void
     {
-        foreach ($members as $member) {
-            if (!$member instanceof Member) {
+        foreach ($members as $index => $member) {
+            if (is_array($member)) {
+                $members[$index] = new Member($member);
+            } elseif (!$member instanceof Member) {
                 throw new InvalidArgumentException(
                     sprintf(
                         'Expected API %s members to be instances of %s!',

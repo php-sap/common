@@ -18,7 +18,6 @@ use phpsap\interfaces\exceptions\IIncompleteConfigException;
 use phpsap\interfaces\exceptions\IInvalidArgumentException;
 use phpsap\interfaces\exceptions\IUnknownFunctionException;
 use phpsap\interfaces\IFunction;
-use phpsap\interfaces\Util\IJsonSerializable;
 
 /**
  * Class AbstractFunction
@@ -42,7 +41,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     private string $name;
 
     /**
-     * @var RemoteApi[]
+     * @var IApi[]
      */
     private static array $api = [];
 
@@ -150,7 +149,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Connect to the SAP remote system and retrieve the API of the SAP remote
      * function. This ignores any API settings in this class.
-     * @return RemoteApi
+     * @return IApi
      * @throws IncompleteConfigException
      * @throws ConnectionFailedException
      * @throws UnknownFunctionException
@@ -161,7 +160,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * Get the remote function API.
      * In case no SAP remote function call API has been defined, it will be queried
      * on the fly by connecting to the SAP remote system.
-     * @return RemoteApi
+     * @return IApi
      * @throws ConnectionFailedException
      * @throws IncompleteConfigException
      * @throws UnknownFunctionException
@@ -193,17 +192,17 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Return a single previously set parameter.
      * @param string $key Name of the parameter to get.
-     * @return array|bool|float|int|string
+     * @return array<int|string, mixed>|bool|float|int|string|null
      * @throws InvalidArgumentException
      */
-    public function getParam(string $key): float|array|bool|int|string
+    public function getParam(string $key): float|array|bool|int|string|null
     {
         return $this->get($key);
     }
 
     /**
      * Returns all previously set parameters.
-     * @return array
+     * @return array<string, array<int|string, mixed>|bool|float|int|string>
      */
     public function getParams(): array
     {
@@ -213,7 +212,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Set a single SAP remote function call parameter.
      * @param string $key   Name of the parameter to set.
-     * @param float|int|bool|array|string $value Value of the parameter.
+     * @param array<int|string, mixed>|bool|float|int|string $value Value of the parameter.
      * @return $this
      * @throws InvalidArgumentException
      */
@@ -261,7 +260,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
 
     /**
      * @inheritDoc
-     * @return array
+     * @return array<string, string|IApi|array<string, mixed>>
      * @throws ConnectionFailedException
      * @throws IncompleteConfigException
      * @throws UnknownFunctionException

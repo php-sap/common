@@ -20,9 +20,16 @@ use phpsap\classes\Config\AbstractConfiguration;
 class AbstractConfigurationInstance extends AbstractConfiguration
 {
     /**
-     * @var array<int, string> Valid config keys for testing.
+     * Get an array of all valid keys this class is able to set().
+     * @return array<int, string>
+     * @noinspection PhpMissingParentCallCommonInspection
      */
-    public static array $allowedKeys = ['zadgcjmt'];
+    protected function getAllowedKeys(): array
+    {
+        return [
+            'zadgcjmt'
+        ];
+    }
 
     /**
      * Retrieves a configuration value for a given key.

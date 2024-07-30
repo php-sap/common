@@ -20,14 +20,6 @@ final class Member extends JsonSerializable implements IMember
     use CastPrimitivesTrait;
 
     /**
-     * @var array<int, string> Allowed JsonSerializable keys to set values for.
-     */
-    protected static array $allowedKeys = [
-        self::JSON_TYPE,
-        self::JSON_NAME
-    ];
-
-    /**
      * @inheritDoc
      */
     public function __construct(array $array)
@@ -48,6 +40,19 @@ final class Member extends JsonSerializable implements IMember
                 self::JSON_NAME => $name
             ]
         );
+    }
+
+    /**
+     * Get an array of all valid keys this class is able to set().
+     * @return array<int, string>
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
+    protected function getAllowedKeys(): array
+    {
+        return [
+            self::JSON_TYPE,
+            self::JSON_NAME
+        ];
     }
 
     /**

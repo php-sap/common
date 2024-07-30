@@ -26,17 +26,12 @@ class JsonSerializable implements IJsonSerializable
     private stdClass $data;
 
     /**
-     * @var array<int, string> Allowed keys to set values for.
-     */
-    protected static array $allowedKeys = [];
-
-    /**
      * Get an array of all valid keys this class is able to set().
      * @return array<int, string>
      */
     protected function getAllowedKeys(): array
     {
-        return static::$allowedKeys;
+        return [];
     }
 
     /**

@@ -31,16 +31,6 @@ final class Value extends JsonSerializable implements IValue
     use CastPrimitivesTrait;
 
     /**
-     * @var array<int, string> Allowed JsonSerializable keys to set values for.
-     */
-    protected static array $allowedKeys = [
-        self::JSON_TYPE,
-        self::JSON_NAME,
-        self::JSON_DIRECTION,
-        self::JSON_OPTIONAL
-    ];
-
-    /**
      * @inheritDoc
      */
     public function __construct(array $array)
@@ -65,6 +55,21 @@ final class Value extends JsonSerializable implements IValue
                 self::JSON_OPTIONAL => $isOptional
             ]
         );
+    }
+
+    /**
+     * Get an array of all valid keys this class is able to set().
+     * @return array<int, string>
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
+    protected function getAllowedKeys(): array
+    {
+        return [
+            self::JSON_TYPE,
+            self::JSON_NAME,
+            self::JSON_DIRECTION,
+            self::JSON_OPTIONAL
+        ];
     }
 
     /**

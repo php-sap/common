@@ -20,11 +20,6 @@ use stdClass;
 class PublicJsonSerializable extends JsonSerializable
 {
     /**
-     * @var array<int, string>
-     */
-    public static array $allowedKeys = [];
-
-    /**
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */

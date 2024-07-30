@@ -21,21 +21,26 @@ use phpsap\interfaces\Config\IConfigTypeB;
 class ConfigTypeB extends ConfigCommon implements IConfigTypeB
 {
     /**
-     * @var array Allowed JsonSerializable keys to set values for.
+     * Get an array of all valid keys this class is able to set().
+     * @return array<int, string>
+     * @noinspection PhpMissingParentCallCommonInspection
      */
-    protected static array $allowedKeys = [
-        self::JSON_MSHOST,
-        self::JSON_R3NAME,
-        self::JSON_GROUP,
-        self::JSON_USER,
-        self::JSON_PASSWD,
-        self::JSON_CLIENT,
-        self::JSON_SAPROUTER,
-        self::JSON_TRACE,
-        self::JSON_LANG,
-        self::JSON_DEST,
-        self::JSON_CODEPAGE
-    ];
+    protected function getAllowedKeys(): array
+    {
+        return [
+            self::JSON_MSHOST,
+            self::JSON_R3NAME,
+            self::JSON_GROUP,
+            self::JSON_USER,
+            self::JSON_PASSWD,
+            self::JSON_CLIENT,
+            self::JSON_SAPROUTER,
+            self::JSON_TRACE,
+            self::JSON_LANG,
+            self::JSON_DEST,
+            self::JSON_CODEPAGE
+        ];
+    }
 
     /**
      * Get the host name of the message server.

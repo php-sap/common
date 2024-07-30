@@ -48,26 +48,26 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
 
     /**
      * Get an array of all valid input parameters.
-     * @return array
+     * @return array<int, string>
      * @throws ConnectionFailedException
      * @throws IncompleteConfigException
-     * @throws InvalidArgumentException
      * @throws UnknownFunctionException
      * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function getAllowedKeys(): array
     {
         $name = $this->getName();
-        if (!array_key_exists($name, static::$allowedKeys)) {
-            static::$allowedKeys[$name] = [];
+        static $allowed_keys = [];
+        if (!array_key_exists($name, $allowed_keys)) {
+            $allowed_keys[$name] = [];
             foreach ($this->getApi()->getInputElements() as $input) {
-                static::$allowedKeys[$name][] = $input->getName();
+                $allowed_keys[$name][] = $input->getName();
             }
             foreach ($this->getApi()->getTables() as $table) {
-                static::$allowedKeys[$name][] = $table->getName();
+                $allowed_keys[$name][] = $table->getName();
             }
         }
-        return static::$allowedKeys[$name];
+        return $allowed_keys[$name];
     }
 
     /**

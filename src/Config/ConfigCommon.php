@@ -20,18 +20,23 @@ use phpsap\interfaces\Config\IConfigCommon;
 abstract class ConfigCommon extends AbstractConfiguration implements IConfigCommon
 {
     /**
-     * @var array Allowed JsonSerializable keys to set values for.
+     * Get an array of all valid keys this class is able to set().
+     * @return array<int, string>
+     * @noinspection PhpMissingParentCallCommonInspection
      */
-    protected static array $allowedKeys = [
-        self::JSON_USER,
-        self::JSON_PASSWD,
-        self::JSON_CLIENT,
-        self::JSON_SAPROUTER,
-        self::JSON_TRACE,
-        self::JSON_LANG,
-        self::JSON_DEST,
-        self::JSON_CODEPAGE
-    ];
+    protected function getAllowedKeys(): array
+    {
+        return [
+            self::JSON_USER,
+            self::JSON_PASSWD,
+            self::JSON_CLIENT,
+            self::JSON_SAPROUTER,
+            self::JSON_TRACE,
+            self::JSON_LANG,
+            self::JSON_DEST,
+            self::JSON_CODEPAGE
+        ];
+    }
 
     /**
      * Get the username to use for authentication.

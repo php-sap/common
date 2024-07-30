@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpsap\classes\Util;
 
+use JsonException;
 use stdClass;
 use phpsap\interfaces\Util\IJsonSerializable;
 use phpsap\exceptions\InvalidArgumentException;
@@ -42,7 +43,13 @@ class JsonSerializable implements IJsonSerializable
     public function __construct(array $data = [])
     {
         $this->reset();
-        $this->setMultiple($data);
+        foreach ($this->getAllowedKeys() as $key) {
+            if (array_key_exists($key, $data)) {
+                //call config key specific set method
+                $method = sprintf('set%s', ucfirst($key));
+                $this->{$method}($data[$key]);
+            }
+        }
     }
 
     /**
@@ -93,36 +100,6 @@ class JsonSerializable implements IJsonSerializable
         if (!in_array($this->validateKey($key), $this->getAllowedKeys(), true)) {
             throw new InvalidArgumentException(sprintf('Unknown key \'%s\'!', $key));
         }
-        $this->setValue($key, $value);
-    }
-
-    /**
-     * This method extracts only allowed keys from the given array.
-     * @param array<string, null|bool|int|float|string|array<int|string, mixed>> $data Associative array of keys and values to set.
-     * @throws InvalidArgumentException
-     */
-    protected function setMultiple(array $data): void
-    {
-        foreach ($this->getAllowedKeys() as $key) {
-            if (!array_key_exists($key, $data)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Invalid JSON: %s is missing %s!',
-                    static::class,
-                    $key
-                ));
-            }
-            $this->setValue($key, $data[$key]);
-        }
-    }
-
-    /**
-     * Set the value for a valid and allowed key. This method will not check the key
-     * anymore, only the value!
-     * @param string $key The key to set the value for.
-     * @param null|bool|int|float|string|array<int|string, mixed> $value The value to set.
-     */
-    private function setValue(string $key, null|bool|int|float|string|array $value): void
-    {
         $this->data->{$key} = $value;
     }
 
@@ -180,48 +157,16 @@ class JsonSerializable implements IJsonSerializable
      */
     public static function jsonDecode(string $json): IJsonSerializable
     {
-        return new static(self::jsonToArray($json));
-    }
-
-    /**
-     * Decode a JSON encoded object to an array.
-     * @param string $json JSON encoded object.
-     * @return array<string, mixed> Array of the JSON encoded object.
-     * @throws InvalidArgumentException
-     */
-    protected static function jsonToArray(string $json): array
-    {
-        $array = json_decode($json, true);
-        if (is_array($array)) {
-            return $array;
+        try {
+            $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new InvalidArgumentException(
+                sprintf('Invalid JSON object! Expected %s JSON object or array!', static::class),
+                0,
+                $exception
+            );
         }
-        throw new InvalidArgumentException(sprintf(
-            'Invalid JSON! Expected JSON encoded %s string!',
-            static::class
-        ));
-    }
-
-    /**
-     * Convert any given representation of a JSON object to an array.
-     * @param string|stdClass|array<string, mixed> $obj  JSON encoded object (string), or a JSON
-     *                                     decoded object (stdClass or array).
-     * @return array<string, mixed>
-     * @throws InvalidArgumentException
-     */
-    protected static function objToArray(array|string|stdClass $obj): array
-    {
-        if (is_object($obj)) {
-            $obj = json_encode($obj);
-        }
-        if (is_string($obj)) {
-            $obj = json_decode($obj, true);
-        }
-        if (is_array($obj)) {
-            return $obj;
-        }
-        throw new InvalidArgumentException(sprintf(
-            'Invalid JSON object! Expected %s JSON object or array!',
-            static::class
-        ));
+        //use the common constructor
+        return new static($array);
     }
 }

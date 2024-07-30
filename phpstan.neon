@@ -17,3 +17,5 @@ parameters:
     - '/Parameter #2 \$array of function array_key_exists expects array, mixed given\./'
     - '/Method phpsap\\classes\\Config\\ConfigType(A|B)::(getAshost|getSysnr|getGwhost|getGwserv|getMshost|getR3name|getGroup|getUser|getPasswd|getClient|getSaprouter|getTrace|getCodepage|getLang|getDest)\(\) should return (int|string)(\|null|) but returns array<int\|string, mixed>\|bool\|float\|int\|string\|null\./'
     - '/Method phpsap.*::(getDirection|getMembers|getName|isOptional|getType)\(\) should return .* but returns array<int\|string, mixed>\|bool\|float\|int\|string\|null\./'
+    # json_decode() returns mixed in JsonSerializable::jsonDecode()
+    - '/Parameter #1 \$data of class phpsap\\classes\\Util\\JsonSerializable constructor expects array<string, array<int\|string, mixed>\|bool\|float\|int\|string\|null>, mixed given\./'

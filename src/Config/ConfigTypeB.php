@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace phpsap\classes\Config;
 
+use phpsap\classes\Config\Traits\CommonTrait;
+use phpsap\classes\Config\Traits\JsonDecodeTrait;
+use phpsap\classes\Util\JsonSerializable;
 use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigTypeB;
@@ -18,24 +21,34 @@ use phpsap\interfaces\Config\IConfigTypeB;
  * @author  Gregor J.
  * @license MIT
  */
-class ConfigTypeB extends ConfigCommon implements IConfigTypeB
+final class ConfigTypeB extends JsonSerializable implements IConfigTypeB
 {
+    use CommonTrait;
+    use JsonDecodeTrait;
+
     /**
-     * @var array Allowed JsonSerializable keys to set values for.
+     * Get an array of all valid keys this class is able to set().
+     * @return array<int, string>
      */
-    protected static array $allowedKeys = [
-        self::JSON_MSHOST,
-        self::JSON_R3NAME,
-        self::JSON_GROUP,
-        self::JSON_USER,
-        self::JSON_PASSWD,
-        self::JSON_CLIENT,
-        self::JSON_SAPROUTER,
-        self::JSON_TRACE,
-        self::JSON_LANG,
-        self::JSON_DEST,
-        self::JSON_CODEPAGE
-    ];
+    protected function getAllowedKeys(): array
+    {
+        return array_merge(
+            $this->getCommonAllowedKeys(),
+            [
+                self::JSON_MSHOST,
+                self::JSON_R3NAME,
+                self::JSON_GROUP,
+                self::JSON_USER,
+                self::JSON_PASSWD,
+                self::JSON_CLIENT,
+                self::JSON_SAPROUTER,
+                self::JSON_TRACE,
+                self::JSON_LANG,
+                self::JSON_DEST,
+                self::JSON_CODEPAGE
+            ]
+        );
+    }
 
     /**
      * Get the host name of the message server.
@@ -45,16 +58,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
      */
     public function getMshost(): string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        if (($result = $this->get(self::JSON_MSHOST)) === null) {
-            throw new IncompleteConfigException(sprintf(
-                'Configuration is missing mandatory key %s!',
-                self::JSON_MSHOST
-            ));
-        }
-        return $result;
+        return $this->get(self::JSON_MSHOST);
     }
 
     /**
@@ -96,7 +100,7 @@ class ConfigTypeB extends ConfigCommon implements IConfigTypeB
 
     /**
      * Get the group name of the application servers, optional; default: PUBLIC.
-     * @return string group name of the application servers
+     * @return string|null group name of the application servers
      * @throws InvalidArgumentException
      */
     public function getGroup(): ?string

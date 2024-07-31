@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace tests\phpsap\classes\Config;
 
+use JsonException;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigTypeB;
 use phpsap\interfaces\Config\IConfiguration;
-use phpsap\classes\Config\AbstractConfiguration;
-use phpsap\classes\Config\ConfigCommon;
 use phpsap\classes\Config\ConfigTypeB;
 use phpsap\interfaces\exceptions\IInvalidArgumentException;
 use PHPUnit\Framework\Exception;
@@ -32,13 +33,11 @@ class ConfigTypeBTest extends TestCase
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testInheritance()
+    public function testInheritance(): void
     {
         $config = new ConfigTypeB();
         static::assertInstanceOf(JsonSerializable::class, $config);
         static::assertInstanceOf(IConfiguration::class, $config);
-        static::assertInstanceOf(AbstractConfiguration::class, $config);
-        static::assertInstanceOf(ConfigCommon::class, $config);
         static::assertInstanceOf(IConfigTypeB::class, $config);
     }
 
@@ -49,8 +48,9 @@ class ConfigTypeBTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws IncompleteConfigException
      * @throws IInvalidArgumentException
+     * @throws JsonException
      */
-    public function testSetAndGet()
+    public function testSetAndGet(): void
     {
         $config = new ConfigTypeB();
         $config
@@ -62,7 +62,7 @@ class ConfigTypeBTest extends TestCase
         static::assertSame('AyRc4bxpQj', $config->getGroup());
         static::assertJsonStringEqualsJsonString(
             '{"mshost":"caum5mXQaN","r3name":"D3Y3HWdOMX","group":"AyRc4bxpQj"}',
-            json_encode($config)
+            json_encode($config, JSON_THROW_ON_ERROR)
         );
     }
 }

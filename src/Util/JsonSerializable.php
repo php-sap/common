@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace phpsap\classes\Util;
 
+use JsonException;
 use stdClass;
 use phpsap\interfaces\Util\IJsonSerializable;
 use phpsap\exceptions\InvalidArgumentException;
+use TypeError;
 
 /**
  * Class JsonSerializable
@@ -18,7 +20,7 @@ use phpsap\exceptions\InvalidArgumentException;
  * @author  Gregor J.
  * @license MIT
  */
-class JsonSerializable implements IJsonSerializable
+abstract class JsonSerializable implements IJsonSerializable
 {
     /**
      * @var stdClass
@@ -26,57 +28,37 @@ class JsonSerializable implements IJsonSerializable
     private stdClass $data;
 
     /**
-     * @var array Allowed data types for values.
-     */
-    protected static array $allowedDataTypes = [
-        'integer',
-        'string',
-        'boolean',
-        'double',
-        'float',
-        'array'
-    ];
-
-    /**
-     * @var array Allowed keys to set values for.
-     */
-    protected static array $allowedKeys = [];
-
-    /**
      * Get an array of all valid keys this class is able to set().
-     * @return array
+     * @return array<int, string>
      */
-    protected function getAllowedKeys(): array
-    {
-        return static::$allowedKeys;
-    }
-
-    /**
-     * Get an array of all valid PHP data types allowed for the stored values.
-     * @return array
-     */
-    protected function getAllowedDataTypes(): array
-    {
-        return static::$allowedDataTypes;
-    }
+    abstract protected function getAllowedKeys(): array;
 
     /**
      * Initializing the data.
-     * @param array|null $data Associative array of keys and values to set.
+     * @param array<string, null|bool|int|float|string|array<int|string, mixed>> $data Associative array of keys and values to set.
      * @throws InvalidArgumentException
      */
-    public function __construct(array $data = null)
+    public function __construct(array $data = [])
     {
         $this->reset();
-        if ($data !== null) {
-            $this->setMultiple($data);
+        // get allowed keys from the array
+        foreach ($this->getAllowedKeys() as $key) {
+            if (array_key_exists($key, $data)) {
+                //call config key specific set method
+                $method = sprintf('set%s', ucfirst($key));
+                try {
+                    $this->{$method}($data[$key]);
+                } catch (TypeError $error) {
+                    throw new InvalidArgumentException($error->getMessage());
+                }
+            }
         }
     }
 
     /**
      * Remove all keys and values from the data.
      */
-    protected function reset()
+    protected function reset(): void
     {
         $this->data = new stdClass();
     }
@@ -95,10 +77,10 @@ class JsonSerializable implements IJsonSerializable
     /**
      * Get the value of the given key from the data.
      * @param string $key The key to retrieve from the data.
-     * @return null|bool|int|float|string|array The value of the key, or null in case the key didn't exist.
+     * @return null|bool|int|float|string|array<int|string, mixed> The value of the key, or null in case the key didn't exist.
      * @throws InvalidArgumentException
      */
-    protected function get(string $key)
+    protected function get(string $key): null|bool|int|float|string|array
     {
         if ($this->has($key)) {
             return $this->data->{$key};
@@ -109,10 +91,10 @@ class JsonSerializable implements IJsonSerializable
     /**
      * Set the given key to the given value in the data.
      * @param string $key    The key to set the value for.
-     * @param bool|int|float|string|array $value  The value to set.
+     * @param null|bool|int|float|string|array<int|string, mixed> $value  The value to set.
      * @throws InvalidArgumentException
      */
-    protected function set(string $key, $value)
+    protected function set(string $key, null|bool|int|float|string|array $value): void
     {
         if ($value === null) {
             $this->remove($key);
@@ -120,41 +102,6 @@ class JsonSerializable implements IJsonSerializable
         }
         if (!in_array($this->validateKey($key), $this->getAllowedKeys(), true)) {
             throw new InvalidArgumentException(sprintf('Unknown key \'%s\'!', $key));
-        }
-        $this->setValue($key, $value);
-    }
-
-    /**
-     * This method extracts only allowed keys from the given array. This way it
-     * behaves differently than the set() method. This method will never throw an
-     * exception because of an invalid key.
-     * @param array $data Associative array of keys and values to set.
-     * @throws InvalidArgumentException
-     */
-    protected function setMultiple(array $data)
-    {
-        foreach ($this->getAllowedKeys() as $key) {
-            if (array_key_exists($key, $data)) {
-                $this->setValue($key, $data[$key]);
-            }
-        }
-    }
-
-    /**
-     * Set the value for a valid and allowed key. This method will not check the key
-     * anymore, only the value!
-     * @param string $key The key to set the value for.
-     * @param mixed $value The value to set.
-     * @throws InvalidArgumentException
-     */
-    private function setValue(string $key, $value)
-    {
-        if (!in_array(gettype($value), $this->getAllowedDataTypes(), true)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid value! Expected a simple value (\'%s\'), but got \'%s\'!',
-                implode('\', \'', $this->getAllowedDataTypes()),
-                gettype($value)
-            ));
         }
         $this->data->{$key} = $value;
     }
@@ -164,7 +111,7 @@ class JsonSerializable implements IJsonSerializable
      * @param string $key The key to remove.
      * @throws InvalidArgumentException
      */
-    protected function remove(string $key)
+    protected function remove(string $key): void
     {
         if ($this->has($key)) {
             unset($this->data->{$key});
@@ -174,14 +121,14 @@ class JsonSerializable implements IJsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->data;
     }
 
     /**
      * Export the data of this class as array.
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {
@@ -207,56 +154,30 @@ class JsonSerializable implements IJsonSerializable
 
     /**
      * Decode a formerly JSON encoded object.
-     * @param string $json JSON encoded object.
-     * @return $this
+     * @param string $json
+     * @return IJsonSerializable
      * @throws InvalidArgumentException
      */
     public static function jsonDecode(string $json): IJsonSerializable
     {
-        $array = self::jsonToArray($json);
-        return new static($array);
-    }
-
-    /**
-     * Decode a JSON encoded object to an array.
-     * @param string $json JSON encoded object.
-     * @return array|null Array of the JSON encoded object or null, in case there
-     *                    was an error.
-     * @throws InvalidArgumentException
-     */
-    protected static function jsonToArray(string $json): ?array
-    {
-        $array = json_decode($json, true);
-        if (is_array($array)) {
-            return $array;
+        try {
+            $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            /**
+             * JSON might decode into anything but array without an error.
+             */
+            if (!is_array($array)) {
+                throw new InvalidArgumentException('JSON did not decode into an array!');
+            }
+            /**
+             * Use the constructor of the implementing class.
+             */
+            return new static($array);
+        } catch (InvalidArgumentException | JsonException $exception) {
+            throw new InvalidArgumentException(
+                sprintf('Invalid JSON: Expected JSON encoded %s!', static::class),
+                0,
+                $exception
+            );
         }
-        throw new InvalidArgumentException(sprintf(
-            'Invalid JSON! Expected JSON encoded %s string!',
-            static::class
-        ));
-    }
-
-    /**
-     * Convert any given representation of a JSON object to an array.
-     * @param stdClass|array|string $obj  JSON encoded object (string), or a JSON
-     *                                     decoded object (stdClass or array).
-     * @return array|null
-     * @throws InvalidArgumentException
-     */
-    protected static function objToArray($obj): ?array
-    {
-        if (is_object($obj)) {
-            $obj = json_encode($obj);
-        }
-        if (is_string($obj)) {
-            $obj = json_decode($obj, true);
-        }
-        if (is_array($obj)) {
-            return $obj;
-        }
-        throw new InvalidArgumentException(sprintf(
-            'Invalid JSON object! Expected %s JSON object or array!',
-            static::class
-        ));
     }
 }

@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace phpsap\classes\Api;
 
+use JsonException;
 use phpsap\exceptions\InvalidArgumentException;
-use phpsap\interfaces\Api\IValue;
+use phpsap\interfaces\Api\IApiElement;
+use phpsap\interfaces\Api\IStruct;
+use phpsap\interfaces\Api\ITable;
 use phpsap\interfaces\Api\IApi;
 use phpsap\interfaces\Util\IJsonSerializable;
 
@@ -18,69 +21,62 @@ use phpsap\interfaces\Util\IJsonSerializable;
  * @author  Gregor J.
  * @license MIT
  */
-class RemoteApi implements IApi
+final class RemoteApi implements IApi
 {
     /**
-     * @var array
+     * @var IApiElement[]
      */
-    private array $data = [];
+    private array $elements = [];
 
     /**
      * Add an input value of the remote function.
-     * @param IValue $value
-     * @return $this
+     * @param IApiElement $element
+     * @return RemoteApi
      */
-    public function add(IValue $value): IApi
+    public function add(IApiElement $element): RemoteApi
     {
-        $this->data[] = $value;
+        $this->elements[] = $element;
         return $this;
     }
 
     /**
      * Get all input values of the remote function.
-     * @return Value[]
-     * @throws InvalidArgumentException
+     * @return IApiElement[]
      */
-    public function getInputValues(): array
+    public function getInputElements(): array
     {
-        return $this->getValues(Value::DIRECTION_INPUT);
+        return $this->getElements(IApiElement::DIRECTION_INPUT);
     }
 
     /**
      * Get all output values of the remote function.
-     * @return Value[]
-     * @throws InvalidArgumentException
+     * @return IApiElement[]
      */
-    public function getOutputValues(): array
+    public function getOutputElements(): array
     {
-        return $this->getValues(Value::DIRECTION_OUTPUT);
+        return $this->getElements(IApiElement::DIRECTION_OUTPUT);
     }
 
     /**
      * Get all tables of the remote function.
-     * @return Table[]
-     * @throws InvalidArgumentException
+     * @return IApiElement[]
      */
     public function getTables(): array
     {
-        return $this->getValues(Table::DIRECTION_TABLE);
+        return $this->getElements(ITable::DIRECTION_TABLE);
     }
 
     /**
      * Get the API values according to their direction: input, output, table.
      * @param string $direction
-     * @return array
-     * @throws InvalidArgumentException
+     * @return IApiElement[]
      */
-    protected function getValues(string $direction): array
+    private function getElements(string $direction): array
     {
         $result = [];
-        foreach ($this->data as $value) {
-            /**
-             * @var Value $value
-             */
-            if ($value->getDirection() === $direction) {
-                $result[] = $value;
+        foreach ($this->elements as $element) {
+            if ($element->getDirection() === $direction) {
+                $result[] = $element;
             }
         }
         return $result;
@@ -88,37 +84,34 @@ class RemoteApi implements IApi
 
     /**
      * Create a remote API from a given array.
-     * @param array|null $values Array of remote API elements. Default: null
+     * @param array<int, array<string, string|bool|array<int, array<string, string>>>> $array Array of remote API elements.
      * @throws InvalidArgumentException
      */
-    public function __construct(array $values = [])
+    public function __construct(array $array = [])
     {
-        foreach ($values as $value) {
-            /**
-             * Call type-specific constructors from the array.
-             */
-            $this->data[] = $this->constructValue($value);
+        foreach ($array as $item) {
+            $this->elements[] = $this->buildElement($item);
         }
     }
 
     /**
-     * Construct an API value (IValue) from a given array.
-     * @param array $value
-     * @return IValue
+     * Call type-specific constructors for the given array.
+     * @param array<string, string|bool|array<int, array<string, string>>> $array
+     * @return IApiElement
      * @throws InvalidArgumentException
      */
-    private function constructValue(array $value): IValue
+    private function buildElement(array $array): IApiElement
     {
-        if (!array_key_exists(Value::JSON_TYPE, $value)) {
-            throw new InvalidArgumentException('API Value is missing type.');
+        if (!array_key_exists(IApiElement::JSON_TYPE, $array)) {
+            throw new InvalidArgumentException('API element is missing type.');
         }
-        if ($value[Value::JSON_TYPE] === Table::TYPE_TABLE) {
-            return Table::fromArray($value);
+        if ($array[IApiElement::JSON_TYPE] === ITable::TYPE_TABLE) {
+            return new Table($array);
         }
-        if ($value[Value::JSON_TYPE] === Struct::TYPE_STRUCT) {
-            return Struct::fromArray($value);
+        if ($array[IApiElement::JSON_TYPE] === IStruct::TYPE_STRUCT) {
+            return new Struct($array);
         }
-        return Value::fromArray($value);
+        return new Value($array);
     }
 
     /**
@@ -129,28 +122,26 @@ class RemoteApi implements IApi
      */
     public static function jsonDecode(string $json): IJsonSerializable
     {
-        $array = json_decode($json, true);
-        if (is_array($array)) {
-            try {
-                return new self($array);
-            } catch (InvalidArgumentException $exception) {
-                throw new InvalidArgumentException(sprintf(
-                    'Invalid JSON! %s',
-                    $exception->getMessage()
-                ));
+        try {
+            $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            if (!is_array($array)) {
+                throw new InvalidArgumentException('JSON did not decode into an array!');
             }
+            return new self($array);
+        } catch (InvalidArgumentException | JsonException $exception) {
+            throw new InvalidArgumentException(
+                sprintf('Invalid JSON: Expected JSON encoded %s string!', self::class),
+                0,
+                $exception
+            );
         }
-        throw new InvalidArgumentException(sprintf(
-            'Invalid JSON! Expected JSON encoded %s string!',
-            static::class
-        ));
     }
 
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
-        return $this->data;
+        return $this->elements;
     }
 }

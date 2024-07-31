@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace tests\phpsap\classes\helper;
 
 use phpsap\classes\Util\JsonSerializable;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Util\IJsonSerializable;
+use stdClass;
 
 /**
  * Class PublicJsonSerializable
@@ -16,13 +20,11 @@ use phpsap\interfaces\Util\IJsonSerializable;
  */
 class PublicJsonSerializable extends JsonSerializable
 {
-    public static array $allowedKeys = [];
-
     /**
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function reset()
+    public function reset(): void
     {
         parent::reset();
     }
@@ -40,7 +42,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function get(string $key)
+    public function get(string $key): float|int|bool|array|string|null
     {
         return parent::get($key);
     }
@@ -49,7 +51,7 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function set(string $key, $value)
+    public function set(string $key, float|int|bool|array|string|null $value): void
     {
         parent::set($key, $value);
     }
@@ -58,44 +60,39 @@ class PublicJsonSerializable extends JsonSerializable
      * @inheritDoc
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function setMultiple(array $data)
-    {
-        parent::setMultiple($data);
-    }
-
-    /**
-     * @inheritDoc
-     * @noinspection PhpOverridingMethodVisibilityInspection
-     */
-    public function remove(string $key)
+    public function remove(string $key): void
     {
         parent::remove($key);
     }
 
     /**
      * @inheritDoc
-     * @noinspection PhpOverridingMethodVisibilityInspection
-     */
-    public static function jsonToArray(string $json): ?array
-    {
-        return parent::jsonToArray($json);
-    }
-
-    /**
-     * @inheritDoc
-     * @noinspection PhpOverridingMethodVisibilityInspection
-     */
-    public static function objToArray($obj): ?array
-    {
-        return parent::objToArray($obj);
-    }
-
-    /**
-     * @inheritDoc
-     * @return $this
      */
     public static function jsonDecode(string $json): IJsonSerializable
     {
         return parent::jsonDecode($json);
+    }
+
+    /**
+     * @var array<int, string>
+     */
+    public static array $allowedKeys = ['variable'];
+
+    /**
+     * @inheritDoc
+     */
+    protected function getAllowedKeys(): array
+    {
+        return self::$allowedKeys;
+    }
+
+    /**
+     * @param float|bool|int|string|array<int|string, mixed>|null $value
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    protected function setVariable(array|float|bool|int|string|null $value): void
+    {
+        $this->set('variable', $value);
     }
 }

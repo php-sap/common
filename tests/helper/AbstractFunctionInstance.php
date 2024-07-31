@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace tests\phpsap\classes\helper;
 
 use phpsap\classes\AbstractFunction;
@@ -19,12 +21,13 @@ use phpsap\interfaces\Api\IApi;
 class AbstractFunctionInstance extends AbstractFunction
 {
     /**
-     * @var array Fake extractApi() response.
+     * Fake extractApi() response.
+     * @var array<int, array<string, array<int, array<string, string>>|bool|string>>
      */
     public static array $fakeApi = [];
 
     /**
-     * @var array Fake invoke() response.
+     * @var array<string, mixed> Fake invoke() response.
      */
     public static array $fakeInvoke = [];
 

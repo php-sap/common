@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace phpsap\classes\Config;
 
+use phpsap\classes\Config\Traits\CommonTrait;
+use phpsap\classes\Config\Traits\JsonDecodeTrait;
+use phpsap\classes\Util\JsonSerializable;
 use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigTypeA;
@@ -18,44 +21,44 @@ use phpsap\interfaces\Config\IConfigTypeA;
  * @author  Gregor J.
  * @license MIT
  */
-class ConfigTypeA extends ConfigCommon implements IConfigTypeA
+final class ConfigTypeA extends JsonSerializable implements IConfigTypeA
 {
+    use CommonTrait;
+    use JsonDecodeTrait;
+
     /**
-     * @var array Allowed JsonSerializable keys to set values for.
+     * Get an array of all valid keys this class is able to set().
+     * @return array<int, string>
      */
-    protected static array $allowedKeys = [
-        self::JSON_ASHOST,
-        self::JSON_SYSNR,
-        self::JSON_GWHOST,
-        self::JSON_GWSERV,
-        self::JSON_USER,
-        self::JSON_PASSWD,
-        self::JSON_CLIENT,
-        self::JSON_SAPROUTER,
-        self::JSON_TRACE,
-        self::JSON_LANG,
-        self::JSON_DEST,
-        self::JSON_CODEPAGE
-    ];
+    protected function getAllowedKeys(): array
+    {
+        return array_merge(
+            $this->getCommonAllowedKeys(),
+            [
+                self::JSON_ASHOST,
+                self::JSON_SYSNR,
+                self::JSON_GWHOST,
+                self::JSON_GWSERV,
+                self::JSON_USER,
+                self::JSON_PASSWD,
+                self::JSON_CLIENT,
+                self::JSON_SAPROUTER,
+                self::JSON_TRACE,
+                self::JSON_LANG,
+                self::JSON_DEST,
+                self::JSON_CODEPAGE
+            ]
+        );
+    }
 
     /**
      * Get the host name of a specific SAP application server.
      * @return string The hostname of a specific SAP application server.
-     * @throws IncompleteConfigException
      * @throws InvalidArgumentException
      */
     public function getAshost(): string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        if (($result = $this->get(self::JSON_ASHOST)) === null) {
-            throw new IncompleteConfigException(sprintf(
-                'Configuration is missing mandatory key %s!',
-                self::JSON_ASHOST
-            ));
-        }
-        return $result;
+        return $this->get(self::JSON_ASHOST);
     }
 
     /**
@@ -73,21 +76,11 @@ class ConfigTypeA extends ConfigCommon implements IConfigTypeA
     /**
      * Get the SAP system number.
      * @return string The SAP system number.
-     * @throws IncompleteConfigException
      * @throws InvalidArgumentException
      */
     public function getSysnr(): string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
-        if (($result = $this->get(self::JSON_SYSNR)) === null) {
-            throw new IncompleteConfigException(sprintf(
-                'Configuration is missing mandatory key %s!',
-                self::JSON_SYSNR
-            ));
-        }
-        return $result;
+        return $this->get(self::JSON_SYSNR);
     }
 
     /**

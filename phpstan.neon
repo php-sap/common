@@ -1,0 +1,16 @@
+parameters:
+  level: 9
+  paths:
+    - exceptions/
+    - src/
+    - tests/
+  scanDirectories:
+    - vendor/
+  ignoreErrors:
+    # deliberately pass invalid object in TableTest::testNonMembers()
+    - '/Parameter #4 \$members of static method phpsap\\classes\\Api\\Table::create\(\) expects array<phpsap\\interfaces\\Api\\IMember>, array<int, stdClass> given\./'
+    # deliberately pass invalid object in StructTest::testNonMembers()
+    - '/Parameter #4 \$members of static method phpsap\\classes\\Api\\Struct::create\(\) expects array<phpsap\\interfaces\\Api\\IMember>, array<int, stdClass> given\./'
+    # JsonSerializable::get() returns the value validated by set()
+    - '/Method phpsap\\classes\\Config\\ConfigType(A|B)::(getAshost|getSysnr|getGwhost|getGwserv|getMshost|getR3name|getGroup|getUser|getPasswd|getClient|getSaprouter|getTrace|getCodepage|getLang|getDest)\(\) should return (int|string)(\|null|) but returns array<int\|string, mixed>\|bool\|float\|int\|string\|null\./'
+    - '/Method phpsap.*::(getDirection|getMembers|getName|isOptional|getType)\(\) should return .* but returns array<int\|string, mixed>\|bool\|float\|int\|string\|null\./'

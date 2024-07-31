@@ -172,7 +172,7 @@ abstract class JsonSerializable implements IJsonSerializable
              * Use the constructor of the implementing class.
              */
             return new static($array);
-        } catch (InvalidArgumentException|JsonException $exception) {
+        } catch (InvalidArgumentException | JsonException $exception) {
             throw new InvalidArgumentException(
                 sprintf('Invalid JSON: Expected JSON encoded %s!', static::class),
                 0,

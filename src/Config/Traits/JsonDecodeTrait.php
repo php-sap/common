@@ -34,7 +34,7 @@ trait JsonDecodeTrait
             if (!is_array($config)) {
                 throw new InvalidArgumentException('JSON did not decode into an array!');
             }
-        } catch (InvalidArgumentException|JsonException $exception) {
+        } catch (InvalidArgumentException | JsonException $exception) {
             throw new InvalidArgumentException(
                 sprintf('Invalid JSON: Expected JSON encoded %s!', static::class),
                 0,

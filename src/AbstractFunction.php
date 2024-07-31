@@ -57,7 +57,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     public function __construct(array $array)
     {
         $this->reset();
-        if(!array_key_exists(self::JSON_NAME, $array) || !is_string($array[self::JSON_NAME])) {
+        if (!array_key_exists(self::JSON_NAME, $array) || !is_string($array[self::JSON_NAME])) {
             throw new InvalidArgumentException(
                 sprintf('Missing %s "%s"', static::class, self::JSON_NAME)
             );
@@ -360,7 +360,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
              * Use the constructor of the implementing class.
              */
             return new static($array);
-        } catch (InvalidArgumentException|JsonException $exception) {
+        } catch (InvalidArgumentException | JsonException $exception) {
             throw new InvalidArgumentException(
                 sprintf('Invalid JSON: Expected JSON encoded %s!', static::class),
                 0,

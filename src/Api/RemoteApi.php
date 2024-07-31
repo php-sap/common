@@ -128,7 +128,7 @@ final class RemoteApi implements IApi
                 throw new InvalidArgumentException('JSON did not decode into an array!');
             }
             return new self($array);
-        } catch (InvalidArgumentException|JsonException $exception) {
+        } catch (InvalidArgumentException | JsonException $exception) {
             throw new InvalidArgumentException(
                 sprintf('Invalid JSON: Expected JSON encoded %s string!', self::class),
                 0,

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace tests\phpsap\classes\Config;
 
-use phpsap\exceptions\IncompleteConfigException;
+use JsonException;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\exceptions\IInvalidArgumentException;
 use PHPUnit\Framework\Exception;
@@ -13,8 +13,6 @@ use PHPUnit\Framework\TestCase;
 use phpsap\classes\Util\JsonSerializable;
 use phpsap\interfaces\Config\IConfigTypeA;
 use phpsap\interfaces\Config\IConfiguration;
-use phpsap\classes\Config\AbstractConfiguration;
-use phpsap\classes\Config\ConfigCommon;
 use phpsap\classes\Config\ConfigTypeA;
 
 /**
@@ -39,18 +37,16 @@ class ConfigTypeATest extends TestCase
         $config = new ConfigTypeA();
         static::assertInstanceOf(JsonSerializable::class, $config);
         static::assertInstanceOf(IConfiguration::class, $config);
-        static::assertInstanceOf(AbstractConfiguration::class, $config);
-        static::assertInstanceOf(ConfigCommon::class, $config);
         static::assertInstanceOf(IConfigTypeA::class, $config);
     }
 
     /**
      * Test set*() and get*() methods.
      * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws IncompleteConfigException
      * @throws IInvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testSetAndGet(): void
     {

@@ -10,8 +10,6 @@ use phpsap\exceptions\IncompleteConfigException;
 use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Config\IConfigTypeB;
 use phpsap\interfaces\Config\IConfiguration;
-use phpsap\classes\Config\AbstractConfiguration;
-use phpsap\classes\Config\ConfigCommon;
 use phpsap\classes\Config\ConfigTypeB;
 use phpsap\interfaces\exceptions\IInvalidArgumentException;
 use PHPUnit\Framework\Exception;
@@ -40,8 +38,6 @@ class ConfigTypeBTest extends TestCase
         $config = new ConfigTypeB();
         static::assertInstanceOf(JsonSerializable::class, $config);
         static::assertInstanceOf(IConfiguration::class, $config);
-        static::assertInstanceOf(AbstractConfiguration::class, $config);
-        static::assertInstanceOf(ConfigCommon::class, $config);
         static::assertInstanceOf(IConfigTypeB::class, $config);
     }
 

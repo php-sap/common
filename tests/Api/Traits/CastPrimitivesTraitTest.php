@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace tests\phpsap\classes\Api;
+namespace tests\phpsap\classes\Api\Traits;
 
 use DateInterval;
 use DateTime;

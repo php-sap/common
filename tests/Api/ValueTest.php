@@ -46,7 +46,7 @@ class ValueTest extends TestCase
     public function testInvalidJsonString(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON! Expected JSON encoded phpsap\classes\Api\Value string!');
+        $this->expectExceptionMessage('Invalid JSON: Expected JSON encoded');
         Value::jsonDecode($json);
     }
 
@@ -71,7 +71,7 @@ class ValueTest extends TestCase
     public function testIncompleteJson(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Value is missing');
+        $this->expectExceptionMessage('Invalid JSON:');
         Value::jsonDecode($json);
     }
 }

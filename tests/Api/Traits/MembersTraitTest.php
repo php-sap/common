@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace tests\phpsap\classes\Api;
+namespace tests\phpsap\classes\Api\Traits;
 
 use phpsap\classes\Api\Member;
 use phpsap\classes\Api\Struct;

@@ -32,14 +32,14 @@ use phpsap\interfaces\IFunction;
 abstract class AbstractFunction extends JsonSerializable implements IFunction
 {
     /**
-     * @var IConfiguration
+     * @var null|IConfiguration
      */
-    protected IConfiguration $config;
+    private ?IConfiguration $config = null;
 
     /**
      * @var string SAP remote function name.
      */
-    private string $name;
+    private string $name = '';
 
     /**
      * @var IApi[]
@@ -47,12 +47,36 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     private static array $api = [];
 
     /**
+     * @param array<int|string, mixed> $array
+     * @throws ConnectionFailedException
+     * @throws IncompleteConfigException
+     * @throws InvalidArgumentException
+     * @throws UnknownFunctionException
+     * @noinspection PhpMissingParentConstructorInspection
+     */
+    public function __construct(array $array)
+    {
+        $this->reset();
+        if(!array_key_exists(self::JSON_NAME, $array) || !is_string($array[self::JSON_NAME])) {
+            throw new InvalidArgumentException(
+                sprintf('Missing %s "%s"', static::class, self::JSON_NAME)
+            );
+        }
+        $this->setName($array[self::JSON_NAME]);
+        if (array_key_exists(self::JSON_API, $array)) {
+            $this->setApi(new RemoteApi($array[self::JSON_API]));
+        }
+        if (array_key_exists(self::JSON_PARAM, $array)) {
+            $this->setParams($array[self::JSON_PARAM]);
+        }
+    }
+
+    /**
      * Get an array of all valid input parameters.
      * @return array<int, string>
      * @throws ConnectionFailedException
      * @throws IncompleteConfigException
      * @throws UnknownFunctionException
-     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function getAllowedKeys(): array
     {
@@ -88,8 +112,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      */
     public static function create(string $name, ?array $params = null, ?IConfiguration $config = null, ?IApi $api = null): IFunction
     {
-        $function = new static();
-        $function->setName($name);
+        $function = new static([self::JSON_NAME => trim($name)]);
         if ($config !== null) {
             $function->setConfiguration($config);
         }
@@ -130,10 +153,16 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     /**
      * Get the SAP connection configuration for this remote function.
      * @return IConfiguration|null
+     * @throws IncompleteConfigException
      */
     public function getConfiguration(): ?IConfiguration
     {
-        return $this->config;
+        if ($this->config !== null) {
+            return $this->config;
+        }
+        throw new IncompleteConfigException(
+            sprintf('Missing configuration for "%s"!', $this->getName())
+        );
     }
 
     /**
@@ -240,7 +269,7 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
         foreach ($this->getAllowedKeys() as $key) {
             if (!array_key_exists($key, $params)) {
                 throw new InvalidArgumentException(sprintf(
-                    'Invalid JSON: %s is missing %s!',
+                    '%s is missing parameter key %s!',
                     static::class,
                     $key
                 ));
@@ -294,44 +323,49 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
      * Decode a formerly JSON encoded SAP remote function object.
      * @param string $json
      * @return IFunction
-     * @throws IConnectionFailedException
-     * @throws IIncompleteConfigException
-     * @throws IInvalidArgumentException
-     * @throws IUnknownFunctionException
+     * @throws ConnectionFailedException
+     * @throws IncompleteConfigException
      * @throws InvalidArgumentException
+     * @throws UnknownFunctionException
      * @noinspection PhpMissingParentCallCommonInspection
      */
     public static function jsonDecode(string $json): IFunction
     {
         try {
             $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
+            /**
+             * JSON might decode into anything but array without an error.
+             */
+            if (!is_array($array)) {
+                throw new InvalidArgumentException('JSON did not decode into an array!');
+            }
+            /**
+             * Ensure all mandatory keys are set.
+             */
+            if (
+                !array_key_exists(self::JSON_NAME, $array)
+                || !array_key_exists(self::JSON_API, $array)
+                || !array_key_exists(self::JSON_PARAM, $array)
+            ) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Missing mandatory keys %s, %s, %s!',
+                        self::JSON_NAME,
+                        self::JSON_API,
+                        self::JSON_PARAM
+                    ),
+                );
+            }
+            /**
+             * Use the constructor of the implementing class.
+             */
+            return new static($array);
+        } catch (InvalidArgumentException|JsonException $exception) {
             throw new InvalidArgumentException(
-                sprintf('Invalid JSON object! Expected %s JSON object or array!', static::class),
+                sprintf('Invalid JSON: Expected JSON encoded %s!', static::class),
                 0,
                 $exception
             );
         }
-        if (
-            array_key_exists(self::JSON_NAME, $array)
-            && array_key_exists(self::JSON_API, $array)
-            && array_key_exists(self::JSON_PARAM, $array)
-        ) {
-            try {
-                $result = new static($array[self::JSON_NAME]);
-                $result->setApi(new RemoteApi($array[self::JSON_API]));
-                $result->setParams($array[self::JSON_PARAM]);
-                return $result;
-            } catch (InvalidArgumentException $exception) {
-                throw new InvalidArgumentException(sprintf(
-                    'Invalid JSON! %s',
-                    $exception->getMessage()
-                ));
-            }
-        }
-        throw new InvalidArgumentException(sprintf(
-            'Invalid JSON! Expected JSON encoded %s string!',
-            static::class
-        ));
     }
 }

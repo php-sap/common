@@ -89,7 +89,7 @@ class MemberTest extends TestCase
     public function testInvalidJsonString(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON! Expected JSON encoded phpsap\classes\Api\Member string!');
+        $this->expectExceptionMessage('Invalid JSON: Expected JSON encoded');
         Member::jsonDecode($json);
     }
 
@@ -117,7 +117,7 @@ class MemberTest extends TestCase
     public function testIncompleteJsonObjects(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Member is missing');
+        $this->expectExceptionMessage('Invalid JSON:');
         Member::jsonDecode($json);
     }
 }

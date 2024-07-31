@@ -8,6 +8,7 @@ use JsonException;
 use stdClass;
 use phpsap\interfaces\Util\IJsonSerializable;
 use phpsap\exceptions\InvalidArgumentException;
+use TypeError;
 
 /**
  * Class JsonSerializable
@@ -19,7 +20,7 @@ use phpsap\exceptions\InvalidArgumentException;
  * @author  Gregor J.
  * @license MIT
  */
-class JsonSerializable implements IJsonSerializable
+abstract class JsonSerializable implements IJsonSerializable
 {
     /**
      * @var stdClass
@@ -30,10 +31,7 @@ class JsonSerializable implements IJsonSerializable
      * Get an array of all valid keys this class is able to set().
      * @return array<int, string>
      */
-    protected function getAllowedKeys(): array
-    {
-        return [];
-    }
+    abstract protected function getAllowedKeys(): array;
 
     /**
      * Initializing the data.
@@ -43,11 +41,16 @@ class JsonSerializable implements IJsonSerializable
     public function __construct(array $data = [])
     {
         $this->reset();
+        // get allowed keys from the array
         foreach ($this->getAllowedKeys() as $key) {
             if (array_key_exists($key, $data)) {
                 //call config key specific set method
                 $method = sprintf('set%s', ucfirst($key));
-                $this->{$method}($data[$key]);
+                try {
+                    $this->{$method}($data[$key]);
+                } catch (TypeError $error) {
+                    throw new InvalidArgumentException($error->getMessage());
+                }
             }
         }
     }
@@ -159,14 +162,22 @@ class JsonSerializable implements IJsonSerializable
     {
         try {
             $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
+            /**
+             * JSON might decode into anything but array without an error.
+             */
+            if (!is_array($array)) {
+                throw new InvalidArgumentException('JSON did not decode into an array!');
+            }
+            /**
+             * Use the constructor of the implementing class.
+             */
+            return new static($array);
+        } catch (InvalidArgumentException|JsonException $exception) {
             throw new InvalidArgumentException(
-                sprintf('Invalid JSON object! Expected %s JSON object or array!', static::class),
+                sprintf('Invalid JSON: Expected JSON encoded %s!', static::class),
                 0,
                 $exception
             );
         }
-        //use the common constructor
-        return new static($array);
     }
 }

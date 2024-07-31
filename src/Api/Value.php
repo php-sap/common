@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpsap\classes\Api;
 
 use phpsap\classes\Api\Traits\CastPrimitivesTrait;
+use phpsap\classes\Api\Traits\ConstructorTrait;
 use phpsap\classes\Api\Traits\DirectionTrait;
 use phpsap\classes\Api\Traits\NameTrait;
 use phpsap\classes\Api\Traits\OptionalTrait;
@@ -29,6 +30,7 @@ final class Value extends JsonSerializable implements IValue
     use DirectionTrait;
     use OptionalTrait;
     use CastPrimitivesTrait;
+    use ConstructorTrait;
 
     /**
      * @inheritDoc
@@ -48,7 +50,6 @@ final class Value extends JsonSerializable implements IValue
     /**
      * Get an array of all valid keys this class is able to set().
      * @return array<int, string>
-     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function getAllowedKeys(): array
     {
@@ -63,7 +64,7 @@ final class Value extends JsonSerializable implements IValue
     /**
      * @return array<int, string>
      */
-    private function getAllowedTypes(): array
+    protected function getAllowedTypes(): array
     {
         return [
             self::TYPE_BOOLEAN,
@@ -81,7 +82,7 @@ final class Value extends JsonSerializable implements IValue
     /**
      * @return array<int, string>
      */
-    private function getAllowedDirections(): array
+    protected function getAllowedDirections(): array
     {
         return [
             self::DIRECTION_INPUT,

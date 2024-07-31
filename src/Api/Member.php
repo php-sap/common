@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace phpsap\classes\Api;
 
 use phpsap\classes\Api\Traits\CastPrimitivesTrait;
+use phpsap\classes\Api\Traits\ConstructorTrait;
 use phpsap\classes\Api\Traits\NameTrait;
 use phpsap\classes\Api\Traits\TypeTrait;
 use phpsap\classes\Util\JsonSerializable;
+use phpsap\exceptions\InvalidArgumentException;
 use phpsap\interfaces\Api\IMember;
 
 /**
@@ -18,6 +20,7 @@ final class Member extends JsonSerializable implements IMember
     use TypeTrait;
     use NameTrait;
     use CastPrimitivesTrait;
+    use ConstructorTrait;
 
     /**
      * @inheritDoc
@@ -35,7 +38,6 @@ final class Member extends JsonSerializable implements IMember
     /**
      * Get an array of all valid keys this class is able to set().
      * @return array<int, string>
-     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function getAllowedKeys(): array
     {
@@ -48,7 +50,7 @@ final class Member extends JsonSerializable implements IMember
     /**
      * @return array<int, string>
      */
-    private function getAllowedTypes(): array
+    protected function getAllowedTypes(): array
     {
         return [
             self::TYPE_BOOLEAN,

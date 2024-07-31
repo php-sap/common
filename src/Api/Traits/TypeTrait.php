@@ -29,7 +29,7 @@ trait TypeTrait
      * @param string $type
      * @throws InvalidArgumentException
      */
-    private function setType(string $type): void
+    protected function setType(string $type): void
     {
         if (!in_array($type, $this->getAllowedTypes(), true)) {
             throw new InvalidArgumentException(
@@ -47,5 +47,5 @@ trait TypeTrait
      * Get an array of allowed types.
      * @return array<int, string>
      */
-    abstract private function getAllowedTypes(): array;
+    abstract protected function getAllowedTypes(): array;
 }

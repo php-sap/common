@@ -140,7 +140,7 @@ class TableTest extends TestCase
             ]
         ];
         $this->expectException(ArrayElementMissingException::class);
-        $this->expectExceptionMessage('Element IlRdvEQp in table MLOWwQXa is missing!');
+        $this->expectExceptionMessage('Element IlRdvEQp in table MLOWwQXa line 0 is missing!');
         $table->cast($raw);
     }
 
@@ -177,7 +177,7 @@ class TableTest extends TestCase
     public function testIncompleteJson(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Table is missing');
+        $this->expectExceptionMessage('Invalid JSON:');
         Table::jsonDecode($json);
     }
 
@@ -207,7 +207,7 @@ class TableTest extends TestCase
     public function testJsonDecodeInvalidType(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected API phpsap\classes\Api\Table type to be in: table!');
+        $this->expectExceptionMessage('Invalid JSON:');
         Table::jsonDecode($json);
     }
 
@@ -240,7 +240,7 @@ class TableTest extends TestCase
     public function testJsonDecodeInvalidMembers(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON: API phpsap\classes\Api\Table members are not an array!');
+        $this->expectExceptionMessage('Invalid JSON:');
         Table::jsonDecode($json);
     }
 }

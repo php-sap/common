@@ -130,7 +130,7 @@ final class RemoteApi implements IApi
             return new self($array);
         } catch (InvalidArgumentException|JsonException $exception) {
             throw new InvalidArgumentException(
-                sprintf('Invalid JSON! Expected JSON encoded %s string!', self::class),
+                sprintf('Invalid JSON: Expected JSON encoded %s string!', self::class),
                 0,
                 $exception
             );

@@ -29,7 +29,7 @@ trait DirectionTrait
      * @param string $direction
      * @throws InvalidArgumentException
      */
-    private function setDirection(string $direction): void
+    protected function setDirection(string $direction): void
     {
         if (!in_array($direction, $this->getAllowedDirections(), true)) {
             throw new InvalidArgumentException(
@@ -47,5 +47,5 @@ trait DirectionTrait
      * Get an array of allowed directions.
      * @return array<int, string>
      */
-    abstract private function getAllowedDirections(): array;
+    abstract protected function getAllowedDirections(): array;
 }

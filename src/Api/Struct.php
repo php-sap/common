@@ -6,6 +6,7 @@ namespace phpsap\classes\Api;
 
 use DateInterval;
 use DateTime;
+use phpsap\classes\Api\Traits\ConstructorTrait;
 use phpsap\classes\Api\Traits\DirectionTrait;
 use phpsap\classes\Api\Traits\MembersTrait;
 use phpsap\classes\Api\Traits\NameTrait;
@@ -32,11 +33,27 @@ final class Struct extends JsonSerializable implements IStruct
     use DirectionTrait;
     use OptionalTrait;
     use MembersTrait;
+    use ConstructorTrait;
+
+    /**
+     * Get an array of all valid keys this class is able to set().
+     * @return array<int, string>
+     */
+    protected function getAllowedKeys(): array
+    {
+        return [
+            self::JSON_TYPE,
+            self::JSON_NAME,
+            self::JSON_DIRECTION,
+            self::JSON_OPTIONAL,
+            self::JSON_MEMBERS,
+        ];
+    }
 
     /**
      * @return array<int, string>
      */
-    private function getAllowedTypes(): array
+    protected function getAllowedTypes(): array
     {
         return [self::TYPE_STRUCT];
     }
@@ -44,7 +61,7 @@ final class Struct extends JsonSerializable implements IStruct
     /**
      * @return array<int, string>
      */
-    private function getAllowedDirections(): array
+    protected function getAllowedDirections(): array
     {
         return [
             self::DIRECTION_INPUT,
@@ -57,7 +74,7 @@ final class Struct extends JsonSerializable implements IStruct
      */
     public static function create(string $name, string $direction, bool $isOptional, array $members): Struct
     {
-        $struct = new self(
+        $struct = new Struct(
             [
                 self::JSON_TYPE => self::TYPE_STRUCT, //it's always 'struct'
                 self::JSON_NAME => $name,
@@ -79,6 +96,7 @@ final class Struct extends JsonSerializable implements IStruct
      */
     public function cast(array $value): array
     {
+        $result = [];
         foreach ($this->getMembers() as $member) {
             $name = $member->getName();
             if (!array_key_exists($name, $value)) {
@@ -88,8 +106,12 @@ final class Struct extends JsonSerializable implements IStruct
                     $this->getName()
                 ));
             }
-            $value[$name] = $member->cast($value[$name]);
+            $result[$name] = $member->cast($value[$name]);
         }
-        return $value;
+        /**
+         * in case there are more values than members, merge these
+         * superfluous values into the result.
+         */
+        return array_merge($value, $result);
     }
 }

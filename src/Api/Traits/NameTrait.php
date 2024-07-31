@@ -29,7 +29,7 @@ trait NameTrait
      * @param string $name
      * @throws InvalidArgumentException
      */
-    private function setName(string $name): void
+    protected function setName(string $name): void
     {
         if (trim($name) === '') {
             throw new InvalidArgumentException(

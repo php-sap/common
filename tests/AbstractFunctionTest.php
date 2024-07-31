@@ -27,6 +27,7 @@ use phpsap\interfaces\IFunction;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use tests\phpsap\classes\helper\AbstractFunctionInstance;
 
 /**
@@ -42,16 +43,12 @@ class AbstractFunctionTest extends TestCase
 {
     /**
      * Test class inheritance.
-     * @throws Exception
-     * @throws ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testInheritance(): void
     {
-        $fnc = new AbstractFunctionInstance('QifKTqzu');
+        $fnc = AbstractFunctionInstance::create('QifKTqzu');
         static::assertInstanceOf(IFunction::class, $fnc);
         static::assertInstanceOf(JsonSerializable::class, $fnc);
-        static::assertInstanceOf(AbstractFunction::class, $fnc);
     }
 
     /**
@@ -81,7 +78,38 @@ class AbstractFunctionTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing or malformed SAP remote function name');
-        new AbstractFunctionInstance($name);
+        AbstractFunctionInstance::create($name);
+    }
+
+    /**
+     * @return array<int, array<int, array<int|string, bool|float|int|stdClass|string>>>
+     */
+    public static function provideMalformedNames(): array
+    {
+        return [
+            [['FEeBlhUw' => 'ITfy2D12']],
+            [[89420 => 'EaDvEX1g']],
+            [[IFunction::JSON_NAME => 99209]],
+            [[IFunction::JSON_NAME => 63.278]],
+            [[IFunction::JSON_NAME => true]],
+            [[IFunction::JSON_NAME => new stdClass()]],
+        ];
+    }
+
+    /**
+     * @param array<int|string, bool|float|int|stdClass|string> $array
+     * @return void
+     * @throws ConnectionFailedException
+     * @throws IncompleteConfigException
+     * @throws InvalidArgumentException
+     * @throws UnknownFunctionException
+     * @dataProvider provideMalformedNames
+     */
+    public function testMalformedNames(array $array): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing tests\phpsap\classes\helper\AbstractFunctionInstance "name"');
+        new AbstractFunctionInstance($array);
     }
 
     /**
@@ -92,7 +120,7 @@ class AbstractFunctionTest extends TestCase
      */
     public function testSettingAndGettingName(): void
     {
-        $fnc = new AbstractFunctionInstance('BbkjmImI');
+        $fnc = AbstractFunctionInstance::create('BbkjmImI');
         static::assertInstanceOf(AbstractFunction::class, $fnc);
         static::assertSame('BbkjmImI', $fnc->getName());
     }
@@ -108,13 +136,29 @@ class AbstractFunctionTest extends TestCase
      * @throws InvalidArgumentException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testSettingAndGettingConfiguration(): void
+    public function testSettingAndGettingConfig(): void
     {
-        $fnc = new AbstractFunctionInstance('tjmecgsl', null, new ConfigTypeA());
+        $fnc = AbstractFunctionInstance::create('tjmecgsl', null, new ConfigTypeA());
         static::assertInstanceOf(AbstractFunction::class, $fnc);
         static::assertInstanceOf(ConfigTypeA::class, $fnc->getConfiguration());
         $fnc->setConfiguration(new ConfigTypeB());
         static::assertInstanceOf(ConfigTypeB::class, $fnc->getConfiguration());
+    }
+
+    /**
+     * @return void
+     * @throws IConnectionFailedException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
+     * @throws InvalidArgumentException
+     */
+    public function testMissingConfiguration(): void
+    {
+        $fnc = AbstractFunctionInstance::create('OGEQas0r');
+        $this->expectException(IncompleteConfigException::class);
+        $this->expectExceptionMessage('Missing configuration for');
+        $fnc->getConfiguration();
     }
 
     /**
@@ -137,7 +181,7 @@ class AbstractFunctionTest extends TestCase
                 IApiElement::JSON_OPTIONAL => false
             ]
         ];
-        $fnc1 = new AbstractFunctionInstance('AcqwjdLj');
+        $fnc1 = AbstractFunctionInstance::create('AcqwjdLj');
         static::assertInstanceOf(AbstractFunction::class, $fnc1);
         $api1 = $fnc1->getApi();
         static::assertInstanceOf(RemoteApi::class, $api1);
@@ -162,7 +206,7 @@ class AbstractFunctionTest extends TestCase
                 IApiElement::JSON_OPTIONAL => true
             ]
         ];
-        $fnc2 = new AbstractFunctionInstance('AcqwjdLj');
+        $fnc2 = AbstractFunctionInstance::create('AcqwjdLj');
         static::assertInstanceOf(AbstractFunction::class, $fnc2);
         $api2 = $fnc2->getApi();
         static::assertInstanceOf(RemoteApi::class, $api2);
@@ -241,7 +285,7 @@ class AbstractFunctionTest extends TestCase
             IApiElement::JSON_DIRECTION => IApiElement::DIRECTION_INPUT,
             IApiElement::JSON_OPTIONAL => true
         ]];
-        $fnc = new AbstractFunctionInstance('QYNlDnyf', null, null, new RemoteApi([
+        $fnc = AbstractFunctionInstance::create('QYNlDnyf', null, null, new RemoteApi([
             [
                 IApiElement::JSON_NAME => 'IdmGEBfI',
                 IApiElement::JSON_TYPE => IValue::TYPE_STRING,
@@ -320,7 +364,7 @@ class AbstractFunctionTest extends TestCase
                 ]
             ]
         ];
-        $fnc = new AbstractFunctionInstance('XkKxjVCh', [
+        $fnc = AbstractFunctionInstance::create('XkKxjVCh', [
             'OkUxzPbS' => 'AtouLfAE',
             'ePmpwEHW' => [
                 'llnwSfRS' => 'tzmvidMm',
@@ -413,7 +457,7 @@ class AbstractFunctionTest extends TestCase
                 IApiElement::JSON_OPTIONAL => false
             ]
         ];
-        $fnc = new AbstractFunctionInstance('GUGtjHBL', ['UOvOMBva' => 'IGxIqMvU']);
+        $fnc = AbstractFunctionInstance::create('GUGtjHBL', ['UOvOMBva' => 'IGxIqMvU']);
         static::assertInstanceOf(AbstractFunction::class, $fnc);
         $json = json_encode($fnc);
         static::assertIsString($json);
@@ -477,17 +521,26 @@ class AbstractFunctionTest extends TestCase
     {
         return [
             [
-                '{"name":"rgVjZtqB",'
-                . '"params":{"JBBIPySA":"7897467303"}}'
+                '{"name":"rgVjZtqB","params":{"JBBIPySA":"7897467303"}}'
             ],
             [
-                '{"name":"rgVjZtqB",'
-                . '"api":[{"type":"string","name":"rgVjZtqB","direction":"input","optional":false}],'
+                '{"name":"rgVjZtqB","api":[{"type":"string","name":"rgVjZtqB","direction":"input","optional":false}],'
             ],
             [
                 '"api":[{"type":"string","name":"rgVjZtqB","direction":"input","optional":false}],'
-                . '"params":{"dvPoAdYG":"CLsVlAje"}}'
+                . '"params":{"BZBl7u6w":"CLsVlAje"}}'
             ],
+            [
+                '"api":[{"type":"string","name":"rgVjZtqB","direction":"input","optional":false}],'
+                . '"params":{"DbF6y6oE":"CLsVlAje"}}'
+            ],
+            ['7072.8'],
+            ['true'],
+            [
+                '{"name":"gYcOqTNx",'
+                . '"api":[{"type":"string","name":"gixpbEZj","direction":"input","optional":false}],'
+                . '"params":{"8rszwVLE":"dUK6wkp0"}}'
+            ]
         ];
     }
 
@@ -512,7 +565,7 @@ class AbstractFunctionTest extends TestCase
             ]
         ];
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON!');
+        $this->expectExceptionMessage('Invalid JSON: Expected JSON encoded');
         AbstractFunctionInstance::jsonDecode($json);
     }
 }

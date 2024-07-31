@@ -6,6 +6,7 @@ namespace phpsap\classes\Api;
 
 use DateInterval;
 use DateTime;
+use phpsap\classes\Api\Traits\ConstructorTrait;
 use phpsap\classes\Api\Traits\DirectionTrait;
 use phpsap\classes\Api\Traits\MembersTrait;
 use phpsap\classes\Api\Traits\NameTrait;
@@ -33,11 +34,27 @@ final class Table extends JsonSerializable implements ITable
     use DirectionTrait;
     use OptionalTrait;
     use MembersTrait;
+    use ConstructorTrait;
+
+    /**
+     * Get an array of all valid keys this class is able to set().
+     * @return array<int, string>
+     */
+    protected function getAllowedKeys(): array
+    {
+        return [
+            self::JSON_TYPE,
+            self::JSON_NAME,
+            self::JSON_DIRECTION,
+            self::JSON_OPTIONAL,
+            self::JSON_MEMBERS,
+        ];
+    }
 
     /**
      * @return array<int, string>
      */
-    private function getAllowedTypes(): array
+    protected function getAllowedTypes(): array
     {
         return [self::TYPE_TABLE];
     }
@@ -45,7 +62,7 @@ final class Table extends JsonSerializable implements ITable
     /**
      * @return array<int, string>
      */
-    private function getAllowedDirections(): array
+    protected function getAllowedDirections(): array
     {
         return [
             self::DIRECTION_INPUT,

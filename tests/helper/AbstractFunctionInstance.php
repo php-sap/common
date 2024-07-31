@@ -21,7 +21,8 @@ use phpsap\interfaces\Api\IApi;
 class AbstractFunctionInstance extends AbstractFunction
 {
     /**
-     * @var array<int, array<string, mixed>> Fake extractApi() response.
+     * Fake extractApi() response.
+     * @var array<int, array<string, array<int, array<string, string>>|bool|string>>
      */
     public static array $fakeApi = [];
 

@@ -85,13 +85,14 @@ class RemoteApiTest extends TestCase
      * @param string $expected The expected JSON output.
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws JsonException
      * @dataProvider provideApiValue
      */
     public function testAddingAndEncodingApiValue(Value|Struct|Table $value, string $expected): void
     {
         $api = new RemoteApi();
         $api->add($value);
-        $actual = json_encode($api);
+        $actual = json_encode($api, JSON_THROW_ON_ERROR);
         static::assertSame($expected, $actual);
     }
 
@@ -278,7 +279,9 @@ class RemoteApiTest extends TestCase
             ['}'],
             ['{"w1sBz6nE":3501'],
             ['DhVsUXYN'],
-            ['[{"type":"string","name":"70PSpu7dcO","optional":true}]']
+            ['[{"type":"string","name":"70PSpu7dcO","optional":true}]'],
+            ['700.23'],
+            ['true']
         ];
     }
 
@@ -290,7 +293,7 @@ class RemoteApiTest extends TestCase
     public function testInvalidJson(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON!');
+        $this->expectExceptionMessage('Invalid JSON: Expected JSON encoded phpsap\classes\Api\RemoteApi string!');
         RemoteApi::jsonDecode($value);
     }
 
@@ -325,7 +328,7 @@ class RemoteApiTest extends TestCase
             ]
         ];
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Struct is missing direction!');
+        $this->expectExceptionMessage('phpsap\classes\Api\Struct is missing direction');
         new RemoteApi($def);
     }
 }

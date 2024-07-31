@@ -29,7 +29,6 @@ final class ConfigTypeB extends JsonSerializable implements IConfigTypeB
     /**
      * Get an array of all valid keys this class is able to set().
      * @return array<int, string>
-     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function getAllowedKeys(): array
     {

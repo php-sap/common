@@ -29,7 +29,7 @@ trait OptionalTrait
      * @param bool $isOptional
      * @throws InvalidArgumentException
      */
-    private function setOptional(bool $isOptional): void
+    protected function setOptional(bool $isOptional): void
     {
         $this->set(self::JSON_OPTIONAL, $isOptional);
     }

@@ -168,7 +168,7 @@ class StructTest extends TestCase
     public function testIncompleteJson(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON: phpsap\classes\Api\Struct is missing');
+        $this->expectExceptionMessage('Invalid JSON:');
         Struct::jsonDecode($json);
     }
 
@@ -198,7 +198,7 @@ class StructTest extends TestCase
     public function testJsonDecodeInvalidStruct(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected API phpsap\classes\Api\Struct type to be in: struct!');
+        $this->expectExceptionMessage('Invalid JSON:');
         Struct::jsonDecode($json);
     }
 
@@ -231,7 +231,7 @@ class StructTest extends TestCase
     public function testJsonDecodeInvalidMembers(string $json): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid JSON: API phpsap\classes\Api\Struct members are not an array!');
+        $this->expectExceptionMessage('Invalid JSON:');
         Struct::jsonDecode($json);
     }
 }

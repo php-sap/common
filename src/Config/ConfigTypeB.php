@@ -58,7 +58,11 @@ final class ConfigTypeB extends JsonSerializable implements IConfigTypeB
      */
     public function getMshost(): string
     {
-        return $this->get(self::JSON_MSHOST);
+        $mshost = $this->get(self::JSON_MSHOST);
+        if (!is_string($mshost)) {
+            throw new IncompleteConfigException('Configuration is missing mandatory "mshost"!');
+        }
+        return $mshost;
     }
 
     /**
@@ -80,9 +84,6 @@ final class ConfigTypeB extends JsonSerializable implements IConfigTypeB
      */
     public function getR3name(): ?string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
         return $this->get(self::JSON_R3NAME);
     }
 
@@ -105,9 +106,6 @@ final class ConfigTypeB extends JsonSerializable implements IConfigTypeB
      */
     public function getGroup(): ?string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
         return $this->get(self::JSON_GROUP);
     }
 

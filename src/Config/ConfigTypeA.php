@@ -54,11 +54,16 @@ final class ConfigTypeA extends JsonSerializable implements IConfigTypeA
     /**
      * Get the host name of a specific SAP application server.
      * @return string The hostname of a specific SAP application server.
+     * @throws IncompleteConfigException
      * @throws InvalidArgumentException
      */
     public function getAshost(): string
     {
-        return $this->get(self::JSON_ASHOST);
+        $ashost = $this->get(self::JSON_ASHOST);
+        if (!is_string($ashost)) {
+            throw new IncompleteConfigException('Configuration is missing mandatory "ashost"!');
+        }
+        return $ashost;
     }
 
     /**
@@ -77,10 +82,15 @@ final class ConfigTypeA extends JsonSerializable implements IConfigTypeA
      * Get the SAP system number.
      * @return string The SAP system number.
      * @throws InvalidArgumentException
+     * @throws IncompleteConfigException
      */
     public function getSysnr(): string
     {
-        return $this->get(self::JSON_SYSNR);
+        $sysnr = $this->get(self::JSON_SYSNR);
+        if (!is_string($sysnr)) {
+            throw new IncompleteConfigException('Configuration is missing mandatory "sysnr"!');
+        }
+        return $sysnr;
     }
 
     /**
@@ -102,9 +112,6 @@ final class ConfigTypeA extends JsonSerializable implements IConfigTypeA
      */
     public function getGwhost(): ?string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
         return $this->get(self::JSON_GWHOST);
     }
 
@@ -127,9 +134,6 @@ final class ConfigTypeA extends JsonSerializable implements IConfigTypeA
      */
     public function getGwserv(): ?string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
         return $this->get(self::JSON_GWSERV);
     }
 

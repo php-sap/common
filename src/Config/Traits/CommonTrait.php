@@ -34,11 +34,16 @@ trait CommonTrait
     /**
      * Get the username to use for authentication.
      * @return string
+     * @throws IncompleteConfigException
      * @throws InvalidArgumentException
      */
     public function getUser(): string
     {
-        return $this->get(self::JSON_USER);
+        $user = $this->get(self::JSON_USER);
+        if (!is_string($user)) {
+            throw new IncompleteConfigException('Configuration is missing mandatory "user"!');
+        }
+        return $user;
     }
 
     /**
@@ -57,10 +62,15 @@ trait CommonTrait
      * Get the password to use for authentication.
      * @return string
      * @throws InvalidArgumentException
+     * @throws IncompleteConfigException
      */
     public function getPasswd(): string
     {
-        return $this->get(self::JSON_PASSWD);
+        $passwd = $this->get(self::JSON_PASSWD);
+        if (!is_string($passwd)) {
+            throw new IncompleteConfigException('Configuration is missing mandatory "passwd"!');
+        }
+        return $passwd;
     }
 
     /**
@@ -83,7 +93,11 @@ trait CommonTrait
      */
     public function getClient(): string
     {
-        return $this->get(self::JSON_CLIENT);
+        $client = $this->get(self::JSON_CLIENT);
+        if (!is_string($client)) {
+            throw new IncompleteConfigException('Configuration is missing mandatory "client"!');
+        }
+        return $client;
     }
 
     /**
@@ -107,9 +121,6 @@ trait CommonTrait
      */
     public function getSaprouter(): ?string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
         return $this->get(self::JSON_SAPROUTER);
     }
 
@@ -140,9 +151,6 @@ trait CommonTrait
      */
     public function getTrace(): ?int
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
         return $this->get(self::JSON_TRACE);
     }
 
@@ -173,9 +181,6 @@ trait CommonTrait
      */
     public function getCodepage(): ?int
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
         return $this->get(self::JSON_CODEPAGE);
     }
 
@@ -201,9 +206,6 @@ trait CommonTrait
      */
     public function getLang(): ?string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
         return $this->get(self::JSON_LANG);
     }
 
@@ -231,9 +233,6 @@ trait CommonTrait
      */
     public function getDest(): ?string
     {
-        /**
-         * InvalidArgumentException will never be thrown.
-         */
         return $this->get(self::JSON_DEST);
     }
 

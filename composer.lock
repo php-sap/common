@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b423d981a30b7741b341b62dc1997626",
+    "content-hash": "9e6cd61396f79520fecc7a877b6966c9",
     "packages": [
         {
             "name": "php-sap/datetime",
@@ -63,7 +63,7 @@
         },
         {
             "name": "php-sap/interfaces",
-            "version": "dev-main",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/interfaces.git",
@@ -85,7 +85,6 @@
             "require-dev": {
                 "squizlabs/php_codesniffer": "^3.7"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -112,7 +111,7 @@
             ],
             "support": {
                 "issues": "https://github.com/php-sap/interfaces/issues",
-                "source": "https://github.com/php-sap/interfaces/tree/main"
+                "source": "https://github.com/php-sap/interfaces/tree/v5.0.0"
             },
             "time": "2024-07-30T12:11:01+00:00"
         }
@@ -1942,9 +1941,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "php-sap/interfaces": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

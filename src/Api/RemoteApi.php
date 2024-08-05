@@ -58,6 +58,15 @@ final class RemoteApi implements IApi
     }
 
     /**
+     * Get all direction changing values of the remote function.
+     * @return IApiElement[]
+     */
+    public function getChangingElements(): array
+    {
+        return $this->getElements(IApiElement::DIRECTION_CHANGING);
+    }
+
+    /**
      * Get all tables of the remote function.
      * @return IApiElement[]
      */

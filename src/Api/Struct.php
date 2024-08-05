@@ -65,7 +65,8 @@ final class Struct extends JsonSerializable implements IStruct
     {
         return [
             self::DIRECTION_INPUT,
-            self::DIRECTION_OUTPUT
+            self::DIRECTION_OUTPUT,
+            self::DIRECTION_CHANGING
         ];
     }
 

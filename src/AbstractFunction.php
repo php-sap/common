@@ -267,14 +267,9 @@ abstract class AbstractFunction extends JsonSerializable implements IFunction
     public function setParams(array $params): IFunction
     {
         foreach ($this->getAllowedKeys() as $key) {
-            if (!array_key_exists($key, $params)) {
-                throw new InvalidArgumentException(sprintf(
-                    '%s is missing parameter key %s!',
-                    static::class,
-                    $key
-                ));
+            if (array_key_exists($key, $params)) {
+                $this->set($key, $params[$key]);
             }
-            $this->set($key, $params[$key]);
         }
         return $this;
     }

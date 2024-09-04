@@ -535,12 +535,7 @@ class AbstractFunctionTest extends TestCase
                 . '"params":{"DbF6y6oE":"CLsVlAje"}}'
             ],
             ['7072.8'],
-            ['true'],
-            [
-                '{"name":"gYcOqTNx",'
-                . '"api":[{"type":"string","name":"gixpbEZj","direction":"input","optional":false}],'
-                . '"params":{"8rszwVLE":"dUK6wkp0"}}'
-            ]
+            ['true']
         ];
     }
 

@@ -1,88 +1,127 @@
-# Controls when the action will run.
-on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-  pull_request:
+name: "CI"
 
-  # Allows you to run this workflow manually from the Actions tab
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
   workflow_dispatch:
 
 permissions:
   contents: "read"
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+concurrency:
+  group: "ci-${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
 jobs:
   # composer validation
   composer:
     name: "composer config validation"
     runs-on: "ubuntu-latest"
+    timeout-minutes: 10
     steps:
-      - uses: "actions/checkout@v3"
+      - name: "git checkout"
+        uses: "actions/checkout@v7"
       - name: "Validate composer.json"
         run: "composer validate --strict"
-  # PHP lint and PHPStan for different PHP versions
+
+  # PHP lint for different PHP versions
   php:
+    name: "PHP ${{ matrix.php-version }}"
+    needs: "composer"
     runs-on: "ubuntu-latest"
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "8.1"
+          - "8.2"
+          - "8.3"
+    steps:
+      - name: "git checkout"
+        uses: "actions/checkout@v7"
+      - name: "setup PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "json"
+          coverage: "xdebug"
+          tools: "composer:v2"
+          cache: "composer"
+      - name: "check PHP version"
+        run: "php -v"
+      - name: "lint PHP files"
+        run: "php -l exceptions/ src/ tests/"
+      - name: "install composer dependencies"
+        run: "composer install --prefer-dist --no-interaction --no-progress"
+
+  # PHPStan static analysis
+  phpstan:
+    name: "PHPStan ${{ matrix.php-version }}"
+    needs: "composer"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 15
     strategy:
       matrix:
         php-version:
           - "8.1"
           - "8.2"
           - "8.3"
-    name: "PHP ${{ matrix.php-version }}"
     steps:
       - name: "git checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v7"
       - name: "setup PHP"
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: "${{ matrix.php-version }}"
-          coverage: "xdebug"
-      - name: "check PHP version"
-        run: "php -v"
-      - name: "lint PHP files"
-        run: "php -l exceptions/ src/ tests/"
+          extensions: "json"
+          tools: "composer:v2"
+          cache: "composer"
       - name: "install composer dependencies"
-        run: "composer install --prefer-dist --no-progress"
-      # PHPStan
+        run: "composer install --prefer-dist --no-interaction --no-progress"
       - name: "PHPStan static analysis"
         uses: "php-actions/phpstan@v3"
         with:
           php_version: "${{ matrix.php-version }}"
           configuration: "phpstan.neon"
           path: "exceptions/ src/ tests/"
+
   # run unit tests
   phpunit:
-    runs-on: "ubuntu-latest"
-    env:
-      CC_TEST_REPORTER_ID: "b6d85f5dc7af90e89653c56b04866b27d98b35e84c2ff9a5d9499bbb53469cbf"
     name: "PHPUnit"
+    needs: "composer"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 15
     steps:
       - name: "git checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v7"
       - name: "setup PHP"
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: "8.1"
+          extensions: "json"
           coverage: "xdebug"
+          tools: "composer:v2"
+          cache: "composer"
       - name: "check PHP version"
         run: "php -v"
       - name: "install composer dependencies"
-        run: "composer install --prefer-dist --no-progress"
-      - name: "CodeClimate reporter setup"
-        run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          ./cc-test-reporter before-build
+        run: "composer install --prefer-dist --no-interaction --no-progress"
       - name: "run PHPUnit"
-        run: |
-          php vendor/bin/phpunit --coverage-clover clover.xml --coverage-text
-          ./cc-test-reporter after-build -t clover --exit-code $?
+        run: "php vendor/bin/phpunit --coverage-text"
+
   codesniffer:
+    name: "PHP CodeSniffer"
+    needs: "composer"
     runs-on: "ubuntu-latest"
+    timeout-minutes: 15
     steps:
       - name: "git checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v7"
       - name: "Install PHP_CodeSniffer"
         run: "curl -OLf https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar"
       - name: "check PHP_CodeSniffer version"

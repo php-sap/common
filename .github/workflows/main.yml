@@ -25,8 +25,12 @@ jobs:
     steps:
       - name: "git checkout"
         uses: "actions/checkout@v7"
+        with:
+          persist-credentials: false
       - name: "Validate composer.json"
         run: "composer validate --strict"
+      - name: "Audit dependencies for known security vulnerabilities"
+        run: "composer audit"
 
   # PHP lint for different PHP versions
   php:
@@ -44,6 +48,8 @@ jobs:
     steps:
       - name: "git checkout"
         uses: "actions/checkout@v7"
+        with:
+          persist-credentials: false
       - name: "setup PHP"
         uses: "shivammathur/setup-php@v2"
         with:
@@ -74,6 +80,8 @@ jobs:
     steps:
       - name: "git checkout"
         uses: "actions/checkout@v7"
+        with:
+          persist-credentials: false
       - name: "setup PHP"
         uses: "shivammathur/setup-php@v2"
         with:
@@ -84,7 +92,7 @@ jobs:
       - name: "install composer dependencies"
         run: "composer install --prefer-dist --no-interaction --no-progress"
       - name: "PHPStan static analysis"
-        run: "vendor/bin/phpstan analyse --configuration=phpstan.neon exceptions/ src/ tests/"
+        run: "vendor/bin/phpstan analyse"
 
   # run unit tests
   phpunit:
@@ -95,6 +103,8 @@ jobs:
     steps:
       - name: "git checkout"
         uses: "actions/checkout@v7"
+        with:
+          persist-credentials: false
       - name: "setup PHP"
         uses: "shivammathur/setup-php@v2"
         with:
@@ -118,6 +128,8 @@ jobs:
     steps:
       - name: "git checkout"
         uses: "actions/checkout@v7"
+        with:
+          persist-credentials: false
       - name: "setup PHP"
         uses: "shivammathur/setup-php@v2"
         with:

@@ -74,6 +74,6 @@ jobs:
       - name: "run PHPUnit"
         run: "php vendor/bin/phpunit --coverage-text"
       - name: "run PHPStan"
-        run: "vendor/bin/phpstan analyse"
+        run: "vendor/bin/phpstan analyse --no-progress"
       - name: "run PHPCS"
         run: "vendor/bin/phpcs"

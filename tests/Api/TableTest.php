@@ -48,7 +48,6 @@ class TableTest extends TestCase
         static::assertSame(ITable::TYPE_TABLE, $table->getType());
         //test members
         $members = $table->getMembers();
-        static::assertIsArray($members);
         static::assertCount(1, $members);
         foreach ($members as $member) {
             static::assertInstanceOf(Member::class, $member);
@@ -161,7 +160,6 @@ class TableTest extends TestCase
         static::assertSame('wWnIOYQc', $element->getName());
         static::assertSame(ITable::DIRECTION_TABLE, $element->getDirection());
         static::assertFalse($element->isOptional());
-        static::assertIsArray($element->getMembers());
         $members = $element->getMembers();
         foreach ($members as $member) {
             static::assertSame(IMember::TYPE_BOOLEAN, $member->getType());

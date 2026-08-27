@@ -233,7 +233,6 @@ class RemoteApiTest extends TestCase
         static::assertSame(IStruct::TYPE_STRUCT, $struct->getType());
         static::assertSame('pS5Irn27', $struct->getName());
         static::assertSame(IApiElement::DIRECTION_OUTPUT, $struct->getDirection());
-        static::assertIsArray($struct->getMembers());
         static::assertCount(2, $struct->getMembers());
         $members = $struct->getMembers();
         $member2 = array_pop($members);
@@ -253,7 +252,6 @@ class RemoteApiTest extends TestCase
         static::assertSame(ITable::TYPE_TABLE, $table->getType());
         static::assertSame('ZZ4wgCWW', $table->getName());
         static::assertSame(ITable::DIRECTION_TABLE, $table->getDirection());
-        static::assertIsArray($table->getMembers());
         static::assertCount(2, $table->getMembers());
         $members = $table->getMembers();
         $member2 = array_pop($members);

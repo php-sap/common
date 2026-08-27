@@ -51,7 +51,13 @@ trait CastPrimitivesTrait
             $method = $methods[$type];
             return $method($value);
         }
-        settype($value, $type);
-        return $value;
+
+        return match ($type) {
+            self::TYPE_BOOLEAN => (bool) $value,
+            self::TYPE_INTEGER => (int) $value,
+            self::TYPE_FLOAT => (float) $value,
+            self::TYPE_STRING => (string) $value,
+            default => $value,
+        };
     }
 }

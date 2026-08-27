@@ -170,6 +170,7 @@ abstract class JsonSerializable implements IJsonSerializable
             }
             /**
              * Use the constructor of the implementing class.
+             * @var array<string, array<int|string, mixed>|bool|float|int|string|null> $array
              */
             return new static($array);
         } catch (InvalidArgumentException | JsonException $exception) {

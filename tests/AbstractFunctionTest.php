@@ -186,7 +186,6 @@ class AbstractFunctionTest extends TestCase
         $api1 = $fnc1->getApi();
         static::assertInstanceOf(RemoteApi::class, $api1);
         $out1 = $api1->getOutputElements();
-        static::assertIsArray($out1);
         static::assertCount(1, $out1);
         $value1 = array_pop($out1);
         static::assertInstanceOf(Value::class, $value1);
@@ -211,7 +210,6 @@ class AbstractFunctionTest extends TestCase
         $api2 = $fnc2->getApi();
         static::assertInstanceOf(RemoteApi::class, $api2);
         $out2 = $api2->getOutputElements();
-        static::assertIsArray($out2);
         static::assertCount(1, $out2);
         $value2 = array_pop($out2);
         static::assertInstanceOf(Value::class, $value2);
@@ -226,7 +224,6 @@ class AbstractFunctionTest extends TestCase
         $api3 = $fnc2->extractApi();
         static::assertInstanceOf(RemoteApi::class, $api3);
         $out3 = $api3->getOutputElements();
-        static::assertIsArray($out3);
         static::assertCount(1, $out3);
         $value3 = array_pop($out3);
         static::assertInstanceOf(Value::class, $value3);
@@ -250,7 +247,6 @@ class AbstractFunctionTest extends TestCase
         $api4 = $fnc2->getApi();
         static::assertInstanceOf(RemoteApi::class, $api4);
         $input = $api4->getInputElements();
-        static::assertIsArray($input);
         static::assertCount(1, $input);
         $value4 = array_pop($input);
         static::assertInstanceOf(Value::class, $value4);
@@ -301,7 +297,6 @@ class AbstractFunctionTest extends TestCase
         $api = $fnc->getApi();
         static::assertInstanceOf(RemoteApi::class, $api);
         $api_inputs = $api->getInputElements();
-        static::assertIsArray($api_inputs);
         static::assertCount(1, $api_inputs);
         $api_input0 = array_pop($api_inputs);
         static::assertInstanceOf(Value::class, $api_input0);
@@ -385,49 +380,49 @@ class AbstractFunctionTest extends TestCase
         $fnc->setParam('OkUxzPbS', 'FVnhTAoQ');
         static::assertSame('FVnhTAoQ', $fnc->getParam('OkUxzPbS'));
 
+        /** @var array<string, mixed> $params */
         $params = $fnc->getParams();
-        static::assertIsArray($params);
-
         static::assertArrayHasKey('OkUxzPbS', $params);
         static::assertIsString($params['OkUxzPbS']);
         static::assertSame('FVnhTAoQ', $params['OkUxzPbS']);
 
         static::assertArrayHasKey('ePmpwEHW', $params);
-        static::assertIsArray($params['ePmpwEHW']);
+        /** @var array<string, mixed> $ePmpwEHW */
+        $ePmpwEHW = $params['ePmpwEHW'];
+        static::assertArrayHasKey('llnwSfRS', $ePmpwEHW);
+        static::assertIsString($ePmpwEHW['llnwSfRS']);
+        static::assertSame('tzmvidMm', $ePmpwEHW['llnwSfRS']);
 
-        static::assertArrayHasKey('llnwSfRS', $params['ePmpwEHW']);
-        static::assertIsString($params['ePmpwEHW']['llnwSfRS']);
-        static::assertSame('tzmvidMm', $params['ePmpwEHW']['llnwSfRS']);
-
-        static::assertArrayHasKey('aqCcYeax', $params['ePmpwEHW']);
-        static::assertIsInt($params['ePmpwEHW']['aqCcYeax']);
-        static::assertSame(64430, $params['ePmpwEHW']['aqCcYeax']);
+        static::assertArrayHasKey('aqCcYeax', $ePmpwEHW);
+        static::assertIsInt($ePmpwEHW['aqCcYeax']);
+        static::assertSame(64430, $ePmpwEHW['aqCcYeax']);
 
         static::assertArrayHasKey('gksKixRv', $params);
-        static::assertIsArray($params['gksKixRv']);
-        static::assertCount(2, $params['gksKixRv']);
+        /** @var array<int, array<string, mixed>> $gksKixRv */
+        $gksKixRv = $params['gksKixRv'];
+        static::assertCount(2, $gksKixRv);
 
-        static::assertArrayHasKey(0, $params['gksKixRv']);
-        static::assertIsArray($params['gksKixRv'][0]);
+        static::assertArrayHasKey(0, $gksKixRv);
+        /** @var array<string, mixed> $gksKixRv0 */
+        $gksKixRv0 = $gksKixRv[0];
+        static::assertArrayHasKey('pLDXUMoT', $gksKixRv0);
+        static::assertIsString($gksKixRv0['pLDXUMoT']);
+        static::assertSame('SPqbjvnb', $gksKixRv0['pLDXUMoT']);
 
-        static::assertArrayHasKey('pLDXUMoT', $params['gksKixRv'][0]);
-        static::assertIsString($params['gksKixRv'][0]['pLDXUMoT']);
-        static::assertSame('SPqbjvnb', $params['gksKixRv'][0]['pLDXUMoT']);
+        static::assertArrayHasKey('rpJNsIjC', $gksKixRv0);
+        static::assertIsInt($gksKixRv0['rpJNsIjC']);
+        static::assertSame(27370, $gksKixRv0['rpJNsIjC']);
 
-        static::assertArrayHasKey('rpJNsIjC', $params['gksKixRv'][0]);
-        static::assertIsInt($params['gksKixRv'][0]['rpJNsIjC']);
-        static::assertSame(27370, $params['gksKixRv'][0]['rpJNsIjC']);
+        static::assertArrayHasKey(1, $gksKixRv);
+        /** @var array<string, mixed> $gksKixRv1 */
+        $gksKixRv1 = $gksKixRv[1];
+        static::assertArrayHasKey('pLDXUMoT', $gksKixRv1);
+        static::assertIsString($gksKixRv1['pLDXUMoT']);
+        static::assertSame('JpFtgGQA', $gksKixRv1['pLDXUMoT']);
 
-        static::assertArrayHasKey(1, $params['gksKixRv']);
-        static::assertIsArray($params['gksKixRv'][1]);
-
-        static::assertArrayHasKey('pLDXUMoT', $params['gksKixRv'][1]);
-        static::assertIsString($params['gksKixRv'][1]['pLDXUMoT']);
-        static::assertSame('JpFtgGQA', $params['gksKixRv'][1]['pLDXUMoT']);
-
-        static::assertArrayHasKey('rpJNsIjC', $params['gksKixRv'][1]);
-        static::assertIsInt($params['gksKixRv'][1]['rpJNsIjC']);
-        static::assertSame(28939, $params['gksKixRv'][1]['rpJNsIjC']);
+        static::assertArrayHasKey('rpJNsIjC', $gksKixRv1);
+        static::assertIsInt($gksKixRv1['rpJNsIjC']);
+        static::assertSame(28939, $gksKixRv1['rpJNsIjC']);
 
         /**
          * Now reset all parameters.
@@ -494,7 +489,6 @@ class AbstractFunctionTest extends TestCase
         static::assertInstanceOf(AbstractFunction::class, $fnc);
 
         $params = $fnc->getParams();
-        static::assertIsArray($params);
         static::assertArrayHasKey('dvPoAdYG', $params);
         static::assertSame('LHpcxfLz', $params['dvPoAdYG']);
 
@@ -502,7 +496,6 @@ class AbstractFunctionTest extends TestCase
         static::assertInstanceOf(RemoteApi::class, $api);
 
         $input_values = $api->getInputElements();
-        static::assertIsArray($input_values);
         static::assertCount(1, $input_values);
 
         $input_value0 = array_pop($input_values);

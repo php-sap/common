@@ -49,7 +49,6 @@ class StructTest extends TestCase
         static::assertSame(IStruct::TYPE_STRUCT, $struct->getType());
         //test members
         $members = $struct->getMembers();
-        static::assertIsArray($members);
         static::assertCount(1, $members);
         foreach ($members as $member) {
             static::assertInstanceOf(Member::class, $member);
@@ -141,7 +140,6 @@ class StructTest extends TestCase
         static::assertSame('l9M7gn6p', $element->getName());
         static::assertSame(IApiElement::DIRECTION_INPUT, $element->getDirection());
         static::assertTrue($element->isOptional());
-        static::assertIsArray($element->getMembers());
         $members = $element->getMembers();
         foreach ($members as $member) {
             static::assertSame(IMember::TYPE_INTEGER, $member->getType());

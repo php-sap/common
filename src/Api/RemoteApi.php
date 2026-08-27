@@ -136,6 +136,7 @@ final class RemoteApi implements IApi
             if (!is_array($array)) {
                 throw new InvalidArgumentException('JSON did not decode into an array!');
             }
+            /** @var array<int, array<string, string|bool|array<int, array<string, string>>>> $array */
             return new self($array);
         } catch (InvalidArgumentException | JsonException $exception) {
             throw new InvalidArgumentException(
